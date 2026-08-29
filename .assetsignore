@@ -1,0 +1,14 @@
+# Cloudflare Workers Assets Ignore List
+node_modules/
+.git/
+.github/
+.wrangler/
+.DS_Store
+package.json
+package-lock.json
+bun.lock
+bun.lockb
+wrangler.toml
+PROJECT_SPEC.md
+README.md
+*.log

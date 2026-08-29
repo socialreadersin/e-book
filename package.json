@@ -1,13 +1,13 @@
 {
-  "name": "social-readers",
+  "name": "e-book",
   "version": "1.0.0",
   "private": true,
   "description": "Social Readers - Bilingual E-Book & Audiobook Platform with 25% Social Impact",
   "scripts": {
     "build": "echo 'Static build ready'",
-    "deploy": "npx wrangler pages deploy . --project-name=social-readers"
+    "deploy": "npx wrangler deploy"
   },
   "devDependencies": {
-    "wrangler": "^3.114.0 || ^4.0.0"
+    "wrangler": "^4.127.1"
   }
 }
