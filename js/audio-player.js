@@ -17,47 +17,47 @@ class AudiobookPlayer {
     if (!playerContainer) {
       playerContainer = document.createElement('div');
       playerContainer.id = 'global-audio-player';
-      playerContainer.className = 'fixed bottom-16 md:bottom-6 left-1/2 transform -translate-x-1/2 w-[94%] max-w-2xl bg-navy/95 backdrop-blur-md text-white rounded-2xl p-4 shadow-2xl z-50 border border-white/20 hidden transition-all duration-300';
+      playerContainer.className = 'fixed bottom-[72px] md:bottom-6 left-1/2 transform -translate-x-1/2 w-[94%] max-w-2xl bg-navy/95 backdrop-blur-md text-white rounded-2xl p-3 sm:p-4 shadow-2xl z-40 border border-white/20 hidden transition-all duration-300';
       playerContainer.innerHTML = `
-        <div class="flex items-center justify-between gap-4">
+        <div class="flex items-center justify-between gap-3 sm:gap-4">
           
           <!-- Track Info -->
-          <div class="flex items-center gap-3 min-w-0 flex-1">
-            <img id="player-cover" src="assets/cover-atomic-habits.svg" class="w-12 h-12 rounded-xl object-contain bg-white/10 p-1 flex-shrink-0" alt="Audiobook Cover">
+          <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+            <img id="player-cover" src="assets/cover-atomic-habits.svg" class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl object-contain bg-white/10 p-1 flex-shrink-0" alt="Audiobook Cover">
             <div class="min-w-0">
-              <div class="flex items-center gap-2">
-                <span class="px-2 py-0.5 rounded bg-brandOrange text-white text-[9px] font-bold uppercase tracking-wider">Audio Sample</span>
-                <span id="player-speed" class="text-[10px] text-gray-300 font-mono cursor-pointer hover:text-white bg-white/10 px-1.5 py-0.5 rounded">1.0x</span>
+              <div class="flex items-center gap-1.5 sm:gap-2">
+                <span class="px-1.5 py-0.5 rounded bg-brandOrange text-white text-[8px] sm:text-[9px] font-bold uppercase tracking-wider">Audio Sample</span>
+                <span id="player-speed" class="text-[9px] sm:text-[10px] text-gray-300 font-mono cursor-pointer hover:text-white bg-white/10 px-1 py-0.5 rounded">1.0x</span>
               </div>
-              <h4 id="player-title" class="font-bold text-sm text-white truncate mt-0.5">Atomic Habits</h4>
-              <p id="player-author" class="text-xs text-gray-300 truncate">James Clear</p>
+              <h4 id="player-title" class="font-bold text-xs sm:text-sm text-white truncate mt-0.5">Atomic Habits</h4>
+              <p id="player-author" class="text-[10px] sm:text-xs text-gray-300 truncate">James Clear</p>
             </div>
           </div>
 
           <!-- Controls -->
-          <div class="flex items-center gap-3 flex-shrink-0">
-            <button id="player-rewind" class="p-2 text-gray-300 hover:text-white" title="Rewind 10s">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.334 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z"></path></svg>
+          <div class="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
+            <button id="player-rewind" class="p-1 sm:p-2 text-gray-300 hover:text-white active:scale-95" title="Rewind 10s">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.334 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z"></path></svg>
             </button>
 
-            <button id="player-play-btn" class="w-11 h-11 rounded-full bg-forest hover:bg-green-600 flex items-center justify-center text-white shadow-lg transition-transform active:scale-95">
-              <svg id="play-icon" class="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              <svg id="pause-icon" class="w-5 h-5 fill-current hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            <button id="player-play-btn" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-forest hover:bg-green-600 flex items-center justify-center text-white shadow-lg transition-transform active:scale-90">
+              <svg id="play-icon" class="w-4 h-4 sm:w-5 sm:h-5 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg id="pause-icon" class="w-4 h-4 sm:w-5 sm:h-5 fill-current hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
             </button>
 
-            <button id="player-forward" class="p-2 text-gray-300 hover:text-white" title="Forward 10s">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.933 12.8a1 1 0 000-1.6L6.6 7.2A1 1 0 005 8v8a1 1 0 001.6.8l5.333-4zM19.933 12.8a1 1 0 000-1.6l-5.333-4A1 1 0 0013 8v8a1 1 0 001.6.8l5.333-4z"></path></svg>
+            <button id="player-forward" class="p-1 sm:p-2 text-gray-300 hover:text-white active:scale-95" title="Forward 10s">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.933 12.8a1 1 0 000-1.6L6.6 7.2A1 1 0 005 8v8a1 1 0 001.6.8l5.333-4zM19.933 12.8a1 1 0 000-1.6l-5.333-4A1 1 0 0013 8v8a1 1 0 001.6.8l5.333-4z"></path></svg>
             </button>
 
-            <button id="player-close" class="p-1 text-gray-400 hover:text-white ml-1" title="Close">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <button id="player-close" class="p-1 text-gray-400 hover:text-white ml-0.5" title="Close">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
           </div>
 
         </div>
 
         <!-- Progress Bar & Time -->
-        <div class="mt-2.5 flex items-center gap-3 text-[11px] text-gray-300 font-mono">
+        <div class="mt-2 flex items-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] text-gray-300 font-mono">
           <span id="player-current-time">0:00</span>
           <input type="range" id="player-seek" min="0" max="100" value="0" class="flex-grow h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-brandOrange">
           <span id="player-duration">0:00</span>
@@ -178,10 +178,10 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       const title = btn.getAttribute('data-book-title') || "Audio Sample";
-      const author = btn.getAttribute('data-book-author') || "Social Readers";
-      const audioUrl = btn.getAttribute('data-audio-url') || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
-      const coverUrl = btn.getAttribute('data-cover-url') || "assets/cover-atomic-habits.svg";
-      window.SocialReadersAudioPlayer.playTrack(title, author, audioUrl, coverUrl);
+      const author = btn.getAttribute('data-book-author') || "";
+      const url = btn.getAttribute('data-audio-url') || "";
+      const cover = btn.getAttribute('data-cover-url') || "";
+      window.SocialReadersAudioPlayer.playTrack(title, author, url, cover);
     });
   });
 });

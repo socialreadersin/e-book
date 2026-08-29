@@ -80,17 +80,43 @@
 
   <!-- MAIN CONTENT -->
   <div class="flex-grow flex flex-col min-w-0">
-    <header class="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
-      <h1 class="text-lg font-bold text-navy">Customer Orders &amp; Social Allocations</h1>
-      <button onclick="exportOrdersCSV()" class="px-4 py-2 rounded-full border border-navy text-navy font-bold text-xs hover:bg-navy hover:text-white transition-colors flex items-center gap-1.5 shadow-sm">
+    
+    <!-- Mobile Admin Top Bar -->
+    <div class="md:hidden bg-navy text-white px-3 py-2.5 flex items-center justify-between border-b border-white/10">
+      <a href="../index.html" class="flex items-center gap-1">
+        <span class="text-sm font-extrabold text-white">SOCIAL</span>
+        <span class="text-sm font-extrabold text-green-400">READERS</span>
+        <span class="text-[9px] bg-brandOrange text-white font-bold px-1.5 py-0.5 rounded ml-1">Admin</span>
+      </a>
+      <div class="flex items-center gap-2">
+        <button type="button" class="lang-toggle-btn px-2 py-0.5 rounded-full border border-white/30 text-white font-bold text-[10px]">
+          EN | த
+        </button>
+        <a href="login.html" class="text-orange-300 text-xs font-semibold hover:underline">Logout</a>
+      </div>
+    </div>
+
+    <!-- Mobile Admin Nav Scrollable Tabs -->
+    <div class="md:hidden bg-white border-b border-gray-200 px-3 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs">
+      <a href="dashboard.html" class="px-3 py-1 rounded-full text-gray-600 hover:bg-gray-100 whitespace-nowrap">Dashboard</a>
+      <a href="manage-books.html" class="px-3 py-1 rounded-full text-gray-600 hover:bg-gray-100 whitespace-nowrap">Books</a>
+      <a href="orders.html" class="px-3 py-1 rounded-full bg-navy text-white font-bold whitespace-nowrap">Orders</a>
+      <a href="categories.html" class="px-3 py-1 rounded-full text-gray-600 hover:bg-gray-100 whitespace-nowrap">Categories</a>
+      <a href="settings.html" class="px-3 py-1 rounded-full text-gray-600 hover:bg-gray-100 whitespace-nowrap">Settings</a>
+      <a href="../index.html" class="px-3 py-1 rounded-full text-forest font-bold hover:bg-green-50 whitespace-nowrap">Live Store &rarr;</a>
+    </div>
+
+    <header class="bg-white border-b border-gray-100 px-4 sm:px-6 py-3.5 sm:py-4 flex items-center justify-between">
+      <h1 class="text-base sm:text-lg font-bold text-navy">Customer Orders &amp; Social Allocations</h1>
+      <button onclick="exportOrdersCSV()" class="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-navy text-navy font-bold text-xs hover:bg-navy hover:text-white transition-colors flex items-center gap-1.5 shadow-sm active:scale-95">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-        <span>Export CSV</span>
+        <span>Export</span>
       </button>
     </header>
 
-    <main class="p-6 sm:p-8 space-y-6 flex-grow">
+    <main class="p-3 sm:p-6 md:p-8 space-y-6 flex-grow">
       
-      <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 sm:p-8">
+      <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-4 sm:p-6 md:p-8">
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse text-xs sm:text-sm">
             <thead class="bg-[#FAF7F2] text-navy font-bold border-b border-gray-200">

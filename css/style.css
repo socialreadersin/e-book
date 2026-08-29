@@ -1,10 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&family=Noto+Sans+Tamil:wght@400;500;600;700;800&display=swap');
 
 :root {
   --color-navy: #0B2C5D;
   --color-green: #2E7D32;
   --color-orange: #E8720C;
   --color-cream: #FAF7F2;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -12,6 +18,13 @@ body {
   background-color: var(--color-cream);
   color: #1f2937;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Fast tap response for touch devices */
+a, button, input, select, textarea, [role="button"] {
+  touch-action: manipulation;
 }
 
 h1, h2, h3, h4, h5, h6, .font-heading {
@@ -38,25 +51,64 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.book-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px -6px rgba(11, 44, 93, 0.12), 0 8px 16px -6px rgba(11, 44, 93, 0.08);
+.book-card:active {
+  transform: scale(0.98);
+}
+
+@media (min-width: 768px) {
+  .book-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -6px rgba(11, 44, 93, 0.12), 0 8px 16px -6px rgba(11, 44, 93, 0.08);
+  }
 }
 
 .category-card {
   transition: all 0.25s ease;
 }
 
-.category-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px -5px rgba(11, 44, 93, 0.1);
+.category-card:active {
+  transform: scale(0.98);
 }
 
-/* Bottom navigation padding offset for mobile */
+@media (min-width: 768px) {
+  .category-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px -5px rgba(11, 44, 93, 0.1);
+  }
+}
+
+/* Bottom navigation padding offset for mobile with safe-area support */
 @media (max-width: 767px) {
   body {
-    padding-bottom: 72px;
+    padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
   }
+  
+  .mobile-bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    height: calc(64px + env(safe-area-inset-bottom, 0px));
+  }
+  
+  /* Prevent iOS automatic zoom on focus by ensuring font-size is at least 16px on mobile inputs */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="search"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Hide scrollbar on horizontal swipe rails while enabling smooth momentum scrolling */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 /* Smooth transitions */
@@ -72,4 +124,9 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 .pulse-badge {
   animation: softPulse 2.5s infinite ease-in-out;
+}
+
+/* Mobile sticky action bar shadow */
+.mobile-sticky-shadow {
+  box-shadow: 0 -4px 16px -2px rgba(11, 44, 93, 0.08);
 }

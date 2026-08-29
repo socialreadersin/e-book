@@ -2,6 +2,9 @@ name = "social-readers"
 compatibility_date = "2026-08-28"
 pages_build_output_dir = "."
 
+[assets]
+directory = "."
+
 [vars]
 ENVIRONMENT = "production"
 CAUSE_SHARE_PERCENT = 25
