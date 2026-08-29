@@ -223,33 +223,46 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 .hero-slider-container {
   position: relative;
   overflow: hidden;
-  border-radius: 1.5rem;
+  border-radius: 1rem;
   background-color: #0B2C5D;
-  box-shadow: 0 20px 40px -15px rgba(11, 44, 93, 0.25);
+  box-shadow: 0 16px 36px -12px rgba(11, 44, 93, 0.28);
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .hero-slider-container {
+    border-radius: 1.5rem;
+  }
 }
 
 .hero-slider-track {
   display: flex;
-  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
   will-change: transform;
+  width: 100%;
 }
 
 .hero-slide {
   flex: 0 0 100%;
   width: 100%;
   position: relative;
-  min-height: 280px;
+  display: block;
+  overflow: hidden;
+  background: #0B2C5D;
 }
 
-@media (min-width: 640px) {
-  .hero-slide {
-    min-height: 380px;
-  }
+.hero-slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 1200 / 480;
+  object-fit: cover;
 }
 
-@media (min-width: 1024px) {
-  .hero-slide {
-    min-height: 440px;
+@media (max-width: 640px) {
+  .hero-slide img {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
   }
 }
 

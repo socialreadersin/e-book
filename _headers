@@ -5,6 +5,10 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), camera=(), microphone=()
 
+/assets/*.svg
+  Content-Type: image/svg+xml; charset=utf-8
+  Cache-Control: public, max-age=31536000, immutable
+
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
