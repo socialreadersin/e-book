@@ -1,0 +1,8 @@
+name = "social-readers"
+compatibility_date = "2026-08-28"
+pages_build_output_dir = "."
+
+[vars]
+ENVIRONMENT = "production"
+CAUSE_SHARE_PERCENT = 25
+BRAND_NAME = "Social Readers"

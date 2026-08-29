@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap');
+
+:root {
+  --color-navy: #0B2C5D;
+  --color-green: #2E7D32;
+  --color-orange: #E8720C;
+  --color-cream: #FAF7F2;
+}
+
+body {
+  font-family: 'Inter', 'Noto Sans Tamil', sans-serif;
+  background-color: var(--color-cream);
+  color: #1f2937;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: 'Poppins', 'Noto Sans Tamil', sans-serif;
+}
+
+/* Custom utility classes */
+.bg-navy { background-color: #0B2C5D; }
+.text-navy { color: #0B2C5D; }
+.border-navy { border-color: #0B2C5D; }
+
+.bg-forest-green { background-color: #2E7D32; }
+.text-forest-green { color: #2E7D32; }
+.border-forest-green { border-color: #2E7D32; }
+
+.bg-brand-orange { background-color: #E8720C; }
+.text-brand-orange { color: #E8720C; }
+.border-brand-orange { border-color: #E8720C; }
+
+.bg-cream { background-color: #FAF7F2; }
+
+/* Custom shadows and cards */
+.book-card {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -6px rgba(11, 44, 93, 0.12), 0 8px 16px -6px rgba(11, 44, 93, 0.08);
+}
+
+.category-card {
+  transition: all 0.25s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px -5px rgba(11, 44, 93, 0.1);
+}
+
+/* Bottom navigation padding offset for mobile */
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 72px;
+  }
+}
+
+/* Smooth transitions */
+.transition-smooth {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Pulse badge animation */
+@keyframes softPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.92; transform: scale(1.03); }
+}
+
+.pulse-badge {
+  animation: softPulse 2.5s infinite ease-in-out;
+}

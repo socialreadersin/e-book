@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 420" width="100%" height="100%">
+  <defs>
+    <linearGradient id="pmBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+  </defs>
+  <rect width="300" height="420" rx="8" fill="url(#pmBg)" stroke="#334155" stroke-width="2" />
+  <line x1="20" y1="0" x2="20" y2="420" stroke="#475569" stroke-width="1" />
+
+  <!-- Rupee Coin Graphic -->
+  <circle cx="150" cy="100" r="35" fill="#10B981" />
+  <text x="150" y="112" font-family="'Poppins', sans-serif" font-weight="700" font-size="28" fill="#FFFFFF" text-anchor="middle">₹</text>
+
+  <text x="150" y="175" font-family="'Poppins', sans-serif" font-weight="700" font-size="13" fill="#94A3B8" text-anchor="middle" letter-spacing="1">THE</text>
+  <text x="150" y="205" font-family="'Poppins', sans-serif" font-weight="800" font-size="22" fill="#F8FAFC" text-anchor="middle">PSYCHOLOGY</text>
+  <text x="150" y="235" font-family="'Poppins', sans-serif" font-weight="800" font-size="22" fill="#10B981" text-anchor="middle">OF MONEY</text>
+  
+  <text x="150" y="268" font-family="'Inter', sans-serif" font-weight="400" font-size="10" fill="#CBD5E1" text-anchor="middle">Timeless Lessons on Wealth, Greed &amp; Happiness</text>
+
+  <rect x="50" y="325" width="200" height="45" rx="8" fill="#10B981" />
+  <text x="150" y="352" font-family="'Poppins', sans-serif" font-weight="700" font-size="13" fill="#0F172A" text-anchor="middle">MORGAN HOUSEL</text>
+</svg>

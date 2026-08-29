@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders &amp; Receipts | Admin — Social Readers</title>
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#0B2C5D',
+            forest: '#2E7D32',
+            brandOrange: '#E8720C',
+            cream: '#FAF7F2',
+          },
+          fontFamily: {
+            heading: ['Poppins', 'Noto Sans Tamil', 'sans-serif'],
+            body: ['Inter', 'Noto Sans Tamil', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-[#FAF7F2] text-gray-800 min-h-screen flex">
+
+  <!-- SIDEBAR -->
+  <aside class="w-64 bg-navy text-white flex-shrink-0 hidden md:flex flex-col justify-between p-6">
+    <div class="space-y-8">
+      <a href="../index.html" class="flex flex-col">
+        <div class="flex items-center gap-1">
+          <span class="text-xl font-extrabold text-white">SOCIAL</span>
+          <span class="text-xl font-extrabold text-green-400">READERS</span>
+        </div>
+        <span class="text-[10px] tracking-widest text-orange-300 font-bold uppercase mt-0.5">Admin Console</span>
+      </a>
+
+      <nav class="space-y-2">
+        <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="manage-books.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          <span>Manage Books</span>
+        </a>
+
+        <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white font-bold text-sm">
+          <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+          <span>Orders &amp; Receipts</span>
+        </a>
+
+        <a href="categories.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+          <span>Categories</span>
+        </a>
+
+        <a href="settings.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+    </div>
+
+    <div class="pt-6 border-t border-white/10 text-xs text-gray-400 flex items-center justify-between">
+      <span>Admin: S. Raman</span>
+      <a href="login.html" class="text-orange-300 hover:underline">Logout</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="flex-grow flex flex-col min-w-0">
+    <header class="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
+      <h1 class="text-lg font-bold text-navy">Customer Orders &amp; Social Allocations</h1>
+      <button onclick="exportOrdersCSV()" class="px-4 py-2 rounded-full border border-navy text-navy font-bold text-xs hover:bg-navy hover:text-white transition-colors flex items-center gap-1.5 shadow-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+        <span>Export CSV</span>
+      </button>
+    </header>
+
+    <main class="p-6 sm:p-8 space-y-6 flex-grow">
+      
+      <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 sm:p-8">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead class="bg-[#FAF7F2] text-navy font-bold border-b border-gray-200">
+              <tr>
+                <th class="p-3 sm:p-4">Order ID</th>
+                <th class="p-3 sm:p-4">Date</th>
+                <th class="p-3 sm:p-4">Customer</th>
+                <th class="p-3 sm:p-4">Title &amp; Format</th>
+                <th class="p-3 sm:p-4">Paid</th>
+                <th class="p-3 sm:p-4">25% Cause Earmark</th>
+                <th class="p-3 sm:p-4">Status</th>
+              </tr>
+            </thead>
+            <tbody id="orders-table-body" class="divide-y divide-gray-100 text-gray-600">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    SocialReadersAuth.requireAdmin();
+
+    function renderOrders() {
+      const orders = SocialReadersDB.getOrders();
+      const tbody = document.getElementById('orders-table-body');
+      
+      tbody.innerHTML = orders.map(ord => `
+        <tr class="hover:bg-gray-50 transition-colors">
+          <td class="p-3 sm:p-4 font-mono font-bold text-navy">#${ord.orderId}</td>
+          <td class="p-3 sm:p-4 text-xs text-gray-400">${ord.date}</td>
+          <td class="p-3 sm:p-4">
+            <span class="font-bold text-navy block">${ord.customerName}</span>
+            <span class="text-xs text-gray-400">${ord.customerEmail}</span>
+          </td>
+          <td class="p-3 sm:p-4">
+            <span class="font-semibold text-gray-800 block">${ord.bookTitle}</span>
+            <span class="text-xs text-forest">${ord.format || 'Digital E-Book'}</span>
+          </td>
+          <td class="p-3 sm:p-4 font-bold text-navy">₹${ord.amount}</td>
+          <td class="p-3 sm:p-4 font-bold text-brandOrange">₹${ord.causeShare}</td>
+          <td class="p-3 sm:p-4">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${ord.status === 'Completed' ? 'bg-green-100 text-forest' : 'bg-amber-100 text-amber-700'}">
+              ${ord.status}
+            </span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    window.exportOrdersCSV = function() {
+      const orders = SocialReadersDB.getOrders();
+      let csvContent = "data:text/csv;charset=utf-8,Order ID,Date,Customer,Email,Book,Format,Amount,25% Cause Share,Status\n";
+      
+      orders.forEach(o => {
+        csvContent += `"${o.orderId}","${o.date}","${o.customerName}","${o.customerEmail}","${o.bookTitle}","${o.format || 'E-Book'}","${o.amount}","${o.causeShare}","${o.status}"\n`;
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `social_readers_orders_${Date.now()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
+    document.addEventListener('DOMContentLoaded', renderOrders);
+  </script>
+</body>
+</html>

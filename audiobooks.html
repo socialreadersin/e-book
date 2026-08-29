@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audiobooks | Social Readers — Read &amp; Listen for Change</title>
+  <meta name="description" content="Immersive audiobooks in English & Tamil. 25% of every purchase directly funds student education and grassroots athletic kits.">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#0B2C5D',
+            forest: '#2E7D32',
+            brandOrange: '#E8720C',
+            cream: '#FAF7F2',
+          },
+          fontFamily: {
+            heading: ['Poppins', 'Noto Sans Tamil', 'sans-serif'],
+            body: ['Inter', 'Noto Sans Tamil', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-[#FAF7F2] text-gray-800 flex flex-col min-h-screen">
+
+  <!-- TOP NAVIGATION -->
+  <header class="bg-white/95 backdrop-blur-md sticky top-0 z-40 border-b border-gray-100 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        
+        <!-- Logo -->
+        <a href="index.html" class="flex flex-col items-start group">
+          <div class="flex items-center gap-1.5">
+            <span class="text-2xl sm:text-3xl font-extrabold tracking-tight text-navy">SOCIAL</span>
+            <span class="text-2xl sm:text-3xl font-extrabold tracking-tight text-forest">READERS</span>
+          </div>
+          <div class="flex items-center gap-2 mt-0.5">
+            <div class="w-4 h-[2px] bg-brandOrange rounded-full"></div>
+            <span data-i18n="brand.tagline" class="text-[10px] sm:text-xs tracking-widest uppercase font-bold text-gray-500 group-hover:text-brandOrange transition-colors">
+              READ FOR CHANGE
+            </span>
+            <div class="w-4 h-[2px] bg-brandOrange rounded-full"></div>
+          </div>
+        </a>
+
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex items-center space-x-8">
+          <a href="index.html" data-i18n="nav.home" class="desktop-nav-link text-sm font-semibold text-gray-600 hover:text-navy transition-colors py-2">Home</a>
+          <a href="categories.html" data-i18n="nav.categories" class="desktop-nav-link text-sm font-semibold text-gray-600 hover:text-navy transition-colors py-2">Categories</a>
+          <a href="books.html" data-i18n="nav.books" class="desktop-nav-link text-sm font-semibold text-gray-600 hover:text-navy transition-colors py-2">All E-Books</a>
+          <a href="audiobooks.html" class="desktop-nav-link text-sm font-semibold text-navy font-bold border-b-2 border-forest transition-colors py-2 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-forest animate-pulse"></span>
+            <span>Audiobooks</span>
+          </a>
+          <a href="impact.html" data-i18n="nav.impact" class="desktop-nav-link text-sm font-semibold text-gray-600 hover:text-navy transition-colors py-2">Our Impact</a>
+          <a href="account.html" data-i18n="nav.account" class="desktop-nav-link text-sm font-semibold text-gray-600 hover:text-navy transition-colors py-2">Account</a>
+        </nav>
+
+        <!-- Actions -->
+        <div class="flex items-center space-x-3 sm:space-x-4">
+          <button type="button" class="lang-toggle-btn px-3.5 py-1.5 rounded-full border-2 border-navy text-navy font-bold text-xs hover:bg-navy hover:text-white transition-all shadow-sm">
+            EN | த
+          </button>
+          <a href="admin/login.html" data-i18n="nav.admin" class="text-xs text-gray-400 hover:text-navy font-medium px-2 py-1 border border-gray-200 rounded-md hidden lg:inline-block">
+            Admin
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    
+    <!-- Hero Banner for Audiobooks -->
+    <div class="bg-navy text-white rounded-3xl p-8 sm:p-12 mb-12 relative overflow-hidden shadow-xl">
+      <div class="absolute right-0 top-0 w-96 h-96 bg-brandOrange/20 rounded-full blur-3xl"></div>
+      <div class="max-w-2xl relative z-10 space-y-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-forest text-white text-xs font-bold uppercase tracking-wider">
+          <span>🎧 High-Quality Studio Narrations</span>
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+          Listen to Inspiring Books on the Go
+        </h1>
+        <p class="text-sm sm:text-base text-gray-300">
+          Stream or download full audiobooks narrated in English and Tamil. Every audiobook purchase allocates 25% to empower rural youth sports and school scholarships.
+        </p>
+      </div>
+    </div>
+
+    <!-- Audiobooks Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      <!-- Audiobook 1: Atomic Habits -->
+      <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+        <div>
+          <div class="relative bg-gray-50 rounded-2xl p-4 aspect-[4/3] flex items-center justify-center mb-5">
+            <img src="assets/cover-atomic-habits.svg" alt="Atomic Habits Audiobook" class="h-full object-contain drop-shadow-md">
+            <span class="absolute top-3 left-3 bg-brandOrange text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+              <span>🎧 5 hrs 35 mins</span>
+            </span>
+          </div>
+          
+          <h3 class="font-extrabold text-navy text-lg hover:text-forest transition-colors">Atomic Habits</h3>
+          <p class="text-xs text-gray-500 mt-1">Author: <strong>James Clear</strong> • Narrated by <strong>James Clear</strong></p>
+          <div class="flex items-center gap-3 mt-3 text-xs">
+            <span class="text-amber-500 font-bold">★ 4.9 (428)</span>
+            <span class="text-gray-400">•</span>
+            <span class="text-forest font-semibold">English &amp; Tamil Edition</span>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between gap-3">
+          <div>
+            <span class="text-xl font-extrabold text-forest">₹149</span>
+            <span class="text-[11px] text-brandOrange block font-bold">₹37.25 for Youth</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button 
+              type="button" 
+              data-listen-sample="true"
+              data-book-title="Atomic Habits (Audio Sample)"
+              data-book-author="James Clear"
+              data-audio-url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+              data-cover-url="assets/cover-atomic-habits.svg"
+              class="px-4 py-2.5 rounded-full bg-blue-50 text-navy font-bold text-xs hover:bg-navy hover:text-white transition-colors flex items-center gap-1.5"
+            >
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <span>Sample</span>
+            </button>
+            <button 
+              type="button" 
+              onclick="window.SocialReadersCheckout.openCheckout('b1', 'audiobook')" 
+              class="px-5 py-2.5 rounded-full bg-forest text-white font-bold text-xs hover:bg-green-800 transition-colors shadow-sm"
+            >
+              Buy
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Audiobook 2: Wings of Fire -->
+      <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+        <div>
+          <div class="relative bg-gray-50 rounded-2xl p-4 aspect-[4/3] flex items-center justify-center mb-5">
+            <img src="assets/cover-wings-of-fire.svg" alt="Wings of Fire Audiobook" class="h-full object-contain drop-shadow-md">
+            <span class="absolute top-3 left-3 bg-brandOrange text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+              <span>🎧 7 hrs 20 mins</span>
+            </span>
+          </div>
+          
+          <h3 class="font-extrabold text-navy text-lg hover:text-forest transition-colors">Wings of Fire</h3>
+          <p class="text-xs text-gray-500 mt-1">Author: <strong>Dr. A.P.J. Abdul Kalam</strong> • Narrated by <strong>Girish Karnad</strong></p>
+          <div class="flex items-center gap-3 mt-3 text-xs">
+            <span class="text-amber-500 font-bold">★ 5.0 (1,240)</span>
+            <span class="text-gray-400">•</span>
+            <span class="text-forest font-semibold">Tamil &amp; English</span>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between gap-3">
+          <div>
+            <span class="text-xl font-extrabold text-forest">₹159</span>
+            <span class="text-[11px] text-brandOrange block font-bold">₹39.75 for Youth</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button 
+              type="button" 
+              data-listen-sample="true"
+              data-book-title="Wings of Fire (Audio Sample)"
+              data-book-author="Dr. A.P.J. Abdul Kalam"
+              data-audio-url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"
+              data-cover-url="assets/cover-wings-of-fire.svg"
+              class="px-4 py-2.5 rounded-full bg-blue-50 text-navy font-bold text-xs hover:bg-navy hover:text-white transition-colors flex items-center gap-1.5"
+            >
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <span>Sample</span>
+            </button>
+            <button 
+              type="button" 
+              onclick="window.SocialReadersCheckout.openCheckout('b5', 'audiobook')" 
+              class="px-5 py-2.5 rounded-full bg-forest text-white font-bold text-xs hover:bg-green-800 transition-colors shadow-sm"
+            >
+              Buy
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Audiobook 3: Rich Dad Poor Dad -->
+      <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+        <div>
+          <div class="relative bg-gray-50 rounded-2xl p-4 aspect-[4/3] flex items-center justify-center mb-5">
+            <img src="assets/cover-rich-dad.svg" alt="Rich Dad Poor Dad Audiobook" class="h-full object-contain drop-shadow-md">
+            <span class="absolute top-3 left-3 bg-brandOrange text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+              <span>🎧 6 hrs 45 mins</span>
+            </span>
+          </div>
+          
+          <h3 class="font-extrabold text-navy text-lg hover:text-forest transition-colors">Rich Dad Poor Dad</h3>
+          <p class="text-xs text-gray-500 mt-1">Author: <strong>Robert Kiyosaki</strong> • Narrated by <strong>Robert Kiyosaki</strong></p>
+          <div class="flex items-center gap-3 mt-3 text-xs">
+            <span class="text-amber-500 font-bold">★ 4.9 (890)</span>
+            <span class="text-gray-400">•</span>
+            <span class="text-forest font-semibold">English &amp; Tamil Edition</span>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between gap-3">
+          <div>
+            <span class="text-xl font-extrabold text-forest">₹199</span>
+            <span class="text-[11px] text-brandOrange block font-bold">₹49.75 for Youth</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button 
+              type="button" 
+              data-listen-sample="true"
+              data-book-title="Rich Dad Poor Dad (Audio Sample)"
+              data-book-author="Robert Kiyosaki"
+              data-audio-url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+              data-cover-url="assets/cover-rich-dad.svg"
+              class="px-4 py-2.5 rounded-full bg-blue-50 text-navy font-bold text-xs hover:bg-navy hover:text-white transition-colors flex items-center gap-1.5"
+            >
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <span>Sample</span>
+            </button>
+            <button 
+              type="button" 
+              onclick="window.SocialReadersCheckout.openCheckout('b4', 'audiobook')" 
+              class="px-5 py-2.5 rounded-full bg-forest text-white font-bold text-xs hover:bg-green-800 transition-colors shadow-sm"
+            >
+              Buy
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-gray-200 mt-16">
+    <div class="bg-gradient-to-r from-orange-50 via-cream to-green-50 py-6 px-4 text-center border-b border-gray-200/70">
+      <div class="max-w-4xl mx-auto flex items-center justify-center gap-3">
+        <svg class="w-5 h-5 fill-current text-brandOrange" viewBox="0 0 24 24">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+        <p data-i18n="footer.tagline" class="text-sm sm:text-base font-extrabold text-navy font-heading">
+          Read more. Give more. Change more lives.
+        </p>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-400">
+      <p data-i18n="footer.rights">© 2026 Social Readers. All rights reserved.</p>
+      <div class="flex items-center gap-4 mt-3 sm:mt-0">
+        <button type="button" class="lang-toggle-btn text-navy font-bold hover:underline">EN | த</button>
+        <a href="books.html" class="hover:underline">E-Books</a>
+        <a href="impact.html" class="hover:underline">Our Impact</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MOBILE BOTTOM TAB BAR -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-2xl flex justify-around items-center h-16 px-2">
+    <a href="index.html" class="mobile-tab-item flex flex-col items-center justify-center w-full py-1 text-gray-500 hover:text-navy">
+      <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+      <span data-i18n="nav.home" class="text-[10px]">Home</span>
+    </a>
+    <a href="categories.html" class="mobile-tab-item flex flex-col items-center justify-center w-full py-1 text-gray-500 hover:text-navy">
+      <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+      <span data-i18n="nav.categories" class="text-[10px]">Categories</span>
+    </a>
+    <a href="books.html" class="mobile-tab-item flex flex-col items-center justify-center w-full py-1 text-gray-500 hover:text-navy">
+      <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+      <span data-i18n="nav.books" class="text-[10px]">E-Books</span>
+    </a>
+    <a href="audiobooks.html" class="mobile-tab-item flex flex-col items-center justify-center w-full py-1 text-navy font-bold">
+      <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+      <span class="text-[10px]">Audiobooks</span>
+    </a>
+    <a href="impact.html" class="mobile-tab-item flex flex-col items-center justify-center w-full py-1 text-brandOrange font-bold">
+      <svg class="w-5 h-5 mb-0.5 fill-current text-brandOrange" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      <span data-i18n="nav.impact" class="text-[10px]">Our Impact</span>
+    </a>
+  </nav>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/audio-player.js"></script>
+  <script src="js/checkout.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

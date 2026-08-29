@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 420" width="100%" height="100%">
+  <defs>
+    <linearGradient id="ycwBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#246428" />
+      <stop offset="100%" stop-color="#1A4A1D" />
+    </linearGradient>
+  </defs>
+  <rect width="300" height="420" rx="8" fill="url(#ycwBg)" stroke="#123615" stroke-width="2" />
+  <line x1="20" y1="0" x2="20" y2="420" stroke="#3d8742" stroke-width="1" />
+
+  <!-- Trophy Icon -->
+  <g transform="translate(125, 75)">
+    <path d="M10,10 L40,10 L38,28 Q25,38 12,28 Z" fill="#E8720C" />
+    <path d="M5,15 Q0,22 8,25" fill="none" stroke="#E8720C" stroke-width="3" />
+    <path d="M45,15 Q50,22 42,25" fill="none" stroke="#E8720C" stroke-width="3" />
+    <rect x="22" y="38" width="6" height="12" fill="#FAF7F2" />
+    <rect x="15" y="50" width="20" height="6" rx="2" fill="#FAF7F2" />
+  </g>
+
+  <text x="150" y="185" font-family="'Poppins', sans-serif" font-weight="700" font-size="20" fill="#FFE082" text-anchor="middle">INTERNATIONAL BESTSELLER</text>
+  <text x="150" y="225" font-family="'Poppins', sans-serif" font-weight="800" font-size="28" fill="#FFFFFF" text-anchor="middle">YOU CAN WIN</text>
+  
+  <text x="150" y="260" font-family="'Inter', sans-serif" font-weight="400" font-size="11" fill="#C8E6C9" text-anchor="middle">Winners don't do different things,</text>
+  <text x="150" y="275" font-family="'Inter', sans-serif" font-weight="400" font-size="11" fill="#C8E6C9" text-anchor="middle">they do things differently.</text>
+
+  <rect x="50" y="325" width="200" height="45" rx="8" fill="#FAF7F2" />
+  <text x="150" y="352" font-family="'Poppins', sans-serif" font-weight="700" font-size="14" fill="#0B2C5D" text-anchor="middle">SHIV KHERA</text>
+</svg>

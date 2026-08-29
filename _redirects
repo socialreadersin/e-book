@@ -1,0 +1,4 @@
+# Cloudflare Pages Redirects
+/admin /admin/dashboard.html 301
+/catalog /books.html 301
+/listen /audiobooks.html 301

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="studentBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#143c77" />
+      <stop offset="100%" stop-color="#0B2C5D" />
+    </linearGradient>
+  </defs>
+
+  <rect width="500" height="400" rx="24" fill="url(#studentBg)" />
+  
+  <!-- Subtle Background Rings -->
+  <circle cx="250" cy="200" r="140" fill="none" stroke="#2E7D32" stroke-width="2" stroke-dasharray="8 8" opacity="0.3" />
+  <circle cx="250" cy="200" r="180" fill="none" stroke="#E8720C" stroke-width="2" stroke-dasharray="6 6" opacity="0.25" />
+
+  <!-- Center Graphic: Students & Sports -->
+  <g transform="translate(150, 70)">
+    <!-- Student Figure with Book -->
+    <g transform="translate(10, 30)">
+      <circle cx="40" cy="30" r="22" fill="#FFD54F" />
+      <!-- Body -->
+      <path d="M15,110 Q40,65 65,110 Z" fill="#2E7D32" />
+      <!-- Book in hand -->
+      <path d="M25,85 L40,75 L55,85 L55,100 L40,90 L25,100 Z" fill="#FAF7F2" stroke="#0B2C5D" stroke-width="1.5" />
+    </g>
+
+    <!-- Athlete Figure with Trophy/Medal -->
+    <g transform="translate(110, 20)">
+      <circle cx="40" cy="30" r="22" fill="#FFB74D" />
+      <!-- Body with athletic gear -->
+      <path d="M15,120 Q40,70 65,120 Z" fill="#E8720C" />
+      <!-- Running motion lines & Medal -->
+      <circle cx="40" cy="85" r="10" fill="#FFD700" stroke="#0B2C5D" stroke-width="1.5" />
+      <path d="M35,68 L40,77 L45,68" stroke="#0B2C5D" stroke-width="2" fill="none" />
+    </g>
+  </g>
+
+  <!-- Impact Tag Card at Bottom -->
+  <g transform="translate(75, 290)">
+    <rect width="350" height="70" rx="16" fill="#FAF7F2" />
+    <text x="175" y="32" font-family="'Poppins', sans-serif" font-weight="700" font-size="14" fill="#0B2C5D" text-anchor="middle">Empowering 12,450+ Young Lives</text>
+    <text x="175" y="52" font-family="'Inter', sans-serif" font-weight="500" font-size="11" fill="#2E7D32" text-anchor="middle">Equal Access to Quality Education &amp; Athletics</text>
+  </g>
+</svg>

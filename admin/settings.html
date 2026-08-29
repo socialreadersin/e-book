@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platform Settings | Admin — Social Readers</title>
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#0B2C5D',
+            forest: '#2E7D32',
+            brandOrange: '#E8720C',
+            cream: '#FAF7F2',
+          },
+          fontFamily: {
+            heading: ['Poppins', 'Noto Sans Tamil', 'sans-serif'],
+            body: ['Inter', 'Noto Sans Tamil', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-[#FAF7F2] text-gray-800 min-h-screen flex">
+
+  <!-- SIDEBAR -->
+  <aside class="w-64 bg-navy text-white flex-shrink-0 hidden md:flex flex-col justify-between p-6">
+    <div class="space-y-8">
+      <a href="../index.html" class="flex flex-col">
+        <div class="flex items-center gap-1">
+          <span class="text-xl font-extrabold text-white">SOCIAL</span>
+          <span class="text-xl font-extrabold text-green-400">READERS</span>
+        </div>
+        <span class="text-[10px] tracking-widest text-orange-300 font-bold uppercase mt-0.5">Admin Console</span>
+      </a>
+
+      <nav class="space-y-2">
+        <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="manage-books.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          <span>Manage Books</span>
+        </a>
+        <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+          <span>Orders &amp; Receipts</span>
+        </a>
+        <a href="categories.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+          <span>Categories</span>
+        </a>
+        <a href="settings.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white font-bold text-sm">
+          <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="pt-6 border-t border-white/10 text-xs text-gray-400 flex items-center justify-between">
+      <span>Admin: S. Raman</span>
+      <a href="login.html" class="text-orange-300 hover:underline">Logout</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="flex-grow flex flex-col min-w-0">
+    <header class="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
+      <h1 class="text-lg font-bold text-navy">Integrations &amp; Platform Configuration</h1>
+    </header>
+
+    <main class="p-6 sm:p-8 space-y-6 flex-grow max-w-4xl">
+      
+      <!-- Cloudinary Config -->
+      <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 sm:p-8 space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-blue-50 text-navy flex items-center justify-center font-bold">☁️</div>
+          <div>
+            <h3 class="font-extrabold text-navy text-base">Cloudinary Storage Integration</h3>
+            <p class="text-xs text-gray-400">Host cover images and raw resources (PDF e-books &amp; MP3 audiobooks)</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <div>
+            <label class="block text-xs font-bold text-navy mb-1">Cloud Name</label>
+            <input type="text" id="setting-cloud-name" class="w-full px-3.5 py-2 text-xs rounded-xl border border-gray-200 focus:outline-none focus:border-navy" placeholder="e.g. social-readers-prod">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-navy mb-1">Unsigned Upload Preset</label>
+            <input type="text" id="setting-upload-preset" class="w-full px-3.5 py-2 text-xs rounded-xl border border-gray-200 focus:outline-none focus:border-navy" placeholder="e.g. sr_unsigned_books">
+          </div>
+        </div>
+      </div>
+
+      <!-- Firebase Config -->
+      <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 sm:p-8 space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">🔥</div>
+          <div>
+            <h3 class="font-extrabold text-navy text-base">Firebase Project Settings</h3>
+            <p class="text-xs text-gray-400">Authentication &amp; Cloud Firestore connection</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <div>
+            <label class="block text-xs font-bold text-navy mb-1">Project ID</label>
+            <input type="text" id="setting-firebase-project-id" class="w-full px-3.5 py-2 text-xs rounded-xl border border-gray-200 focus:outline-none focus:border-navy" placeholder="social-readers-store">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-navy mb-1">Web API Key</label>
+            <input type="password" id="setting-firebase-api-key" class="w-full px-3.5 py-2 text-xs rounded-xl border border-gray-200 focus:outline-none focus:border-navy" placeholder="AIzaSy...">
+          </div>
+        </div>
+      </div>
+
+      <!-- 25% Social Cause Policy -->
+      <div class="bg-white rounded-3xl border border-orange-100 shadow-sm p-6 sm:p-8 space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-orange-50 text-brandOrange flex items-center justify-center font-bold">❤️</div>
+          <div>
+            <h3 class="font-extrabold text-navy text-base">25% For Change Mission Policy</h3>
+            <p class="text-xs text-gray-400">Earmarked allocation percentage across all sales</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="w-48">
+            <label class="block text-xs font-bold text-navy mb-1">Cause Allocation Rate</label>
+            <input type="text" value="25% Fixed (Mandatory)" disabled class="w-full px-3.5 py-2 text-xs rounded-xl bg-gray-100 text-gray-500 font-bold border border-gray-200">
+          </div>
+          <p class="text-xs text-gray-500 pt-5">Non-negotiable brand pillar. 25% of every transaction is automatically recorded into the audited social ledger.</p>
+        </div>
+      </div>
+
+      <div class="flex justify-end">
+        <button id="save-settings-btn" class="px-6 py-2.5 rounded-full bg-forest text-white text-xs font-bold hover:bg-green-800 transition-colors shadow-sm">
+          Save Settings
+        </button>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    SocialReadersAuth.requireAdmin();
+
+    const cloudNameInput = document.getElementById('setting-cloud-name');
+    const uploadPresetInput = document.getElementById('setting-upload-preset');
+    const fbProjectIdInput = document.getElementById('setting-firebase-project-id');
+    const fbApiKeyInput = document.getElementById('setting-firebase-api-key');
+
+    cloudNameInput.value = localStorage.getItem('sr_cloudinary_cloud_name') || '';
+    uploadPresetInput.value = localStorage.getItem('sr_cloudinary_upload_preset') || '';
+    fbProjectIdInput.value = localStorage.getItem('sr_firebase_project_id') || '';
+    fbApiKeyInput.value = localStorage.getItem('sr_firebase_api_key') || '';
+
+    document.getElementById('save-settings-btn').addEventListener('click', () => {
+      localStorage.setItem('sr_cloudinary_cloud_name', cloudNameInput.value.trim());
+      localStorage.setItem('sr_cloudinary_upload_preset', uploadPresetInput.value.trim());
+      localStorage.setItem('sr_firebase_project_id', fbProjectIdInput.value.trim());
+      localStorage.setItem('sr_firebase_api_key', fbApiKeyInput.value.trim());
+      alert('Settings saved successfully.');
+    });
+  </script>
+</body>
+</html>

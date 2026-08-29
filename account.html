@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account | Social Readers</title>
+  <meta name="description" content="Manage your e-book library, order history, and see your personal impact contribution on Social Readers.">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#0B2C5D',
+            forest: '#2E7D32',
+            brandOrange: '#E8720C',
+            cream: '#FAF7F2',
+          },
+          fontFamily: {
+            heading: ['Poppins', 'Noto Sans Tamil', 'sans-serif'],
+            body: ['Inter', 'Noto Sans Tamil', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-[#FAF7F2] text-gray-800 flex flex-col min-h-screen">
+
+  <!-- TOP NAVIGATION -->
+  <header class="bg-white/95 backdrop-blur-md sticky top-0 z-40 border-b border-gray-100 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        
+        <!-- Logo -->
+        <a href="index.html" class="flex flex-col items-start group">
+          <div class="flex items-center gap-1.5">
+            <span class="text-2xl sm:text-3xl font-extrabold tracking-tight text-navy">SOCIAL</span>
+            <span class="text-2xl sm:text-3xl font-extrabold tracking-tight text-forest">READERS</span>
+          </div>
+          <div class="flex items-center gap-2 mt-0.5">
+            <div class="w-4 h-[2px] bg-brandOrange rounded-full"></div>
+            <span data-i18n="brand.tagline" class="text-[10px] sm:text-xs tracking-widest uppercase font-bold text-gray-500 group-hover:text-brandOrange transition-colors">
+              READ FOR CHANGE
+            </span>
+            <div class="w-4 h-[2px] bg-brandOrange rounded-full"></div>
+          </div>
+        </a>
+
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex items-center space-x-8">
+          <a href="index.html" data-i18n="nav.home" class="desktop-nav-link text-sm font-semibold text-gray-600 hover:text-navy transition-colors py-2">Home</a>
+          <a href="categories.html" data-i18n="nav.categories" class="desktop-nav-link text-sm font-semibold text-gray-600 hover:text-navy transition-colors py-2">Categories</a>
+          <a href="books.html" data-i18n="nav.books" class="desktop-nav-link text-sm font-semibold text-gray-600 hover:text-navy transition-colors py-2">All E-Books</a>
+          <a href="audiobooks.html" class="desktop-nav-link text-sm font-semibold text-gray-600 hover:text-navy transition-colors py-2">Audiobooks</a>
+          <a href="impact.html" data-i18n="nav.impact" class="desktop-nav-link text-sm font-semibold text-gray-600 hover:text-navy transition-colors py-2 flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-brandOrange"></span>
+            <span>Our Impact</span>
+          </a>
+          <a href="account.html" data-i18n="nav.account" class="desktop-nav-link text-sm font-semibold text-navy font-bold border-b-2 border-forest transition-colors py-2">Account</a>
+        </nav>
+
+        <!-- Actions -->
+        <div class="flex items-center space-x-3 sm:space-x-4">
+          <button type="button" class="lang-toggle-btn px-3.5 py-1.5 rounded-full border-2 border-navy text-navy font-bold text-xs hover:bg-navy hover:text-white transition-all shadow-sm">
+            EN | த
+          </button>
+          <a href="admin/login.html" data-i18n="nav.admin" class="text-xs text-gray-400 hover:text-navy font-medium px-2 py-1 border border-gray-200 rounded-md hidden lg:inline-block">
+            Admin
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- User Profile Header Card -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
+      
+      <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+        <!-- Avatar -->
+        <div class="w-20 h-20 rounded-full bg-navy text-white font-extrabold text-2xl flex items-center justify-center shadow-md">
+          SR
+        </div>
+        <div>
+          <h1 data-i18n="account.welcome" class="text-2xl font-extrabold text-navy">Welcome back, Reader!</h1>
+          <p data-i18n="account.email" class="text-sm text-gray-500 mt-0.5">reader@socialreaders.org</p>
+          <div class="flex items-center gap-2 mt-2 justify-center sm:justify-start">
+            <span class="px-2.5 py-0.5 rounded-full bg-green-100 text-forest text-[11px] font-bold">Active Reader</span>
+            <span class="text-xs text-gray-400">Member since 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personal Social Contribution Callout Box -->
+      <div class="w-full md:w-auto bg-gradient-to-r from-orange-50 to-amber-50 rounded-2xl p-4 border border-orange-200 text-center sm:text-left flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-brandOrange text-white flex items-center justify-center flex-shrink-0">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        </div>
+        <div>
+          <span class="text-[10px] uppercase font-bold text-brandOrange tracking-wider block">Your 25% Contribution</span>
+          <p data-i18n="account.impact_metric" class="text-xs sm:text-sm font-bold text-navy">
+            You have contributed ₹172.50 to education &amp; sports so far!
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Account Navigation Tabs -->
+    <div class="flex border-b border-gray-200 mb-8 overflow-x-auto">
+      <button class="account-tab-btn px-6 py-3 font-semibold text-sm border-b-2 border-forest text-navy font-bold whitespace-nowrap" data-tab-target="tab-library" data-i18n="account.tab.library">
+        My Library (4)
+      </button>
+      <button class="account-tab-btn px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-500 hover:text-navy whitespace-nowrap" data-tab-target="tab-orders" data-i18n="account.tab.orders">
+        Order History
+      </button>
+      <button class="account-tab-btn px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-500 hover:text-navy whitespace-nowrap" data-tab-target="tab-wishlist" data-i18n="account.tab.wishlist">
+        Wishlist
+      </button>
+      <button class="account-tab-btn px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-500 hover:text-navy whitespace-nowrap" data-tab-target="tab-impact" data-i18n="account.tab.impact">
+        My Personal Impact
+      </button>
+    </div>
+
+    <!-- TAB 1: MY LIBRARY -->
+    <div id="tab-library" class="account-tab-pane">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Library Book 1 -->
+        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between">
+          <div>
+            <img src="assets/cover-atomic-habits.svg" alt="Atomic Habits" class="w-full h-56 object-contain bg-gray-50 rounded-xl p-2">
+            <h3 data-i18n="book1.title" class="font-bold text-navy text-sm mt-3">Atomic Habits</h3>
+            <p data-i18n="book1.author" class="text-xs text-gray-500">James Clear</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-gray-100 space-y-2">
+            <button type="button" onclick="showToast('Downloading E-Book PDF...')" data-i18n="account.download" class="w-full py-2 rounded-lg bg-navy text-white text-xs font-bold hover:bg-blue-900 transition-colors">
+              Download E-Book
+            </button>
+            <button type="button" onclick="showToast('Opening web reader...')" data-i18n="account.read_online" class="w-full py-2 rounded-lg border border-gray-200 text-navy text-xs font-semibold hover:bg-gray-50 transition-colors">
+              Read Online
+            </button>
+          </div>
+        </div>
+
+        <!-- Library Book 2 -->
+        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between">
+          <div>
+            <img src="assets/cover-mindset.svg" alt="The Power of Mindset" class="w-full h-56 object-contain bg-gray-50 rounded-xl p-2">
+            <h3 data-i18n="book2.title" class="font-bold text-navy text-sm mt-3">The Power of Mindset</h3>
+            <p data-i18n="book2.author" class="text-xs text-gray-500">Carol S. Dweck</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-gray-100 space-y-2">
+            <button type="button" onclick="showToast('Downloading E-Book PDF...')" data-i18n="account.download" class="w-full py-2 rounded-lg bg-navy text-white text-xs font-bold hover:bg-blue-900 transition-colors">
+              Download E-Book
+            </button>
+            <button type="button" onclick="showToast('Opening web reader...')" data-i18n="account.read_online" class="w-full py-2 rounded-lg border border-gray-200 text-navy text-xs font-semibold hover:bg-gray-50 transition-colors">
+              Read Online
+            </button>
+          </div>
+        </div>
+
+        <!-- Library Book 3 -->
+        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between">
+          <div>
+            <img src="assets/cover-you-can-win.svg" alt="You Can Win" class="w-full h-56 object-contain bg-gray-50 rounded-xl p-2">
+            <h3 data-i18n="book3.title" class="font-bold text-navy text-sm mt-3">You Can Win</h3>
+            <p data-i18n="book3.author" class="text-xs text-gray-500">Shiv Khera</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-gray-100 space-y-2">
+            <button type="button" onclick="showToast('Downloading E-Book PDF...')" data-i18n="account.download" class="w-full py-2 rounded-lg bg-navy text-white text-xs font-bold hover:bg-blue-900 transition-colors">
+              Download E-Book
+            </button>
+            <button type="button" onclick="showToast('Opening web reader...')" data-i18n="account.read_online" class="w-full py-2 rounded-lg border border-gray-200 text-navy text-xs font-semibold hover:bg-gray-50 transition-colors">
+              Read Online
+            </button>
+          </div>
+        </div>
+
+        <!-- Library Book 4 -->
+        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between">
+          <div>
+            <img src="assets/cover-rich-dad.svg" alt="Rich Dad Poor Dad" class="w-full h-56 object-contain bg-gray-50 rounded-xl p-2">
+            <h3 data-i18n="book4.title" class="font-bold text-navy text-sm mt-3">Rich Dad Poor Dad</h3>
+            <p data-i18n="book4.author" class="text-xs text-gray-500">Robert Kiyosaki</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-gray-100 space-y-2">
+            <button type="button" onclick="showToast('Downloading E-Book PDF...')" data-i18n="account.download" class="w-full py-2 rounded-lg bg-navy text-white text-xs font-bold hover:bg-blue-900 transition-colors">
+              Download E-Book
+            </button>
+            <button type="button" onclick="showToast('Opening web reader...')" data-i18n="account.read_online" class="w-full py-2 rounded-lg border border-gray-200 text-navy text-xs font-semibold hover:bg-gray-50 transition-colors">
+              Read Online
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 2: ORDER HISTORY -->
+    <div id="tab-orders" class="account-tab-pane hidden">
+      <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead class="bg-[#FAF7F2] text-navy font-bold border-b border-gray-200">
+              <tr>
+                <th class="p-4">Order ID</th>
+                <th class="p-4">Book Title</th>
+                <th class="p-4">Date</th>
+                <th class="p-4">Amount</th>
+                <th class="p-4">25% Allocated</th>
+                <th class="p-4">Receipt</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 text-gray-600">
+              <tr>
+                <td class="p-4 font-mono font-bold text-navy">#SR-9821</td>
+                <td class="p-4 font-semibold text-gray-800">Atomic Habits</td>
+                <td class="p-4">24 Aug 2026</td>
+                <td class="p-4 font-bold text-forest">₹149.00</td>
+                <td class="p-4 font-bold text-brandOrange">₹37.25</td>
+                <td class="p-4"><button onclick="showToast('Downloading receipt PDF...')" class="text-navy font-semibold hover:underline">Download</button></td>
+              </tr>
+              <tr>
+                <td class="p-4 font-mono font-bold text-navy">#SR-9540</td>
+                <td class="p-4 font-semibold text-gray-800">The Power of Mindset</td>
+                <td class="p-4">12 Aug 2026</td>
+                <td class="p-4 font-bold text-forest">₹179.00</td>
+                <td class="p-4 font-bold text-brandOrange">₹44.75</td>
+                <td class="p-4"><button onclick="showToast('Downloading receipt PDF...')" class="text-navy font-semibold hover:underline">Download</button></td>
+              </tr>
+              <tr>
+                <td class="p-4 font-mono font-bold text-navy">#SR-9102</td>
+                <td class="p-4 font-semibold text-gray-800">You Can Win</td>
+                <td class="p-4">28 Jul 2026</td>
+                <td class="p-4 font-bold text-forest">₹149.00</td>
+                <td class="p-4 font-bold text-brandOrange">₹37.25</td>
+                <td class="p-4"><button onclick="showToast('Downloading receipt PDF...')" class="text-navy font-semibold hover:underline">Download</button></td>
+              </tr>
+              <tr>
+                <td class="p-4 font-mono font-bold text-navy">#SR-8744</td>
+                <td class="p-4 font-semibold text-gray-800">Rich Dad Poor Dad</td>
+                <td class="p-4">15 Jul 2026</td>
+                <td class="p-4 font-bold text-forest">₹199.00</td>
+                <td class="p-4 font-bold text-brandOrange">₹49.75</td>
+                <td class="p-4"><button onclick="showToast('Downloading receipt PDF...')" class="text-navy font-semibold hover:underline">Download</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: WISHLIST -->
+    <div id="tab-wishlist" class="account-tab-pane hidden">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex items-center gap-4">
+          <img src="assets/cover-wings-of-fire.svg" alt="Wings of Fire" class="w-20 h-28 object-contain bg-gray-50 rounded-lg p-1">
+          <div class="flex-grow">
+            <h4 data-i18n="book5.title" class="font-bold text-navy text-sm">Wings of Fire</h4>
+            <p data-i18n="book5.author" class="text-xs text-gray-500">Dr. A.P.J. Abdul Kalam</p>
+            <span data-i18n="book5.price" class="text-sm font-bold text-forest mt-1 block">₹159</span>
+            <button type="button" onclick="showToast('Added to Cart!')" class="mt-2 px-3 py-1 bg-forest text-white text-xs font-bold rounded-full">
+              Buy Now
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex items-center gap-4">
+          <img src="assets/cover-ikigai.svg" alt="Ikigai" class="w-20 h-28 object-contain bg-gray-50 rounded-lg p-1">
+          <div class="flex-grow">
+            <h4 data-i18n="book6.title" class="font-bold text-navy text-sm">Ikigai</h4>
+            <p data-i18n="book6.author" class="text-xs text-gray-500">Héctor García</p>
+            <span data-i18n="book6.price" class="text-sm font-bold text-forest mt-1 block">₹169</span>
+            <button type="button" onclick="showToast('Added to Cart!')" class="mt-2 px-3 py-1 bg-forest text-white text-xs font-bold rounded-full">
+              Buy Now
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 4: PERSONAL IMPACT -->
+    <div id="tab-impact" class="account-tab-pane hidden">
+      <div class="bg-white rounded-3xl p-6 sm:p-10 border border-gray-100 shadow-sm space-y-6">
+        <h3 class="text-xl font-bold text-navy">Your Verified Contribution Breakdown</h3>
+        <p class="text-sm text-gray-600">
+          Through your 4 purchases on Social Readers, here is the direct real-world difference you made:
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4">
+          <div class="p-6 rounded-2xl bg-orange-50 border border-orange-200 text-center">
+            <div class="text-3xl font-extrabold text-brandOrange">2</div>
+            <p class="text-xs font-bold text-navy mt-1">Student Textbooks Funded</p>
+          </div>
+          <div class="p-6 rounded-2xl bg-green-50 border border-green-200 text-center">
+            <div class="text-3xl font-extrabold text-forest">1 Pair</div>
+            <p class="text-xs font-bold text-navy mt-1">Running Spikes Co-Sponsored</p>
+          </div>
+          <div class="p-6 rounded-2xl bg-blue-50 border border-blue-200 text-center">
+            <div class="text-3xl font-extrabold text-navy">₹172.50</div>
+            <p class="text-xs font-bold text-navy mt-1">Total Social Fund Generated</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-gray-200 mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-400">
+      <p data-i18n="footer.rights">© 2026 Social Readers. All rights reserved.</p>
+      <div class="flex items-center gap-4 mt-3 sm:mt-0">
+        <button type="button" class="lang-toggle-btn text-navy font-bold hover:underline">EN | த</button>
+        <a href="books.html" class="hover:underline">Catalog</a>
+        <a href="impact.html" class="hover:underline">Our Impact</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MOBILE BOTTOM TAB BAR -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-2xl flex justify-around items-center h-16 px-2">
+    <a href="index.html" class="mobile-tab-item flex flex-col items-center justify-center w-full py-1 text-gray-500 hover:text-navy">
+      <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+      <span data-i18n="nav.home" class="text-[10px]">Home</span>
+    </a>
+    <a href="categories.html" class="mobile-tab-item flex flex-col items-center justify-center w-full py-1 text-gray-500 hover:text-navy">
+      <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+      <span data-i18n="nav.categories" class="text-[10px]">Categories</span>
+    </a>
+    <a href="books.html" class="mobile-tab-item flex flex-col items-center justify-center w-full py-1 text-gray-500 hover:text-navy">
+      <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+      <span data-i18n="nav.library" class="text-[10px]">My Library</span>
+    </a>
+    <a href="impact.html" class="mobile-tab-item flex flex-col items-center justify-center w-full py-1 text-brandOrange font-bold">
+      <svg class="w-5 h-5 mb-0.5 fill-current text-brandOrange" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      <span data-i18n="nav.impact" class="text-[10px]">Our Impact</span>
+    </a>
+    <a href="account.html" class="mobile-tab-item flex flex-col items-center justify-center w-full py-1 text-navy font-bold">
+      <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+      <span data-i18n="nav.account" class="text-[10px]">Account</span>
+    </a>
+  </nav>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/audio-player.js"></script>
+  <script src="js/checkout.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

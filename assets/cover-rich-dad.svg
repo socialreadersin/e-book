@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 420" width="100%" height="100%">
+  <defs>
+    <linearGradient id="rdBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4A154B" />
+      <stop offset="100%" stop-color="#2D0B2E" />
+    </linearGradient>
+  </defs>
+  <rect width="300" height="420" rx="8" fill="url(#rdBg)" stroke="#1F0720" stroke-width="2" />
+  <line x1="20" y1="0" x2="20" y2="420" stroke="#662268" stroke-width="1" />
+
+  <rect x="30" y="40" width="240" height="40" rx="6" fill="#E8720C" />
+  <text x="150" y="65" font-family="'Poppins', sans-serif" font-weight="700" font-size="12" fill="#FFFFFF" text-anchor="middle">#1 PERSONAL FINANCE BOOK</text>
+
+  <text x="150" y="150" font-family="'Poppins', sans-serif" font-weight="800" font-size="30" fill="#FFD54F" text-anchor="middle">RICH DAD</text>
+  <text x="150" y="190" font-family="'Poppins', sans-serif" font-weight="800" font-size="30" fill="#FFFFFF" text-anchor="middle">POOR DAD</text>
+  
+  <line x1="80" y1="210" x2="220" y2="210" stroke="#FFD54F" stroke-width="2" />
+
+  <text x="150" y="240" font-family="'Inter', sans-serif" font-weight="400" font-size="10" fill="#E1BEE7" text-anchor="middle">What The Rich Teach Their Kids</text>
+  <text x="150" y="255" font-family="'Inter', sans-serif" font-weight="400" font-size="10" fill="#E1BEE7" text-anchor="middle">About Money — That The Poor Do Not!</text>
+
+  <rect x="50" y="325" width="200" height="45" rx="8" fill="#FFD54F" />
+  <text x="150" y="352" font-family="'Poppins', sans-serif" font-weight="700" font-size="13" fill="#2D0B2E" text-anchor="middle">ROBERT T. KIYOSAKI</text>
+</svg>
