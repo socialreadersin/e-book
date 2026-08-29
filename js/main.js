@@ -8,6 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
   highlightActiveNav();
 
   // Initialize interactive components
+  initHeroSlider();
+  initLightningDealsTimer();
+  initBookCarousels();
+  initHeaderSearchBar();
   initWishlistButtons();
   initCategoryFilters();
   initFormatFilters();
@@ -125,6 +129,21 @@ function initCategoryFilters() {
         }
       });
     });
+  }
+
+  // Parse URL Query parameters (e.g., books.html?q=atomic or books.html?cat=business)
+  const urlParams = new URLSearchParams(window.location.search);
+  const qParam = urlParams.get('q');
+  const catParam = urlParams.get('cat');
+
+  if (qParam && searchInput) {
+    searchInput.value = qParam;
+    searchInput.dispatchEvent(new Event('input'));
+  } else if (catParam) {
+    const matchingBtn = document.querySelector(`.category-filter-btn[data-category="${catParam}"]`);
+    if (matchingBtn) {
+      matchingBtn.click();
+    }
   }
 }
 
@@ -253,3 +272,202 @@ function showToast(message) {
     toast.classList.remove('translate-y-0', 'opacity-100');
   }, 2500);
 }
+
+/**
+ * Amazon / Flipkart Style Hero Slider Controller
+ */
+function initHeroSlider() {
+  const slider = document.getElementById('hero-slider');
+  if (!slider) return;
+
+  const track = slider.querySelector('.hero-slider-track');
+  const slides = slider.querySelectorAll('.hero-slide');
+  const dots = slider.querySelectorAll('.slider-dot');
+  const prevBtn = slider.querySelector('.slider-arrow-btn.prev');
+  const nextBtn = slider.querySelector('.slider-arrow-btn.next');
+
+  if (!track || !slides.length) return;
+
+  let currentSlide = 0;
+  const totalSlides = slides.length;
+  let autoplayTimer = null;
+  const autoplayDelay = 5000;
+
+  function updateSlider(index) {
+    if (index < 0) {
+      currentSlide = totalSlides - 1;
+    } else if (index >= totalSlides) {
+      currentSlide = 0;
+    } else {
+      currentSlide = index;
+    }
+
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+    // Update dots
+    dots.forEach((dot, i) => {
+      if (i === currentSlide) {
+        dot.classList.add('active');
+      } else {
+        dot.classList.remove('active');
+      }
+    });
+  }
+
+  function startAutoplay() {
+    stopAutoplay();
+    autoplayTimer = setInterval(() => {
+      updateSlider(currentSlide + 1);
+    }, autoplayDelay);
+  }
+
+  function stopAutoplay() {
+    if (autoplayTimer) {
+      clearInterval(autoplayTimer);
+      autoplayTimer = null;
+    }
+  }
+
+  // Prev / Next button listeners
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      updateSlider(currentSlide - 1);
+      startAutoplay();
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      updateSlider(currentSlide + 1);
+      startAutoplay();
+    });
+  }
+
+  // Dot button listeners
+  dots.forEach((dot) => {
+    dot.addEventListener('click', () => {
+      const slideIndex = parseInt(dot.getAttribute('data-slide-to') || '0', 10);
+      updateSlider(slideIndex);
+      startAutoplay();
+    });
+  });
+
+  // Pause on hover
+  slider.addEventListener('mouseenter', stopAutoplay);
+  slider.addEventListener('mouseleave', startAutoplay);
+
+  // Touch Swipe Support for Mobile
+  let startX = 0;
+  let moveX = 0;
+
+  slider.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    stopAutoplay();
+  }, { passive: true });
+
+  slider.addEventListener('touchmove', (e) => {
+    moveX = e.touches[0].clientX;
+  }, { passive: true });
+
+  slider.addEventListener('touchend', () => {
+    const diff = startX - moveX;
+    if (Math.abs(diff) > 45 && moveX !== 0) {
+      if (diff > 0) {
+        updateSlider(currentSlide + 1);
+      } else {
+        updateSlider(currentSlide - 1);
+      }
+    }
+    startX = 0;
+    moveX = 0;
+    startAutoplay();
+  });
+
+  // Start autoplay initial
+  startAutoplay();
+}
+
+/**
+ * Amazon / Flipkart Lightning Deals Live Countdown Timer
+ */
+function initLightningDealsTimer() {
+  const timerElements = document.querySelectorAll('.deal-countdown-timer');
+  if (!timerElements.length) return;
+
+  // Set target end time (e.g. 5 hours 42 mins from current session)
+  let remainingSeconds = 5 * 3600 + 42 * 60 + 18;
+
+  function updateTimer() {
+    remainingSeconds = Math.max(0, remainingSeconds - 1);
+
+    const hours = Math.floor(remainingSeconds / 3600);
+    const minutes = Math.floor((remainingSeconds % 3600) / 60);
+    const seconds = remainingSeconds % 60;
+
+    const formatted = `${String(hours).padStart(2, '0')}h : ${String(minutes).padStart(2, '0')}m : ${String(seconds).padStart(2, '0')}s`;
+
+    timerElements.forEach((el) => {
+      el.textContent = formatted;
+    });
+  }
+
+  setInterval(updateTimer, 1000);
+  updateTimer();
+}
+
+/**
+ * Amazon / Flipkart Horizontal Product Carousels
+ */
+function initBookCarousels() {
+  const carousels = document.querySelectorAll('.book-carousel-container');
+  if (!carousels.length) return;
+
+  carousels.forEach((container) => {
+    const track = container.querySelector('.book-carousel-track');
+    const prevBtn = container.querySelector('.carousel-nav-btn.prev');
+    const nextBtn = container.querySelector('.carousel-nav-btn.next');
+
+    if (!track) return;
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        const scrollAmount = track.clientWidth * 0.75;
+        track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        const scrollAmount = track.clientWidth * 0.75;
+        track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      });
+    }
+  });
+}
+
+/**
+ * Amazon Style Global Search Bar
+ */
+function initHeaderSearchBar() {
+  const searchForms = document.querySelectorAll('.amazon-search-form');
+  searchForms.forEach((form) => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = form.querySelector('input[type="search"], input[type="text"]');
+      const categorySelect = form.querySelector('select');
+      const query = input ? input.value.trim() : '';
+      const cat = categorySelect ? categorySelect.value : 'all';
+
+      let targetUrl = 'books.html';
+      const params = [];
+      if (query) params.push(`q=${encodeURIComponent(query)}`);
+      if (cat && cat !== 'all') params.push(`cat=${encodeURIComponent(cat)}`);
+
+      if (params.length) {
+        targetUrl += '?' + params.join('&');
+      }
+      window.location.href = targetUrl;
+    });
+  });
+}
+
