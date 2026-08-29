@@ -1,6 +1,6 @@
 /**
  * Social Readers - Main Application Logic
- * Navigation, Tab Switching, Wishlist Toggle & Interactions
+ * Navigation, Tab Switching, Wishlist, Category & Format Filters, Reader & Audio hooks
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,8 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize interactive components
   initWishlistButtons();
   initCategoryFilters();
+  initFormatFilters();
   initAccountTabs();
   initToastSystem();
+  initBookDetailStickyBar();
+  initMobileReadAndDownloadButtons();
 });
 
 /**
@@ -75,13 +78,13 @@ function initWishlistButtons() {
 }
 
 /**
- * Filter books by category in books.html
+ * Filter books by category and live search in books.html
  */
 function initCategoryFilters() {
   const filterBtns = document.querySelectorAll('.category-filter-btn');
   const bookCards = document.querySelectorAll('.catalog-book-card');
 
-  if (!filterBtns.length) return;
+  if (!filterBtns.length && !bookCards.length) return;
 
   filterBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -126,6 +129,38 @@ function initCategoryFilters() {
 }
 
 /**
+ * Filter by format (All / E-Books / Audiobooks)
+ */
+function initFormatFilters() {
+  const formatBtns = document.querySelectorAll('.format-filter-btn');
+  const bookCards = document.querySelectorAll('.catalog-book-card');
+
+  if (!formatBtns.length) return;
+
+  formatBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const selectedFormat = btn.getAttribute('data-format');
+
+      formatBtns.forEach((b) => {
+        b.classList.remove('bg-navy', 'text-white');
+        b.classList.add('bg-white', 'text-navy', 'border', 'border-gray-200');
+      });
+      btn.classList.add('bg-navy', 'text-white');
+      btn.classList.remove('bg-white', 'text-navy', 'border', 'border-gray-200');
+
+      bookCards.forEach((card) => {
+        const cardType = card.getAttribute('data-type') || 'both';
+        if (selectedFormat === 'all' || cardType === selectedFormat || cardType === 'both') {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+}
+
+/**
  * Tab switching in account.html
  */
 function initAccountTabs() {
@@ -159,6 +194,37 @@ function initAccountTabs() {
 }
 
 /**
+ * Initialize Sticky Action Bar on Book Detail Page for Mobile
+ */
+function initBookDetailStickyBar() {
+  const stickyBar = document.querySelector('.mobile-sticky-action-bar');
+  if (!stickyBar) return;
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 200) {
+      stickyBar.style.transform = 'translateY(0)';
+      stickyBar.style.opacity = '1';
+    } else {
+      stickyBar.style.transform = 'translateY(100%)';
+      stickyBar.style.opacity = '0';
+    }
+  }, { passive: true });
+}
+
+/**
+ * Bind read and simulated download buttons
+ */
+function initMobileReadAndDownloadButtons() {
+  document.querySelectorAll('[data-download-book]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const title = btn.getAttribute('data-download-book') || 'E-Book';
+      showToast(`Downloading "${title}" EPUB & PDF...`);
+    });
+  });
+}
+
+/**
  * Toast Notification System
  */
 let toastTimeout;
@@ -172,10 +238,10 @@ function showToast(message) {
   }
 
   toast.innerHTML = `
-    <svg class="w-5 h-5 text-forest-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg class="w-5 h-5 text-forest-green flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
     </svg>
-    <span class="text-sm font-medium">${message}</span>
+    <span class="text-xs sm:text-sm font-medium">${message}</span>
   `;
 
   toast.classList.remove('translate-y-10', 'opacity-0');

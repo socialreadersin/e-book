@@ -10,7 +10,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -24,6 +24,7 @@
           fontFamily: {
             heading: ['Poppins', 'Noto Sans Tamil', 'sans-serif'],
             body: ['Inter', 'Noto Sans Tamil', 'sans-serif'],
+            serif: ['Merriweather', 'Noto Sans Tamil', 'Georgia', 'serif'],
           }
         }
       }
@@ -60,7 +61,7 @@
           <a href="books.html" data-i18n="nav.books" class="desktop-nav-link text-sm font-semibold text-navy font-bold border-b-2 border-forest transition-colors py-2">All E-Books</a>
           <a href="audiobooks.html" class="desktop-nav-link text-sm font-semibold text-gray-600 hover:text-navy transition-colors py-2">Audiobooks</a>
           <a href="impact.html" data-i18n="nav.impact" class="desktop-nav-link text-sm font-semibold text-gray-600 hover:text-navy transition-colors py-2 flex items-center gap-1">
-            <span class="w-2 h-2 rounded-full bg-brandOrange"></span>
+            <span class="w-2 h-2 rounded-full bg-brandOrange animate-ping"></span>
             <span>Our Impact</span>
           </a>
           <a href="account.html" data-i18n="nav.account" class="desktop-nav-link text-sm font-semibold text-gray-600 hover:text-navy transition-colors py-2">Account</a>
@@ -104,6 +105,7 @@
           data-i18n="bookspage.search.placeholder"
           placeholder="Search by book title or author..." 
           class="w-full pl-10 pr-4 py-2.5 rounded-full border border-gray-200 bg-white text-sm focus:outline-none focus:border-navy focus:ring-1 focus:ring-navy shadow-sm"
+          style="font-size: 16px;"
         >
         <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -111,30 +113,49 @@
       </div>
     </div>
 
-    <!-- Category Filter Tabs (Smooth horizontal touch swipe) -->
-    <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-6 sm:mb-8 no-scrollbar scroll-smooth">
-      <button class="category-filter-btn px-4 sm:px-5 py-2 rounded-full text-xs font-bold bg-navy text-white transition-all whitespace-nowrap shadow-sm active:scale-95" data-category="all" data-i18n="bookspage.filter.all">
-        All Books
-      </button>
-      <button class="category-filter-btn px-4 sm:px-5 py-2 rounded-full text-xs font-bold bg-white text-navy border border-gray-200 hover:bg-gray-50 transition-all whitespace-nowrap active:scale-95" data-category="selfdev" data-i18n="bookspage.filter.selfdev">
-        Self Development
-      </button>
-      <button class="category-filter-btn px-4 sm:px-5 py-2 rounded-full text-xs font-bold bg-white text-navy border border-gray-200 hover:bg-gray-50 transition-all whitespace-nowrap active:scale-95" data-category="business" data-i18n="bookspage.filter.business">
-        Business &amp; Finance
-      </button>
-      <button class="category-filter-btn px-4 sm:px-5 py-2 rounded-full text-xs font-bold bg-white text-navy border border-gray-200 hover:bg-gray-50 transition-all whitespace-nowrap active:scale-95" data-category="health" data-i18n="bookspage.filter.health">
-        Health &amp; Mindset
-      </button>
-      <button class="category-filter-btn px-4 sm:px-5 py-2 rounded-full text-xs font-bold bg-white text-navy border border-gray-200 hover:bg-gray-50 transition-all whitespace-nowrap active:scale-95" data-category="biography" data-i18n="bookspage.filter.biography">
-        Biographies
-      </button>
+    <!-- Filter Control Bar: Categories & Formats (Touch-Friendly Horizontal Swipe) -->
+    <div class="space-y-3 mb-6 sm:mb-8">
+      
+      <!-- Category Filter Tabs -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar scroll-smooth">
+        <button class="category-filter-btn px-4 sm:px-5 py-2 rounded-full text-xs font-bold bg-navy text-white transition-all whitespace-nowrap shadow-sm active:scale-95" data-category="all" data-i18n="bookspage.filter.all">
+          All Categories
+        </button>
+        <button class="category-filter-btn px-4 sm:px-5 py-2 rounded-full text-xs font-bold bg-white text-navy border border-gray-200 hover:bg-gray-50 transition-all whitespace-nowrap active:scale-95" data-category="selfdev" data-i18n="bookspage.filter.selfdev">
+          Self Development
+        </button>
+        <button class="category-filter-btn px-4 sm:px-5 py-2 rounded-full text-xs font-bold bg-white text-navy border border-gray-200 hover:bg-gray-50 transition-all whitespace-nowrap active:scale-95" data-category="business" data-i18n="bookspage.filter.business">
+          Business &amp; Finance
+        </button>
+        <button class="category-filter-btn px-4 sm:px-5 py-2 rounded-full text-xs font-bold bg-white text-navy border border-gray-200 hover:bg-gray-50 transition-all whitespace-nowrap active:scale-95" data-category="health" data-i18n="bookspage.filter.health">
+          Health &amp; Mindset
+        </button>
+        <button class="category-filter-btn px-4 sm:px-5 py-2 rounded-full text-xs font-bold bg-white text-navy border border-gray-200 hover:bg-gray-50 transition-all whitespace-nowrap active:scale-95" data-category="biography" data-i18n="bookspage.filter.biography">
+          Biographies
+        </button>
+      </div>
+
+      <!-- Format Filter Tabs (All / E-Books / Audiobooks) -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
+        <span class="text-gray-400 font-medium pl-1 hidden sm:inline">Format:</span>
+        <button class="format-filter-btn px-3 py-1.5 rounded-xl font-bold bg-navy text-white transition-all whitespace-nowrap shadow-xs active:scale-95" data-format="all">
+          All Formats
+        </button>
+        <button class="format-filter-btn px-3 py-1.5 rounded-xl font-semibold bg-white text-navy border border-gray-200 hover:bg-gray-50 transition-all whitespace-nowrap active:scale-95" data-format="ebook">
+          📖 E-Books Only
+        </button>
+        <button class="format-filter-btn px-3 py-1.5 rounded-xl font-semibold bg-white text-navy border border-gray-200 hover:bg-gray-50 transition-all whitespace-nowrap active:scale-95" data-format="audiobook">
+          🎧 Audiobooks Only
+        </button>
+      </div>
+
     </div>
 
     <!-- Books Grid (2-Column on Mobile for optimal e-commerce shopping experience) -->
     <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
       
       <!-- Book 1: Atomic Habits -->
-      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="selfdev">
+      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="selfdev" data-type="both">
         <div class="relative">
           <a href="book-detail.html" class="block">
             <img src="assets/cover-atomic-habits.svg" alt="Atomic Habits" class="w-full h-40 sm:h-56 md:h-64 object-contain rounded-xl bg-gray-50 p-1.5 sm:p-2">
@@ -154,15 +175,18 @@
             <span data-i18n="book.impact_share" class="text-[9px] sm:text-[11px] font-semibold text-brandOrange bg-orange-50 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
           </div>
         </div>
-        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100">
-          <a href="book-detail.html" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
-            Buy Now
-          </a>
+        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100 space-y-1.5">
+          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b1', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
+            Buy Now (₹149)
+          </button>
+          <button type="button" data-read-sample="true" data-book-id="b1" class="w-full py-1.5 rounded-full border border-navy text-navy text-[11px] font-semibold hover:bg-navy hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1">
+            <span>Read Sample</span>
+          </button>
         </div>
       </div>
 
       <!-- Book 2: The Power of Mindset -->
-      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="health">
+      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="health" data-type="both">
         <div class="relative">
           <a href="book-detail.html" class="block">
             <img src="assets/cover-mindset.svg" alt="The Power of Mindset" class="w-full h-40 sm:h-56 md:h-64 object-contain rounded-xl bg-gray-50 p-1.5 sm:p-2">
@@ -181,15 +205,18 @@
             <span data-i18n="book.impact_share" class="text-[9px] sm:text-[11px] font-semibold text-brandOrange bg-orange-50 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
           </div>
         </div>
-        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100">
-          <a href="book-detail.html" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
-            Buy Now
-          </a>
+        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100 space-y-1.5">
+          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b2', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
+            Buy Now (₹179)
+          </button>
+          <button type="button" data-read-sample="true" data-book-id="b2" class="w-full py-1.5 rounded-full border border-navy text-navy text-[11px] font-semibold hover:bg-navy hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1">
+            <span>Read Sample</span>
+          </button>
         </div>
       </div>
 
       <!-- Book 3: You Can Win -->
-      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="selfdev">
+      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="selfdev" data-type="ebook">
         <div class="relative">
           <a href="book-detail.html" class="block">
             <img src="assets/cover-you-can-win.svg" alt="You Can Win" class="w-full h-40 sm:h-56 md:h-64 object-contain rounded-xl bg-gray-50 p-1.5 sm:p-2">
@@ -209,15 +236,18 @@
             <span data-i18n="book.impact_share" class="text-[9px] sm:text-[11px] font-semibold text-brandOrange bg-orange-50 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
           </div>
         </div>
-        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100">
-          <a href="book-detail.html" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
-            Buy Now
-          </a>
+        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100 space-y-1.5">
+          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b3', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
+            Buy Now (₹149)
+          </button>
+          <button type="button" data-read-sample="true" data-book-id="b3" class="w-full py-1.5 rounded-full border border-navy text-navy text-[11px] font-semibold hover:bg-navy hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1">
+            <span>Read Sample</span>
+          </button>
         </div>
       </div>
 
       <!-- Book 4: Rich Dad Poor Dad -->
-      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="business">
+      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="business" data-type="both">
         <div class="relative">
           <a href="book-detail.html" class="block">
             <img src="assets/cover-rich-dad.svg" alt="Rich Dad Poor Dad" class="w-full h-40 sm:h-56 md:h-64 object-contain rounded-xl bg-gray-50 p-1.5 sm:p-2">
@@ -225,6 +255,7 @@
           <button type="button" class="wishlist-btn absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-liked="false" aria-label="Wishlist">
             <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="#E8720C" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
           </button>
+          <span data-i18n="book.badge.bestseller" class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-forest text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full">Bestseller</span>
         </div>
         <div class="mt-3 sm:mt-4 flex-grow">
           <a href="book-detail.html">
@@ -236,15 +267,18 @@
             <span data-i18n="book.impact_share" class="text-[9px] sm:text-[11px] font-semibold text-brandOrange bg-orange-50 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
           </div>
         </div>
-        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100">
-          <a href="book-detail.html" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
-            Buy Now
-          </a>
+        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100 space-y-1.5">
+          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b4', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
+            Buy Now (₹199)
+          </button>
+          <button type="button" data-read-sample="true" data-book-id="b4" class="w-full py-1.5 rounded-full border border-navy text-navy text-[11px] font-semibold hover:bg-navy hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1">
+            <span>Read Sample</span>
+          </button>
         </div>
       </div>
 
       <!-- Book 5: Wings of Fire -->
-      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="biography">
+      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="biography" data-type="both">
         <div class="relative">
           <a href="book-detail.html" class="block">
             <img src="assets/cover-wings-of-fire.svg" alt="Wings of Fire" class="w-full h-40 sm:h-56 md:h-64 object-contain rounded-xl bg-gray-50 p-1.5 sm:p-2">
@@ -252,6 +286,7 @@
           <button type="button" class="wishlist-btn absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-liked="false" aria-label="Wishlist">
             <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="#E8720C" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
           </button>
+          <span data-i18n="book.badge.bestseller" class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-forest text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full">Bestseller</span>
         </div>
         <div class="mt-3 sm:mt-4 flex-grow">
           <a href="book-detail.html">
@@ -263,15 +298,18 @@
             <span data-i18n="book.impact_share" class="text-[9px] sm:text-[11px] font-semibold text-brandOrange bg-orange-50 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
           </div>
         </div>
-        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100">
-          <a href="book-detail.html" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
-            Buy Now
-          </a>
+        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100 space-y-1.5">
+          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b5', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
+            Buy Now (₹159)
+          </button>
+          <button type="button" data-read-sample="true" data-book-id="b5" class="w-full py-1.5 rounded-full border border-navy text-navy text-[11px] font-semibold hover:bg-navy hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1">
+            <span>Read Sample</span>
+          </button>
         </div>
       </div>
 
       <!-- Book 6: Ikigai -->
-      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="health">
+      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="health" data-type="audiobook">
         <div class="relative">
           <a href="book-detail.html" class="block">
             <img src="assets/cover-ikigai.svg" alt="Ikigai" class="w-full h-40 sm:h-56 md:h-64 object-contain rounded-xl bg-gray-50 p-1.5 sm:p-2">
@@ -279,6 +317,7 @@
           <button type="button" class="wishlist-btn absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-liked="false" aria-label="Wishlist">
             <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="#E8720C" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
           </button>
+          <span class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-navy text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full">🎧 Audiobook</span>
         </div>
         <div class="mt-3 sm:mt-4 flex-grow">
           <a href="book-detail.html">
@@ -290,15 +329,18 @@
             <span data-i18n="book.impact_share" class="text-[9px] sm:text-[11px] font-semibold text-brandOrange bg-orange-50 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
           </div>
         </div>
-        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100">
-          <a href="book-detail.html" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
-            Buy Now
-          </a>
+        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100 space-y-1.5">
+          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b6', 'audiobook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
+            Buy Now (₹169)
+          </button>
+          <button type="button" data-read-sample="true" data-book-id="b6" class="w-full py-1.5 rounded-full border border-navy text-navy text-[11px] font-semibold hover:bg-navy hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1">
+            <span>Read Sample</span>
+          </button>
         </div>
       </div>
 
       <!-- Book 7: Deep Work -->
-      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="selfdev">
+      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="selfdev" data-type="ebook">
         <div class="relative">
           <a href="book-detail.html" class="block">
             <img src="assets/cover-deep-work.svg" alt="Deep Work" class="w-full h-40 sm:h-56 md:h-64 object-contain rounded-xl bg-gray-50 p-1.5 sm:p-2">
@@ -317,15 +359,18 @@
             <span data-i18n="book.impact_share" class="text-[9px] sm:text-[11px] font-semibold text-brandOrange bg-orange-50 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
           </div>
         </div>
-        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100">
-          <a href="book-detail.html" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
-            Buy Now
-          </a>
+        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100 space-y-1.5">
+          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b7', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
+            Buy Now (₹189)
+          </button>
+          <button type="button" data-read-sample="true" data-book-id="b7" class="w-full py-1.5 rounded-full border border-navy text-navy text-[11px] font-semibold hover:bg-navy hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1">
+            <span>Read Sample</span>
+          </button>
         </div>
       </div>
 
       <!-- Book 8: The Psychology of Money -->
-      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="business">
+      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="business" data-type="both">
         <div class="relative">
           <a href="book-detail.html" class="block">
             <img src="assets/cover-psychology-money.svg" alt="The Psychology of Money" class="w-full h-40 sm:h-56 md:h-64 object-contain rounded-xl bg-gray-50 p-1.5 sm:p-2">
@@ -333,6 +378,7 @@
           <button type="button" class="wishlist-btn absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-liked="false" aria-label="Wishlist">
             <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="#E8720C" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
           </button>
+          <span data-i18n="book.badge.bestseller" class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-forest text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full">Bestseller</span>
         </div>
         <div class="mt-3 sm:mt-4 flex-grow">
           <a href="book-detail.html">
@@ -344,10 +390,13 @@
             <span data-i18n="book.impact_share" class="text-[9px] sm:text-[11px] font-semibold text-brandOrange bg-orange-50 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
           </div>
         </div>
-        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100">
-          <a href="book-detail.html" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
-            Buy Now
-          </a>
+        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100 space-y-1.5">
+          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b8', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
+            Buy Now (₹199)
+          </button>
+          <button type="button" data-read-sample="true" data-book-id="b8" class="w-full py-1.5 rounded-full border border-navy text-navy text-[11px] font-semibold hover:bg-navy hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1">
+            <span>Read Sample</span>
+          </button>
         </div>
       </div>
 
@@ -356,23 +405,99 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="bg-white border-t border-gray-200 mt-12 sm:mt-16">
-    <div class="bg-gradient-to-r from-orange-50 via-cream to-green-50 py-6 px-4 text-center border-b border-gray-200/70">
+  <footer class="bg-white border-t border-gray-200 mt-12 sm:mt-16 pb-20 md:pb-8">
+    
+    <!-- Footer Tagline Highlight Banner -->
+    <div class="bg-gradient-to-r from-orange-50 via-cream to-green-50 py-5 sm:py-7 px-4 text-center border-b border-gray-200/70">
       <div class="max-w-4xl mx-auto flex items-center justify-center gap-2 sm:gap-3">
-        <svg class="w-5 h-5 fill-current text-brandOrange flex-shrink-0" viewBox="0 0 24 24">
+        <svg class="w-5 h-5 sm:w-6 sm:h-6 fill-current text-brandOrange flex-shrink-0" viewBox="0 0 24 24">
           <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
         </svg>
-        <p data-i18n="footer.tagline" class="text-xs sm:text-base font-extrabold text-navy font-heading">
+        <p data-i18n="footer.tagline" class="text-xs sm:text-base md:text-lg font-extrabold text-navy font-heading">
           Read more. Give more. Change more lives.
         </p>
       </div>
     </div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-400 gap-3">
-      <p data-i18n="footer.rights">© 2026 Social Readers. All rights reserved.</p>
-      <div class="flex items-center gap-4">
-        <button type="button" class="lang-toggle-btn text-navy font-bold hover:underline">EN | த</button>
-        <a href="categories.html" class="hover:underline">Categories</a>
-        <a href="impact.html" class="hover:underline">Our Impact</a>
+
+    <!-- Main Footer Links (Mobile-optimized 2-column + 1-column layout) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8">
+        
+        <!-- Col 1: Brand & Mission -->
+        <div class="space-y-3 md:col-span-1">
+          <a href="index.html" class="flex flex-col items-start group inline-block">
+            <div class="flex items-center gap-1 sm:gap-1.5">
+              <span class="text-xl font-extrabold tracking-tight text-navy">SOCIAL</span>
+              <span class="text-xl font-extrabold tracking-tight text-forest">READERS</span>
+            </div>
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <div class="w-3 h-[2px] bg-brandOrange rounded-full"></div>
+              <span data-i18n="brand.tagline" class="text-[9px] tracking-widest uppercase font-bold text-gray-500">
+                READ FOR CHANGE
+              </span>
+              <div class="w-3 h-[2px] bg-brandOrange rounded-full"></div>
+            </div>
+          </a>
+          <p data-i18n="footer.desc" class="text-xs text-gray-500 leading-relaxed">
+            Social Readers is a mission-driven bilingual digital bookstore. 25% of every purchase directly funds student education and grassroots sports talent.
+          </p>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-200 text-brandOrange text-[11px] font-bold">
+            <span>❤️ 25% Guaranteed Social Cause</span>
+          </div>
+        </div>
+
+        <!-- Quick Links & Categories (2-Col Subgrid on Mobile) -->
+        <div class="grid grid-cols-2 gap-4 md:contents">
+          <!-- Col 2: Quick Links -->
+          <div>
+            <h4 data-i18n="footer.quicklinks" class="text-xs sm:text-sm font-bold text-navy uppercase tracking-wider mb-2 sm:mb-3">Quick Links</h4>
+            <ul class="space-y-2 text-xs text-gray-600">
+              <li><a href="index.html" data-i18n="nav.home" class="hover:text-forest transition-colors py-0.5 inline-block">Home</a></li>
+              <li><a href="categories.html" data-i18n="nav.categories" class="hover:text-forest transition-colors py-0.5 inline-block">Categories</a></li>
+              <li><a href="books.html" data-i18n="nav.books" class="hover:text-forest transition-colors py-0.5 inline-block">All E-Books</a></li>
+              <li><a href="audiobooks.html" class="hover:text-forest transition-colors py-0.5 inline-block">Audiobooks</a></li>
+              <li><a href="impact.html" data-i18n="nav.impact" class="hover:text-forest transition-colors py-0.5 inline-block">Our Impact</a></li>
+              <li><a href="account.html" data-i18n="nav.account" class="hover:text-forest transition-colors py-0.5 inline-block">My Account</a></li>
+            </ul>
+          </div>
+
+          <!-- Col 3: Categories -->
+          <div>
+            <h4 data-i18n="footer.categories" class="text-xs sm:text-sm font-bold text-navy uppercase tracking-wider mb-2 sm:mb-3">Categories</h4>
+            <ul class="space-y-2 text-xs text-gray-600">
+              <li><a href="books.html" data-i18n="cat.selfdev" class="hover:text-forest transition-colors py-0.5 inline-block">Self Development</a></li>
+              <li><a href="books.html" data-i18n="cat.business" class="hover:text-forest transition-colors py-0.5 inline-block">Business &amp; Finance</a></li>
+              <li><a href="books.html" data-i18n="cat.health" class="hover:text-forest transition-colors py-0.5 inline-block">Health &amp; Mindset</a></li>
+              <li><a href="books.html" data-i18n="cat.biography" class="hover:text-forest transition-colors py-0.5 inline-block">Biographies</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Col 4: Contact & Settings -->
+        <div class="pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100">
+          <h4 data-i18n="footer.contact" class="text-xs sm:text-sm font-bold text-navy uppercase tracking-wider mb-2 sm:mb-3">Contact &amp; Support</h4>
+          <p class="text-xs text-gray-500">Need assistance or have feedback?</p>
+          <a href="mailto:support@socialreaders.org" class="text-xs font-semibold text-forest hover:underline block mt-1 py-1">support@socialreaders.org</a>
+          <div class="mt-3 sm:mt-4 flex flex-wrap items-center gap-2">
+            <button type="button" class="lang-toggle-btn px-3 py-1.5 rounded-full border border-navy text-navy font-bold text-xs hover:bg-navy hover:text-white transition-all active:scale-95 shadow-xs">
+              EN | த
+            </button>
+            <a href="admin/login.html" class="text-xs text-gray-400 hover:text-navy px-2 py-1 border border-gray-200 rounded-md">
+              Admin Login
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Legal & Copyright -->
+      <div class="border-t border-gray-100 mt-6 sm:mt-10 pt-4 sm:pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-400 gap-3 text-center sm:text-left">
+        <p data-i18n="footer.rights">© 2026 Social Readers. All rights reserved.</p>
+        <div class="flex flex-wrap justify-center gap-3 sm:gap-4 text-[11px] sm:text-xs">
+          <a href="impact.html" class="text-brandOrange hover:underline font-semibold">25% Transparency Report</a>
+          <a href="books.html" class="hover:underline">Catalog</a>
+          <a href="impact.html" class="hover:underline">Impact Stories</a>
+        </div>
       </div>
     </div>
   </footer>
@@ -389,7 +514,7 @@
     </a>
     <a href="books.html" class="mobile-tab-item flex flex-col items-center justify-center w-full py-1 text-navy font-bold transition-colors">
       <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-      <span data-i18n="nav.books" class="text-[10px] font-bold">All Books</span>
+      <span data-i18n="nav.books" class="text-[10px] font-bold">Catalog</span>
     </a>
     <a href="audiobooks.html" class="mobile-tab-item flex flex-col items-center justify-center w-full py-1 text-gray-500 hover:text-navy transition-colors">
       <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
@@ -411,6 +536,7 @@
   <script src="js/i18n.js"></script>
   <script src="js/audio-player.js"></script>
   <script src="js/checkout.js"></script>
+  <script src="js/reader.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
