@@ -54,31 +54,161 @@ function highlightActiveNav() {
 }
 
 /**
- * Interactive Wishlist button toggle
+ * Interactive Wishlist button toggle with localStorage persistence
  */
 function initWishlistButtons() {
+  let savedWishlist = [];
+  try {
+    savedWishlist = JSON.parse(localStorage.getItem('sr_wishlist')) || ['b5', 'b6'];
+  } catch(e) {
+    savedWishlist = ['b5', 'b6'];
+  }
+
   document.querySelectorAll('.wishlist-btn').forEach((btn) => {
+    // Determine book id
+    const card = btn.closest('[data-book-id], .catalog-book-card');
+    const bookId = btn.getAttribute('data-book-id') || 
+                   btn.closest('[data-book-id]')?.getAttribute('data-book-id') || 
+                   (btn.closest('.catalog-book-card')?.querySelector('[data-book-id]')?.getAttribute('data-book-id'));
+
+    const heartIcon = btn.querySelector('svg');
+
+    // Restore active state
+    if (bookId && savedWishlist.includes(bookId)) {
+      btn.setAttribute('data-liked', 'true');
+      if (heartIcon) {
+        heartIcon.setAttribute('fill', '#E8720C');
+        heartIcon.setAttribute('stroke', '#E8720C');
+      }
+    }
+
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      const heartIcon = btn.querySelector('svg');
       const isFilled = btn.getAttribute('data-liked') === 'true';
 
       if (isFilled) {
         btn.setAttribute('data-liked', 'false');
-        heartIcon.setAttribute('fill', 'none');
-        heartIcon.setAttribute('stroke', '#E8720C');
+        if (heartIcon) {
+          heartIcon.setAttribute('fill', 'none');
+          heartIcon.setAttribute('stroke', '#E8720C');
+        }
+        if (bookId) {
+          savedWishlist = savedWishlist.filter(id => id !== bookId);
+          localStorage.setItem('sr_wishlist', JSON.stringify(savedWishlist));
+        }
         showToast('Removed from Wishlist');
       } else {
         btn.setAttribute('data-liked', 'true');
-        heartIcon.setAttribute('fill', '#E8720C');
-        heartIcon.setAttribute('stroke', '#E8720C');
+        if (heartIcon) {
+          heartIcon.setAttribute('fill', '#E8720C');
+          heartIcon.setAttribute('stroke', '#E8720C');
+        }
         btn.classList.add('scale-125');
         setTimeout(() => btn.classList.remove('scale-125'), 200);
+        if (bookId && !savedWishlist.includes(bookId)) {
+          savedWishlist.push(bookId);
+          localStorage.setItem('sr_wishlist', JSON.stringify(savedWishlist));
+        }
         showToast('Added to Wishlist ❤️');
       }
     });
   });
+}
+
+/**
+ * Global State & Unified Filter Function for books.html
+ */
+let currentCategoryFilter = 'all';
+let currentFormatFilter = 'all';
+let currentSearchTerm = '';
+
+function applyBookFilters() {
+  const bookCards = document.querySelectorAll('.catalog-book-card');
+  let visibleCount = 0;
+
+  bookCards.forEach((card) => {
+    const cardCat = card.getAttribute('data-category') || '';
+    const cardType = card.getAttribute('data-type') || 'both';
+    const title = card.querySelector('.book-title')?.textContent.toLowerCase() || '';
+    const author = card.querySelector('.book-author')?.textContent.toLowerCase() || '';
+
+    const matchesCategory = currentCategoryFilter === 'all' || cardCat === currentCategoryFilter;
+    const matchesFormat = currentFormatFilter === 'all' || cardType === currentFormatFilter || cardType === 'both';
+    const matchesSearch = !currentSearchTerm || title.includes(currentSearchTerm) || author.includes(currentSearchTerm);
+
+    const isVisible = matchesCategory && matchesFormat && matchesSearch;
+
+    if (isVisible) {
+      card.style.display = ''; // Preserves original flex layout from stylesheet
+      card.classList.remove('hidden');
+      visibleCount++;
+    } else {
+      card.style.display = 'none';
+      card.classList.add('hidden');
+    }
+  });
+
+  // Toggle "No Books Found" empty state
+  let noResultsEl = document.getElementById('books-no-results');
+  const gridContainer = document.getElementById('books-catalog-grid') || document.querySelector('.catalog-book-card')?.parentElement;
+  
+  if (visibleCount === 0 && gridContainer) {
+    if (!noResultsEl) {
+      noResultsEl = document.createElement('div');
+      noResultsEl.id = 'books-no-results';
+      noResultsEl.className = 'col-span-full py-12 px-4 text-center bg-white rounded-3xl border border-gray-100 shadow-sm my-4';
+      noResultsEl.innerHTML = `
+        <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-full bg-orange-50 text-brandOrange flex items-center justify-center text-2xl sm:text-3xl mb-3 shadow-inner">
+          🔍
+        </div>
+        <h3 class="text-base sm:text-lg font-bold text-navy">No E-Books Found</h3>
+        <p class="text-xs sm:text-sm text-gray-500 max-w-sm mx-auto mt-1">
+          We couldn't find any books matching your selected filters or search terms.
+        </p>
+        <button type="button" id="reset-book-filters-btn" class="mt-4 px-5 py-2 rounded-full bg-navy text-white text-xs font-bold hover:bg-blue-950 active:scale-95 transition-all shadow-sm">
+          Reset All Filters
+        </button>
+      `;
+      gridContainer.appendChild(noResultsEl);
+      document.getElementById('reset-book-filters-btn')?.addEventListener('click', resetAllBookFilters);
+    } else {
+      noResultsEl.classList.remove('hidden');
+    }
+  } else if (noResultsEl) {
+    noResultsEl.classList.add('hidden');
+  }
+}
+
+function resetAllBookFilters() {
+  currentCategoryFilter = 'all';
+  currentFormatFilter = 'all';
+  currentSearchTerm = '';
+
+  const searchInput = document.getElementById('bookSearchInput');
+  if (searchInput) searchInput.value = '';
+
+  document.querySelectorAll('.category-filter-btn').forEach(btn => {
+    const isAll = btn.getAttribute('data-category') === 'all';
+    btn.classList.toggle('bg-navy', isAll);
+    btn.classList.toggle('text-white', isAll);
+    btn.classList.toggle('bg-white', !isAll);
+    btn.classList.toggle('text-navy', !isAll);
+    btn.classList.toggle('border', !isAll);
+    btn.classList.toggle('border-gray-200', !isAll);
+  });
+
+  document.querySelectorAll('.format-filter-btn').forEach(btn => {
+    const isAll = btn.getAttribute('data-format') === 'all';
+    btn.classList.toggle('bg-navy', isAll);
+    btn.classList.toggle('text-white', isAll);
+    btn.classList.toggle('bg-white', !isAll);
+    btn.classList.toggle('text-navy', !isAll);
+    btn.classList.toggle('border', !isAll);
+    btn.classList.toggle('border-gray-200', !isAll);
+  });
+
+  applyBookFilters();
 }
 
 /**
@@ -92,7 +222,7 @@ function initCategoryFilters() {
 
   filterBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
-      const selectedCategory = btn.getAttribute('data-category');
+      currentCategoryFilter = btn.getAttribute('data-category') || 'all';
 
       // Update active button styling
       filterBtns.forEach((b) => {
@@ -102,15 +232,7 @@ function initCategoryFilters() {
       btn.classList.add('bg-navy', 'text-white');
       btn.classList.remove('bg-white', 'text-navy', 'border', 'border-gray-200');
 
-      // Filter visible books
-      bookCards.forEach((card) => {
-        const cardCat = card.getAttribute('data-category');
-        if (selectedCategory === 'all' || cardCat === selectedCategory) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
+      applyBookFilters();
     });
   });
 
@@ -118,16 +240,8 @@ function initCategoryFilters() {
   const searchInput = document.getElementById('bookSearchInput');
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase().trim();
-      bookCards.forEach((card) => {
-        const title = card.querySelector('.book-title')?.textContent.toLowerCase() || '';
-        const author = card.querySelector('.book-author')?.textContent.toLowerCase() || '';
-        if (title.includes(term) || author.includes(term)) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
+      currentSearchTerm = e.target.value.toLowerCase().trim();
+      applyBookFilters();
     });
   }
 
@@ -138,13 +252,22 @@ function initCategoryFilters() {
 
   if (qParam && searchInput) {
     searchInput.value = qParam;
-    searchInput.dispatchEvent(new Event('input'));
-  } else if (catParam) {
+    currentSearchTerm = qParam.toLowerCase().trim();
+  }
+  if (catParam) {
     const matchingBtn = document.querySelector(`.category-filter-btn[data-category="${catParam}"]`);
     if (matchingBtn) {
-      matchingBtn.click();
+      filterBtns.forEach((b) => {
+        b.classList.remove('bg-navy', 'text-white');
+        b.classList.add('bg-white', 'text-navy', 'border', 'border-gray-200');
+      });
+      matchingBtn.classList.add('bg-navy', 'text-white');
+      matchingBtn.classList.remove('bg-white', 'text-navy', 'border', 'border-gray-200');
+      currentCategoryFilter = catParam;
     }
   }
+
+  applyBookFilters();
 }
 
 /**
@@ -152,13 +275,11 @@ function initCategoryFilters() {
  */
 function initFormatFilters() {
   const formatBtns = document.querySelectorAll('.format-filter-btn');
-  const bookCards = document.querySelectorAll('.catalog-book-card');
-
   if (!formatBtns.length) return;
 
   formatBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
-      const selectedFormat = btn.getAttribute('data-format');
+      currentFormatFilter = btn.getAttribute('data-format') || 'all';
 
       formatBtns.forEach((b) => {
         b.classList.remove('bg-navy', 'text-white');
@@ -167,20 +288,13 @@ function initFormatFilters() {
       btn.classList.add('bg-navy', 'text-white');
       btn.classList.remove('bg-white', 'text-navy', 'border', 'border-gray-200');
 
-      bookCards.forEach((card) => {
-        const cardType = card.getAttribute('data-type') || 'both';
-        if (selectedFormat === 'all' || cardType === selectedFormat || cardType === 'both') {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
+      applyBookFilters();
     });
   });
 }
 
 /**
- * Tab switching in account.html
+ * Tab switching and dynamic content rendering in account.html
  */
 function initAccountTabs() {
   const tabBtns = document.querySelectorAll('.account-tab-btn');
@@ -194,10 +308,10 @@ function initAccountTabs() {
 
       // Button styles
       tabBtns.forEach((b) => {
-        b.classList.remove('border-forest-green', 'text-navy', 'font-bold');
+        b.classList.remove('border-forest-green', 'border-forest', 'text-navy', 'font-bold');
         b.classList.add('border-transparent', 'text-gray-500');
       });
-      btn.classList.add('border-forest-green', 'text-navy', 'font-bold');
+      btn.classList.add('border-forest', 'text-navy', 'font-bold');
       btn.classList.remove('border-transparent', 'text-gray-500');
 
       // Pane visibility
@@ -210,6 +324,64 @@ function initAccountTabs() {
       });
     });
   });
+
+  // Render dynamic order history and impact if on account page
+  renderDynamicAccountData();
+}
+
+/**
+ * Sync dynamic orders, library counts, and personal impact in account.html
+ */
+function renderDynamicAccountData() {
+  if (!window.SocialReadersDB) return;
+
+  const orders = window.SocialReadersDB.getOrders();
+  if (!orders || !orders.length) return;
+
+  // Calculate totals
+  let totalFund = 0;
+  orders.forEach(o => {
+    totalFund += (Number(o.causeShare) || (o.amount * 0.25) || 0);
+  });
+
+  // Update contribution callouts
+  const impactMetricEl = document.querySelector('[data-i18n="account.impact_metric"]');
+  if (impactMetricEl) {
+    impactMetricEl.textContent = `You contributed ₹${totalFund.toFixed(2)} to youth so far!`;
+  }
+
+  const statFundEl = document.getElementById('account-total-fund-stat');
+  if (statFundEl) {
+    statFundEl.textContent = `₹${totalFund.toFixed(2)}`;
+  }
+
+  // Update textbooks count (approx 1 textbook per ₹75)
+  const textbooksCountEl = document.getElementById('account-textbooks-stat');
+  if (textbooksCountEl) {
+    textbooksCountEl.textContent = Math.max(1, Math.floor(totalFund / 75));
+  }
+
+  // Render Orders Table
+  const ordersTbody = document.getElementById('account-orders-tbody');
+  if (ordersTbody) {
+    ordersTbody.innerHTML = orders.map(ord => `
+      <tr class="hover:bg-gray-50/75 transition-colors">
+        <td class="p-3 sm:p-4 font-mono font-bold text-navy">${ord.orderId || '#SR-9800'}</td>
+        <td class="p-3 sm:p-4">
+          <div class="font-semibold text-gray-800">${ord.bookTitle}</div>
+          <div class="text-[11px] text-forest font-medium">${ord.format || 'E-Book'}</div>
+        </td>
+        <td class="p-3 sm:p-4 text-xs text-gray-500 whitespace-nowrap">${ord.date || 'Today'}</td>
+        <td class="p-3 sm:p-4 font-bold text-navy whitespace-nowrap">₹${ord.amount}.00</td>
+        <td class="p-3 sm:p-4 font-bold text-brandOrange whitespace-nowrap">₹${Number(ord.causeShare).toFixed(2)}</td>
+        <td class="p-3 sm:p-4">
+          <button type="button" onclick="showToast('Downloading invoice ${ord.orderId} PDF...')" class="inline-flex items-center gap-1 text-navy hover:text-forest font-bold text-xs underline">
+            <span>Receipt</span>
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
 }
 
 /**

@@ -189,31 +189,33 @@
     </div>
 
     <!-- Books Grid (2-Column on Mobile for optimal e-commerce shopping experience) -->
-    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
+    <div id="books-catalog-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
       
       <!-- Book 1: Atomic Habits -->
-      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="selfdev" data-type="both">
-        <div class="relative">
-          <a href="book-detail.html" class="block">
-            <img src="assets/cover-atomic-habits.svg" alt="Atomic Habits" class="w-full h-40 sm:h-56 md:h-64 object-contain rounded-xl bg-gray-50 p-1.5 sm:p-2">
+      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-all" data-category="selfdev" data-type="both">
+        <div class="relative w-full h-44 sm:h-52 md:h-60 rounded-xl bg-gray-50 flex items-center justify-center p-2 overflow-hidden">
+          <a href="book-detail.html" class="w-full h-full flex items-center justify-center">
+            <img src="assets/cover-atomic-habits.svg" alt="Atomic Habits" class="max-h-full max-w-full object-contain rounded-lg transition-transform duration-300 hover:scale-105">
           </a>
-          <button type="button" class="wishlist-btn absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-liked="false" aria-label="Wishlist">
+          <button type="button" class="wishlist-btn absolute top-2 right-2 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-book-id="b1" data-liked="false" aria-label="Wishlist">
             <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="#E8720C" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
           </button>
-          <span data-i18n="book.badge.bestseller" class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-forest text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full">Bestseller</span>
+          <span data-i18n="book.badge.bestseller" class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-forest text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs">Bestseller</span>
         </div>
-        <div class="mt-3 sm:mt-4 flex-grow">
-          <a href="book-detail.html">
-            <h3 data-i18n="book1.title" class="book-title font-bold text-navy text-xs sm:text-base hover:text-forest transition-colors line-clamp-1">Atomic Habits</h3>
-          </a>
-          <p data-i18n="book1.author" class="book-author text-[10px] sm:text-xs text-gray-500 mt-0.5 line-clamp-1">James Clear</p>
-          <div class="mt-2 sm:mt-3 flex flex-wrap items-baseline justify-between gap-1">
-            <span data-i18n="book1.price" class="text-sm sm:text-lg font-bold text-forest">₹149</span>
-            <span data-i18n="book.impact_share" class="text-[9px] sm:text-[11px] font-semibold text-brandOrange bg-orange-50 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
+        <div class="mt-3 flex-grow flex flex-col justify-between">
+          <div>
+            <a href="book-detail.html">
+              <h3 data-i18n="book1.title" class="book-title font-bold text-navy text-xs sm:text-sm md:text-base hover:text-forest transition-colors line-clamp-2 min-h-[2.5rem] flex items-center">Atomic Habits</h3>
+            </a>
+            <p data-i18n="book1.author" class="book-author text-[10px] sm:text-xs text-gray-500 mt-0.5 truncate">James Clear</p>
+          </div>
+          <div class="mt-2.5 flex items-center justify-between gap-1">
+            <span data-i18n="book1.price" class="text-sm sm:text-base md:text-lg font-bold text-forest">₹149</span>
+            <span data-i18n="book.impact_share" class="text-[9px] sm:text-[10px] font-semibold text-brandOrange bg-orange-50 border border-orange-200/60 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
           </div>
         </div>
-        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100 space-y-1.5">
-          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b1', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
+        <div class="mt-3 pt-2.5 border-t border-gray-100 space-y-1.5">
+          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b1', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-xs active:scale-95">
             Buy Now (₹149)
           </button>
           <button type="button" data-read-sample="true" data-book-id="b1" class="w-full py-1.5 rounded-full border border-navy text-navy text-[11px] font-semibold hover:bg-navy hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1">
@@ -223,27 +225,29 @@
       </div>
 
       <!-- Book 2: The Power of Mindset -->
-      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="health" data-type="both">
-        <div class="relative">
-          <a href="book-detail.html" class="block">
-            <img src="assets/cover-mindset.svg" alt="The Power of Mindset" class="w-full h-40 sm:h-56 md:h-64 object-contain rounded-xl bg-gray-50 p-1.5 sm:p-2">
+      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-all" data-category="health" data-type="both">
+        <div class="relative w-full h-44 sm:h-52 md:h-60 rounded-xl bg-gray-50 flex items-center justify-center p-2 overflow-hidden">
+          <a href="book-detail.html" class="w-full h-full flex items-center justify-center">
+            <img src="assets/cover-mindset.svg" alt="The Power of Mindset" class="max-h-full max-w-full object-contain rounded-lg transition-transform duration-300 hover:scale-105">
           </a>
-          <button type="button" class="wishlist-btn absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-liked="false" aria-label="Wishlist">
+          <button type="button" class="wishlist-btn absolute top-2 right-2 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-book-id="b2" data-liked="false" aria-label="Wishlist">
             <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="#E8720C" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
           </button>
         </div>
-        <div class="mt-3 sm:mt-4 flex-grow">
-          <a href="book-detail.html">
-            <h3 data-i18n="book2.title" class="book-title font-bold text-navy text-xs sm:text-base hover:text-forest transition-colors line-clamp-1">The Power of Mindset</h3>
-          </a>
-          <p data-i18n="book2.author" class="book-author text-[10px] sm:text-xs text-gray-500 mt-0.5 line-clamp-1">Carol S. Dweck</p>
-          <div class="mt-2 sm:mt-3 flex flex-wrap items-baseline justify-between gap-1">
-            <span data-i18n="book2.price" class="text-sm sm:text-lg font-bold text-forest">₹179</span>
-            <span data-i18n="book.impact_share" class="text-[9px] sm:text-[11px] font-semibold text-brandOrange bg-orange-50 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
+        <div class="mt-3 flex-grow flex flex-col justify-between">
+          <div>
+            <a href="book-detail.html">
+              <h3 data-i18n="book2.title" class="book-title font-bold text-navy text-xs sm:text-sm md:text-base hover:text-forest transition-colors line-clamp-2 min-h-[2.5rem] flex items-center">The Power of Mindset</h3>
+            </a>
+            <p data-i18n="book2.author" class="book-author text-[10px] sm:text-xs text-gray-500 mt-0.5 truncate">Carol S. Dweck</p>
+          </div>
+          <div class="mt-2.5 flex items-center justify-between gap-1">
+            <span data-i18n="book2.price" class="text-sm sm:text-base md:text-lg font-bold text-forest">₹179</span>
+            <span data-i18n="book.impact_share" class="text-[9px] sm:text-[10px] font-semibold text-brandOrange bg-orange-50 border border-orange-200/60 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
           </div>
         </div>
-        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100 space-y-1.5">
-          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b2', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
+        <div class="mt-3 pt-2.5 border-t border-gray-100 space-y-1.5">
+          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b2', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-xs active:scale-95">
             Buy Now (₹179)
           </button>
           <button type="button" data-read-sample="true" data-book-id="b2" class="w-full py-1.5 rounded-full border border-navy text-navy text-[11px] font-semibold hover:bg-navy hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1">
@@ -253,28 +257,30 @@
       </div>
 
       <!-- Book 3: You Can Win -->
-      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="selfdev" data-type="ebook">
-        <div class="relative">
-          <a href="book-detail.html" class="block">
-            <img src="assets/cover-you-can-win.svg" alt="You Can Win" class="w-full h-40 sm:h-56 md:h-64 object-contain rounded-xl bg-gray-50 p-1.5 sm:p-2">
+      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-all" data-category="selfdev" data-type="ebook">
+        <div class="relative w-full h-44 sm:h-52 md:h-60 rounded-xl bg-gray-50 flex items-center justify-center p-2 overflow-hidden">
+          <a href="book-detail.html" class="w-full h-full flex items-center justify-center">
+            <img src="assets/cover-you-can-win.svg" alt="You Can Win" class="max-h-full max-w-full object-contain rounded-lg transition-transform duration-300 hover:scale-105">
           </a>
-          <button type="button" class="wishlist-btn absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-liked="false" aria-label="Wishlist">
+          <button type="button" class="wishlist-btn absolute top-2 right-2 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-book-id="b3" data-liked="false" aria-label="Wishlist">
             <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="#E8720C" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
           </button>
-          <span data-i18n="book.badge.bestseller" class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-forest text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full">Bestseller</span>
+          <span data-i18n="book.badge.bestseller" class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-forest text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs">Bestseller</span>
         </div>
-        <div class="mt-3 sm:mt-4 flex-grow">
-          <a href="book-detail.html">
-            <h3 data-i18n="book3.title" class="book-title font-bold text-navy text-xs sm:text-base hover:text-forest transition-colors line-clamp-1">You Can Win</h3>
-          </a>
-          <p data-i18n="book3.author" class="book-author text-[10px] sm:text-xs text-gray-500 mt-0.5 line-clamp-1">Shiv Khera</p>
-          <div class="mt-2 sm:mt-3 flex flex-wrap items-baseline justify-between gap-1">
-            <span data-i18n="book3.price" class="text-sm sm:text-lg font-bold text-forest">₹149</span>
-            <span data-i18n="book.impact_share" class="text-[9px] sm:text-[11px] font-semibold text-brandOrange bg-orange-50 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
+        <div class="mt-3 flex-grow flex flex-col justify-between">
+          <div>
+            <a href="book-detail.html">
+              <h3 data-i18n="book3.title" class="book-title font-bold text-navy text-xs sm:text-sm md:text-base hover:text-forest transition-colors line-clamp-2 min-h-[2.5rem] flex items-center">You Can Win</h3>
+            </a>
+            <p data-i18n="book3.author" class="book-author text-[10px] sm:text-xs text-gray-500 mt-0.5 truncate">Shiv Khera</p>
+          </div>
+          <div class="mt-2.5 flex items-center justify-between gap-1">
+            <span data-i18n="book3.price" class="text-sm sm:text-base md:text-lg font-bold text-forest">₹149</span>
+            <span data-i18n="book.impact_share" class="text-[9px] sm:text-[10px] font-semibold text-brandOrange bg-orange-50 border border-orange-200/60 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
           </div>
         </div>
-        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100 space-y-1.5">
-          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b3', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
+        <div class="mt-3 pt-2.5 border-t border-gray-100 space-y-1.5">
+          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b3', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-xs active:scale-95">
             Buy Now (₹149)
           </button>
           <button type="button" data-read-sample="true" data-book-id="b3" class="w-full py-1.5 rounded-full border border-navy text-navy text-[11px] font-semibold hover:bg-navy hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1">
@@ -284,28 +290,30 @@
       </div>
 
       <!-- Book 4: Rich Dad Poor Dad -->
-      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="business" data-type="both">
-        <div class="relative">
-          <a href="book-detail.html" class="block">
-            <img src="assets/cover-rich-dad.svg" alt="Rich Dad Poor Dad" class="w-full h-40 sm:h-56 md:h-64 object-contain rounded-xl bg-gray-50 p-1.5 sm:p-2">
+      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-all" data-category="business" data-type="both">
+        <div class="relative w-full h-44 sm:h-52 md:h-60 rounded-xl bg-gray-50 flex items-center justify-center p-2 overflow-hidden">
+          <a href="book-detail.html" class="w-full h-full flex items-center justify-center">
+            <img src="assets/cover-rich-dad.svg" alt="Rich Dad Poor Dad" class="max-h-full max-w-full object-contain rounded-lg transition-transform duration-300 hover:scale-105">
           </a>
-          <button type="button" class="wishlist-btn absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-liked="false" aria-label="Wishlist">
+          <button type="button" class="wishlist-btn absolute top-2 right-2 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-book-id="b4" data-liked="false" aria-label="Wishlist">
             <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="#E8720C" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
           </button>
-          <span data-i18n="book.badge.bestseller" class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-forest text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full">Bestseller</span>
+          <span data-i18n="book.badge.bestseller" class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-forest text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs">Bestseller</span>
         </div>
-        <div class="mt-3 sm:mt-4 flex-grow">
-          <a href="book-detail.html">
-            <h3 data-i18n="book4.title" class="book-title font-bold text-navy text-xs sm:text-base hover:text-forest transition-colors line-clamp-1">Rich Dad Poor Dad</h3>
-          </a>
-          <p data-i18n="book4.author" class="book-author text-[10px] sm:text-xs text-gray-500 mt-0.5 line-clamp-1">Robert Kiyosaki</p>
-          <div class="mt-2 sm:mt-3 flex flex-wrap items-baseline justify-between gap-1">
-            <span data-i18n="book4.price" class="text-sm sm:text-lg font-bold text-forest">₹199</span>
-            <span data-i18n="book.impact_share" class="text-[9px] sm:text-[11px] font-semibold text-brandOrange bg-orange-50 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
+        <div class="mt-3 flex-grow flex flex-col justify-between">
+          <div>
+            <a href="book-detail.html">
+              <h3 data-i18n="book4.title" class="book-title font-bold text-navy text-xs sm:text-sm md:text-base hover:text-forest transition-colors line-clamp-2 min-h-[2.5rem] flex items-center">Rich Dad Poor Dad</h3>
+            </a>
+            <p data-i18n="book4.author" class="book-author text-[10px] sm:text-xs text-gray-500 mt-0.5 truncate">Robert Kiyosaki</p>
+          </div>
+          <div class="mt-2.5 flex items-center justify-between gap-1">
+            <span data-i18n="book4.price" class="text-sm sm:text-base md:text-lg font-bold text-forest">₹199</span>
+            <span data-i18n="book.impact_share" class="text-[9px] sm:text-[10px] font-semibold text-brandOrange bg-orange-50 border border-orange-200/60 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
           </div>
         </div>
-        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100 space-y-1.5">
-          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b4', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
+        <div class="mt-3 pt-2.5 border-t border-gray-100 space-y-1.5">
+          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b4', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-xs active:scale-95">
             Buy Now (₹199)
           </button>
           <button type="button" data-read-sample="true" data-book-id="b4" class="w-full py-1.5 rounded-full border border-navy text-navy text-[11px] font-semibold hover:bg-navy hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1">
@@ -315,28 +323,30 @@
       </div>
 
       <!-- Book 5: Wings of Fire -->
-      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="biography" data-type="both">
-        <div class="relative">
-          <a href="book-detail.html" class="block">
-            <img src="assets/cover-wings-of-fire.svg" alt="Wings of Fire" class="w-full h-40 sm:h-56 md:h-64 object-contain rounded-xl bg-gray-50 p-1.5 sm:p-2">
+      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-all" data-category="biography" data-type="both">
+        <div class="relative w-full h-44 sm:h-52 md:h-60 rounded-xl bg-gray-50 flex items-center justify-center p-2 overflow-hidden">
+          <a href="book-detail.html" class="w-full h-full flex items-center justify-center">
+            <img src="assets/cover-wings-of-fire.svg" alt="Wings of Fire" class="max-h-full max-w-full object-contain rounded-lg transition-transform duration-300 hover:scale-105">
           </a>
-          <button type="button" class="wishlist-btn absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-liked="false" aria-label="Wishlist">
+          <button type="button" class="wishlist-btn absolute top-2 right-2 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-book-id="b5" data-liked="false" aria-label="Wishlist">
             <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="#E8720C" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
           </button>
-          <span data-i18n="book.badge.bestseller" class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-forest text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full">Bestseller</span>
+          <span data-i18n="book.badge.bestseller" class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-forest text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs">Bestseller</span>
         </div>
-        <div class="mt-3 sm:mt-4 flex-grow">
-          <a href="book-detail.html">
-            <h3 data-i18n="book5.title" class="book-title font-bold text-navy text-xs sm:text-base hover:text-forest transition-colors line-clamp-1">Wings of Fire</h3>
-          </a>
-          <p data-i18n="book5.author" class="book-author text-[10px] sm:text-xs text-gray-500 mt-0.5 line-clamp-1">Dr. A.P.J. Abdul Kalam</p>
-          <div class="mt-2 sm:mt-3 flex flex-wrap items-baseline justify-between gap-1">
-            <span data-i18n="book5.price" class="text-sm sm:text-lg font-bold text-forest">₹159</span>
-            <span data-i18n="book.impact_share" class="text-[9px] sm:text-[11px] font-semibold text-brandOrange bg-orange-50 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
+        <div class="mt-3 flex-grow flex flex-col justify-between">
+          <div>
+            <a href="book-detail.html">
+              <h3 data-i18n="book5.title" class="book-title font-bold text-navy text-xs sm:text-sm md:text-base hover:text-forest transition-colors line-clamp-2 min-h-[2.5rem] flex items-center">Wings of Fire</h3>
+            </a>
+            <p data-i18n="book5.author" class="book-author text-[10px] sm:text-xs text-gray-500 mt-0.5 truncate">Dr. A.P.J. Abdul Kalam</p>
+          </div>
+          <div class="mt-2.5 flex items-center justify-between gap-1">
+            <span data-i18n="book5.price" class="text-sm sm:text-base md:text-lg font-bold text-forest">₹159</span>
+            <span data-i18n="book.impact_share" class="text-[9px] sm:text-[10px] font-semibold text-brandOrange bg-orange-50 border border-orange-200/60 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
           </div>
         </div>
-        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100 space-y-1.5">
-          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b5', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
+        <div class="mt-3 pt-2.5 border-t border-gray-100 space-y-1.5">
+          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b5', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-xs active:scale-95">
             Buy Now (₹159)
           </button>
           <button type="button" data-read-sample="true" data-book-id="b5" class="w-full py-1.5 rounded-full border border-navy text-navy text-[11px] font-semibold hover:bg-navy hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1">
@@ -346,28 +356,30 @@
       </div>
 
       <!-- Book 6: Ikigai -->
-      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="health" data-type="audiobook">
-        <div class="relative">
-          <a href="book-detail.html" class="block">
-            <img src="assets/cover-ikigai.svg" alt="Ikigai" class="w-full h-40 sm:h-56 md:h-64 object-contain rounded-xl bg-gray-50 p-1.5 sm:p-2">
+      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-all" data-category="health" data-type="audiobook">
+        <div class="relative w-full h-44 sm:h-52 md:h-60 rounded-xl bg-gray-50 flex items-center justify-center p-2 overflow-hidden">
+          <a href="book-detail.html" class="w-full h-full flex items-center justify-center">
+            <img src="assets/cover-ikigai.svg" alt="Ikigai" class="max-h-full max-w-full object-contain rounded-lg transition-transform duration-300 hover:scale-105">
           </a>
-          <button type="button" class="wishlist-btn absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-liked="false" aria-label="Wishlist">
+          <button type="button" class="wishlist-btn absolute top-2 right-2 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-book-id="b6" data-liked="false" aria-label="Wishlist">
             <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="#E8720C" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
           </button>
-          <span class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-navy text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full">🎧 Audiobook</span>
+          <span class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-navy text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs">🎧 Audiobook</span>
         </div>
-        <div class="mt-3 sm:mt-4 flex-grow">
-          <a href="book-detail.html">
-            <h3 data-i18n="book6.title" class="book-title font-bold text-navy text-xs sm:text-base hover:text-forest transition-colors line-clamp-1">Ikigai</h3>
-          </a>
-          <p data-i18n="book6.author" class="book-author text-[10px] sm:text-xs text-gray-500 mt-0.5 line-clamp-1">Héctor García</p>
-          <div class="mt-2 sm:mt-3 flex flex-wrap items-baseline justify-between gap-1">
-            <span data-i18n="book6.price" class="text-sm sm:text-lg font-bold text-forest">₹169</span>
-            <span data-i18n="book.impact_share" class="text-[9px] sm:text-[11px] font-semibold text-brandOrange bg-orange-50 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
+        <div class="mt-3 flex-grow flex flex-col justify-between">
+          <div>
+            <a href="book-detail.html">
+              <h3 data-i18n="book6.title" class="book-title font-bold text-navy text-xs sm:text-sm md:text-base hover:text-forest transition-colors line-clamp-2 min-h-[2.5rem] flex items-center">Ikigai</h3>
+            </a>
+            <p data-i18n="book6.author" class="book-author text-[10px] sm:text-xs text-gray-500 mt-0.5 truncate">Héctor García</p>
+          </div>
+          <div class="mt-2.5 flex items-center justify-between gap-1">
+            <span data-i18n="book6.price" class="text-sm sm:text-base md:text-lg font-bold text-forest">₹169</span>
+            <span data-i18n="book.impact_share" class="text-[9px] sm:text-[10px] font-semibold text-brandOrange bg-orange-50 border border-orange-200/60 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
           </div>
         </div>
-        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100 space-y-1.5">
-          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b6', 'audiobook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
+        <div class="mt-3 pt-2.5 border-t border-gray-100 space-y-1.5">
+          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b6', 'audiobook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-xs active:scale-95">
             Buy Now (₹169)
           </button>
           <button type="button" data-read-sample="true" data-book-id="b6" class="w-full py-1.5 rounded-full border border-navy text-navy text-[11px] font-semibold hover:bg-navy hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1">
@@ -377,27 +389,29 @@
       </div>
 
       <!-- Book 7: Deep Work -->
-      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="selfdev" data-type="ebook">
-        <div class="relative">
-          <a href="book-detail.html" class="block">
-            <img src="assets/cover-deep-work.svg" alt="Deep Work" class="w-full h-40 sm:h-56 md:h-64 object-contain rounded-xl bg-gray-50 p-1.5 sm:p-2">
+      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-all" data-category="selfdev" data-type="ebook">
+        <div class="relative w-full h-44 sm:h-52 md:h-60 rounded-xl bg-gray-50 flex items-center justify-center p-2 overflow-hidden">
+          <a href="book-detail.html" class="w-full h-full flex items-center justify-center">
+            <img src="assets/cover-deep-work.svg" alt="Deep Work" class="max-h-full max-w-full object-contain rounded-lg transition-transform duration-300 hover:scale-105">
           </a>
-          <button type="button" class="wishlist-btn absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-liked="false" aria-label="Wishlist">
+          <button type="button" class="wishlist-btn absolute top-2 right-2 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-book-id="b7" data-liked="false" aria-label="Wishlist">
             <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="#E8720C" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
           </button>
         </div>
-        <div class="mt-3 sm:mt-4 flex-grow">
-          <a href="book-detail.html">
-            <h3 data-i18n="book7.title" class="book-title font-bold text-navy text-xs sm:text-base hover:text-forest transition-colors line-clamp-1">Deep Work</h3>
-          </a>
-          <p data-i18n="book7.author" class="book-author text-[10px] sm:text-xs text-gray-500 mt-0.5 line-clamp-1">Cal Newport</p>
-          <div class="mt-2 sm:mt-3 flex flex-wrap items-baseline justify-between gap-1">
-            <span data-i18n="book7.price" class="text-sm sm:text-lg font-bold text-forest">₹189</span>
-            <span data-i18n="book.impact_share" class="text-[9px] sm:text-[11px] font-semibold text-brandOrange bg-orange-50 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
+        <div class="mt-3 flex-grow flex flex-col justify-between">
+          <div>
+            <a href="book-detail.html">
+              <h3 data-i18n="book7.title" class="book-title font-bold text-navy text-xs sm:text-sm md:text-base hover:text-forest transition-colors line-clamp-2 min-h-[2.5rem] flex items-center">Deep Work</h3>
+            </a>
+            <p data-i18n="book7.author" class="book-author text-[10px] sm:text-xs text-gray-500 mt-0.5 truncate">Cal Newport</p>
+          </div>
+          <div class="mt-2.5 flex items-center justify-between gap-1">
+            <span data-i18n="book7.price" class="text-sm sm:text-base md:text-lg font-bold text-forest">₹189</span>
+            <span data-i18n="book.impact_share" class="text-[9px] sm:text-[10px] font-semibold text-brandOrange bg-orange-50 border border-orange-200/60 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
           </div>
         </div>
-        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100 space-y-1.5">
-          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b7', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
+        <div class="mt-3 pt-2.5 border-t border-gray-100 space-y-1.5">
+          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b7', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-xs active:scale-95">
             Buy Now (₹189)
           </button>
           <button type="button" data-read-sample="true" data-book-id="b7" class="w-full py-1.5 rounded-full border border-navy text-navy text-[11px] font-semibold hover:bg-navy hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1">
@@ -407,28 +421,30 @@
       </div>
 
       <!-- Book 8: The Psychology of Money -->
-      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm" data-category="business" data-type="both">
-        <div class="relative">
-          <a href="book-detail.html" class="block">
-            <img src="assets/cover-psychology-money.svg" alt="The Psychology of Money" class="w-full h-40 sm:h-56 md:h-64 object-contain rounded-xl bg-gray-50 p-1.5 sm:p-2">
+      <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-3 sm:p-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-all" data-category="business" data-type="both">
+        <div class="relative w-full h-44 sm:h-52 md:h-60 rounded-xl bg-gray-50 flex items-center justify-center p-2 overflow-hidden">
+          <a href="book-detail.html" class="w-full h-full flex items-center justify-center">
+            <img src="assets/cover-psychology-money.svg" alt="The Psychology of Money" class="max-h-full max-w-full object-contain rounded-lg transition-transform duration-300 hover:scale-105">
           </a>
-          <button type="button" class="wishlist-btn absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-liked="false" aria-label="Wishlist">
+          <button type="button" class="wishlist-btn absolute top-2 right-2 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-book-id="b8" data-liked="false" aria-label="Wishlist">
             <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="#E8720C" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
           </button>
-          <span data-i18n="book.badge.bestseller" class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-forest text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full">Bestseller</span>
+          <span data-i18n="book.badge.bestseller" class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-forest text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs">Bestseller</span>
         </div>
-        <div class="mt-3 sm:mt-4 flex-grow">
-          <a href="book-detail.html">
-            <h3 data-i18n="book8.title" class="book-title font-bold text-navy text-xs sm:text-base hover:text-forest transition-colors line-clamp-1">Psychology of Money</h3>
-          </a>
-          <p data-i18n="book8.author" class="book-author text-[10px] sm:text-xs text-gray-500 mt-0.5 line-clamp-1">Morgan Housel</p>
-          <div class="mt-2 sm:mt-3 flex flex-wrap items-baseline justify-between gap-1">
-            <span data-i18n="book8.price" class="text-sm sm:text-lg font-bold text-forest">₹199</span>
-            <span data-i18n="book.impact_share" class="text-[9px] sm:text-[11px] font-semibold text-brandOrange bg-orange-50 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
+        <div class="mt-3 flex-grow flex flex-col justify-between">
+          <div>
+            <a href="book-detail.html">
+              <h3 data-i18n="book8.title" class="book-title font-bold text-navy text-xs sm:text-sm md:text-base hover:text-forest transition-colors line-clamp-2 min-h-[2.5rem] flex items-center">Psychology of Money</h3>
+            </a>
+            <p data-i18n="book8.author" class="book-author text-[10px] sm:text-xs text-gray-500 mt-0.5 truncate">Morgan Housel</p>
+          </div>
+          <div class="mt-2.5 flex items-center justify-between gap-1">
+            <span data-i18n="book8.price" class="text-sm sm:text-base md:text-lg font-bold text-forest">₹199</span>
+            <span data-i18n="book.impact_share" class="text-[9px] sm:text-[10px] font-semibold text-brandOrange bg-orange-50 border border-orange-200/60 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
           </div>
         </div>
-        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100 space-y-1.5">
-          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b8', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-sm active:scale-95">
+        <div class="mt-3 pt-2.5 border-t border-gray-100 space-y-1.5">
+          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b8', 'ebook')" data-i18n="book.btn.buy" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-xs active:scale-95">
             Buy Now (₹199)
           </button>
           <button type="button" data-read-sample="true" data-book-id="b8" class="w-full py-1.5 rounded-full border border-navy text-navy text-[11px] font-semibold hover:bg-navy hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1">
@@ -597,6 +613,7 @@
 
   <!-- Scripts -->
   <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/audio-player.js"></script>
   <script src="js/checkout.js"></script>
