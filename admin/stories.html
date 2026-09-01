@@ -442,7 +442,19 @@
     </div>
   </div>
 
+  <!-- Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/cloudinary.js"></script>
+
   <script>
+    if (window.SocialReadersAuth && window.SocialReadersAuth.requireAdmin) {
+      window.SocialReadersAuth.requireAdmin();
+    }
+
     // Modal toggle
     const storyModal = document.getElementById('story-modal');
     const openStoryBtn = document.getElementById('open-add-story-btn');
@@ -460,6 +472,7 @@
     function closeStoryModal() {
       storyModal.classList.add('hidden');
       storyModal.classList.remove('flex');
+      storyForm.reset();
     }
 
     closeStoryBtn.addEventListener('click', closeStoryModal);

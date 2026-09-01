@@ -59,9 +59,9 @@ function highlightActiveNav() {
 function initWishlistButtons() {
   let savedWishlist = [];
   try {
-    savedWishlist = JSON.parse(localStorage.getItem('sr_wishlist')) || ['b5', 'b6'];
+    savedWishlist = JSON.parse(localStorage.getItem('sr_wishlist')) || [];
   } catch(e) {
-    savedWishlist = ['b5', 'b6'];
+    savedWishlist = [];
   }
 
   document.querySelectorAll('.wishlist-btn').forEach((btn) => {
@@ -331,56 +331,251 @@ function initAccountTabs() {
 
 /**
  * Sync dynamic orders, library counts, and personal impact in account.html
+ * Scoped strictly to the currently logged-in user
  */
-function renderDynamicAccountData() {
+async function renderDynamicAccountData() {
   if (!window.SocialReadersDB) return;
 
-  const orders = window.SocialReadersDB.getOrders();
-  if (!orders || !orders.length) return;
+  const currentUser = window.SocialReadersAuth && window.SocialReadersAuth.getCurrentUser ? window.SocialReadersAuth.getCurrentUser() : null;
 
-  // Calculate totals
-  let totalFund = 0;
-  orders.forEach(o => {
-    totalFund += (Number(o.causeShare) || (o.amount * 0.25) || 0);
+  // Profile Header UI Elements
+  const welcomeTitle = document.querySelector('[data-i18n="account.welcome"]');
+  const userEmailEl = document.querySelector('[data-i18n="account.email"]');
+  const avatarEl = document.querySelector('.w-14.h-14, .w-16.h-16, .w-20.h-20');
+  const impactMetricEl = document.querySelector('[data-i18n="account.impact_metric"]');
+  const statFundEl = document.getElementById('account-total-fund-stat');
+  const textbooksCountEl = document.getElementById('account-textbooks-stat');
+  const spikesCountEl = document.getElementById('account-spikes-stat');
+  const libraryTabBtn = document.querySelector('[data-tab-target="tab-library"]');
+  const libraryPane = document.getElementById('tab-library');
+  const ordersTbody = document.getElementById('account-orders-tbody');
+  const ordersMobileContainer = document.getElementById('account-orders-mobile');
+
+  // 1. IF GUEST / LOGGED OUT: Show clear sign-in prompts and zeroed personal stats
+  if (!currentUser) {
+    if (welcomeTitle) welcomeTitle.textContent = "Welcome to Social Readers";
+    if (userEmailEl) userEmailEl.textContent = "Sign in to access your library, downloads, and receipts.";
+    if (avatarEl) avatarEl.textContent = "SR";
+
+    if (impactMetricEl) {
+      impactMetricEl.textContent = "Sign in to see your 25% personal contribution!";
+    }
+    if (statFundEl) statFundEl.textContent = "₹0.00";
+    if (textbooksCountEl) textbooksCountEl.textContent = "0";
+    if (spikesCountEl) spikesCountEl.textContent = "0 Pair";
+
+    if (libraryTabBtn) libraryTabBtn.textContent = "My Library (0)";
+
+    if (libraryPane) {
+      libraryPane.innerHTML = `
+        <div class="col-span-full py-12 px-4 text-center bg-white rounded-3xl border border-gray-100 shadow-xs max-w-xl mx-auto my-4">
+          <div class="w-14 h-14 rounded-full bg-blue-50 text-navy flex items-center justify-center mx-auto mb-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
+          <h3 class="text-base font-bold text-navy">Sign In to See Your Library</h3>
+          <p class="text-xs text-gray-500 mt-1 mb-4">Your purchased e-books and audiobooks will appear here once you sign in.</p>
+          <a href="books.html" class="inline-flex px-5 py-2.5 rounded-full bg-navy text-white text-xs font-bold hover:bg-blue-900 active:scale-95 transition-all shadow-sm">
+            Explore Book Catalog
+          </a>
+        </div>
+      `;
+    }
+
+    if (ordersTbody) {
+      ordersTbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="p-8 text-center text-gray-400 text-xs">
+            Sign in to view your order history.
+          </td>
+        </tr>
+      `;
+    }
+
+    if (ordersMobileContainer) {
+      ordersMobileContainer.innerHTML = `
+        <div class="p-6 text-center text-gray-400 text-xs bg-white rounded-2xl border border-gray-100">
+          Sign in to view your order history.
+        </div>
+      `;
+    }
+    return;
+  }
+
+  // 2. IF LOGGED IN: Filter orders strictly matching currentUser.email
+  const userEmail = (currentUser.email || '').toLowerCase().trim();
+  const userName = currentUser.name || userEmail.split('@')[0];
+
+  if (welcomeTitle) welcomeTitle.textContent = `Welcome back, ${userName}!`;
+  if (userEmailEl) userEmailEl.textContent = currentUser.email;
+  if (avatarEl) avatarEl.textContent = userName.substring(0, 2).toUpperCase();
+
+  let allOrders = [];
+  try {
+    allOrders = await window.SocialReadersDB.getOrders();
+  } catch (e) {
+    allOrders = window.SocialReadersDB.getOrdersSync ? window.SocialReadersDB.getOrdersSync() : [];
+  }
+
+  // Filter orders strictly for this customer
+  const userOrders = (allOrders || []).filter(ord => {
+    const buyer = (ord.customerEmail || ord.buyerEmail || '').toLowerCase().trim();
+    return buyer === userEmail;
   });
 
-  // Update contribution callouts
-  const impactMetricEl = document.querySelector('[data-i18n="account.impact_metric"]');
+  // Calculate totals for logged in user
+  let totalFund = 0;
+  userOrders.forEach(o => {
+    totalFund += (Number(o.causeShare) || (Number(o.amount) * 0.25) || 0);
+  });
+
   if (impactMetricEl) {
     impactMetricEl.textContent = `You contributed ₹${totalFund.toFixed(2)} to youth so far!`;
   }
-
-  const statFundEl = document.getElementById('account-total-fund-stat');
   if (statFundEl) {
     statFundEl.textContent = `₹${totalFund.toFixed(2)}`;
   }
-
-  // Update textbooks count (approx 1 textbook per ₹75)
-  const textbooksCountEl = document.getElementById('account-textbooks-stat');
   if (textbooksCountEl) {
-    textbooksCountEl.textContent = Math.max(1, Math.floor(totalFund / 75));
+    textbooksCountEl.textContent = Math.floor(totalFund / 75);
+  }
+  if (spikesCountEl) {
+    spikesCountEl.textContent = `${Math.floor(totalFund / 150)} Pair`;
   }
 
-  // Render Orders Table
-  const ordersTbody = document.getElementById('account-orders-tbody');
+  if (libraryTabBtn) {
+    libraryTabBtn.textContent = `My Library (${userOrders.length})`;
+  }
+
+  // Render User Library
+  if (libraryPane) {
+    if (userOrders.length === 0) {
+      libraryPane.innerHTML = `
+        <div class="col-span-full py-12 px-4 text-center bg-white rounded-3xl border border-gray-100 shadow-xs max-w-xl mx-auto my-4">
+          <div class="w-14 h-14 rounded-full bg-emerald-50 text-forest flex items-center justify-center mx-auto mb-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          </div>
+          <h3 class="text-base font-bold text-navy">Your Library is Empty</h3>
+          <p class="text-xs text-gray-500 mt-1 mb-4">You haven't purchased any books yet. 25% of every purchase directly educates students and supports rural athletes!</p>
+          <a href="books.html" class="inline-flex px-5 py-2.5 rounded-full bg-forest text-white text-xs font-bold hover:bg-green-800 active:scale-95 transition-all shadow-sm">
+            Browse Books &amp; Audiobooks
+          </a>
+        </div>
+      `;
+    } else {
+      let booksCatalog = [];
+      try {
+        booksCatalog = await window.SocialReadersDB.getBooks();
+      } catch (e) {
+        booksCatalog = window.SocialReadersDB.getBooksSync ? window.SocialReadersDB.getBooksSync() : [];
+      }
+
+      const libraryHtml = userOrders.map(ord => {
+        const matchingBook = booksCatalog.find(b => b.id === ord.bookId || b.title === ord.bookTitle) || {
+          id: ord.bookId || 'b1',
+          title: ord.bookTitle || 'Purchased Book',
+          author: 'Social Readers Author',
+          coverUrl: 'assets/cover-atomic-habits.svg'
+        };
+        const titleText = typeof matchingBook.title === 'object' ? (matchingBook.title.en || matchingBook.title.ta) : matchingBook.title;
+        const authorText = typeof matchingBook.author === 'object' ? (matchingBook.author.en || matchingBook.author.ta) : matchingBook.author;
+
+        return `
+          <div class="bg-white rounded-2xl p-2.5 sm:p-4 border border-gray-100 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+            <div>
+              <div class="w-full h-36 sm:h-52 bg-gray-50 rounded-xl flex items-center justify-center p-2 overflow-hidden">
+                <img src="${matchingBook.coverUrl || 'assets/cover-atomic-habits.svg'}" alt="${titleText}" class="max-h-full max-w-full object-contain rounded-lg">
+              </div>
+              <h3 class="font-bold text-navy text-xs sm:text-sm mt-2 line-clamp-2 min-h-[2rem] flex items-center">${titleText}</h3>
+              <p class="text-[10px] sm:text-xs text-gray-500 truncate">${authorText}</p>
+            </div>
+            <div class="mt-2.5 pt-2 border-t border-gray-100 space-y-1.5">
+              <button type="button" data-read-sample="true" data-book-id="${matchingBook.id}" class="w-full py-1.5 sm:py-2 rounded-lg bg-navy text-white text-[10px] sm:text-xs font-bold hover:bg-blue-900 active:scale-95 transition-all shadow-xs flex items-center justify-center gap-1">
+                <span>Read Online</span>
+              </button>
+              <div class="grid grid-cols-2 gap-1">
+                <button type="button" data-download-book="${titleText}" class="py-1 rounded-md border border-gray-200 text-navy text-[10px] font-semibold hover:bg-gray-50 active:scale-95 transition-all text-center">
+                  PDF
+                </button>
+                <button type="button" onclick="window.SocialReadersAudioPlayer.playTrack('${titleText}', '${authorText}', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', '${matchingBook.coverUrl || 'assets/cover-atomic-habits.svg'}')" class="py-1 rounded-md bg-orange-50 text-brandOrange text-[10px] font-semibold hover:bg-orange-100 active:scale-95 transition-all text-center">
+                  Listen
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      libraryPane.innerHTML = `<div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">${libraryHtml}</div>`;
+      initSampleReaderTriggers();
+    }
+  }
+
+  // Render Orders Desktop Table
   if (ordersTbody) {
-    ordersTbody.innerHTML = orders.map(ord => `
-      <tr class="hover:bg-gray-50/75 transition-colors">
-        <td class="p-3 sm:p-4 font-mono font-bold text-navy">${ord.orderId || '#SR-9800'}</td>
-        <td class="p-3 sm:p-4">
-          <div class="font-semibold text-gray-800">${ord.bookTitle}</div>
-          <div class="text-[11px] text-forest font-medium">${ord.format || 'E-Book'}</div>
-        </td>
-        <td class="p-3 sm:p-4 text-xs text-gray-500 whitespace-nowrap">${ord.date || 'Today'}</td>
-        <td class="p-3 sm:p-4 font-bold text-navy whitespace-nowrap">₹${ord.amount}.00</td>
-        <td class="p-3 sm:p-4 font-bold text-brandOrange whitespace-nowrap">₹${Number(ord.causeShare).toFixed(2)}</td>
-        <td class="p-3 sm:p-4">
-          <button type="button" onclick="showToast('Downloading invoice ${ord.orderId} PDF...')" class="inline-flex items-center gap-1 text-navy hover:text-forest font-bold text-xs underline">
-            <span>Receipt</span>
-          </button>
-        </td>
-      </tr>
-    `).join('');
+    if (userOrders.length === 0) {
+      ordersTbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="p-8 text-center text-gray-400 text-xs">
+            No orders found for this account.
+          </td>
+        </tr>
+      `;
+    } else {
+      ordersTbody.innerHTML = userOrders.map(ord => `
+        <tr class="hover:bg-gray-50/75 transition-colors">
+          <td class="p-3 sm:p-4 font-mono font-bold text-navy">${ord.orderId || '#SR-9800'}</td>
+          <td class="p-3 sm:p-4">
+            <div class="font-semibold text-gray-800">${ord.bookTitle}</div>
+            <div class="text-[11px] text-forest font-medium">${ord.format || 'E-Book'}</div>
+          </td>
+          <td class="p-3 sm:p-4 text-xs text-gray-500 whitespace-nowrap">${ord.date || 'Today'}</td>
+          <td class="p-3 sm:p-4 font-bold text-navy whitespace-nowrap">₹${ord.amount}.00</td>
+          <td class="p-3 sm:p-4 font-bold text-brandOrange whitespace-nowrap">₹${Number(ord.causeShare || ord.amount * 0.25).toFixed(2)}</td>
+          <td class="p-3 sm:p-4">
+            <button type="button" onclick="showToast('Downloading invoice ${ord.orderId} PDF...')" class="inline-flex items-center gap-1 text-navy hover:text-forest font-bold text-xs underline">
+              <span>Receipt</span>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  // Render Orders Mobile Cards
+  if (ordersMobileContainer) {
+    if (userOrders.length === 0) {
+      ordersMobileContainer.innerHTML = `
+        <div class="p-6 text-center text-gray-400 text-xs bg-white rounded-2xl border border-gray-100">
+          No orders found for this account.
+        </div>
+      `;
+    } else {
+      ordersMobileContainer.innerHTML = userOrders.map(ord => `
+        <div class="p-3.5 bg-white rounded-2xl border border-gray-100 shadow-xs flex flex-col gap-2.5">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-xs font-bold text-navy px-2 py-0.5 bg-gray-100 rounded-md">${ord.orderId || '#SR-9800'}</span>
+            <span class="text-[11px] text-gray-400 font-medium">${ord.date || 'Recent'}</span>
+          </div>
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <h4 class="font-bold text-navy text-sm leading-tight">${ord.bookTitle}</h4>
+              <span class="text-[10px] text-forest font-bold uppercase tracking-wider">${ord.format || 'E-Book'}</span>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <span class="text-sm font-black text-navy">₹${ord.amount}.00</span>
+              <span class="text-[10px] font-bold text-brandOrange block">₹${Number(ord.causeShare || ord.amount * 0.25).toFixed(2)} cause</span>
+            </div>
+          </div>
+          <div class="pt-2 border-t border-gray-50 flex items-center justify-between">
+            <span class="inline-flex items-center gap-1 text-[10px] font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded-full">
+              ● Completed
+            </span>
+            <button type="button" onclick="showToast('Downloading invoice ${ord.orderId} PDF...')" class="px-2.5 py-1 rounded-lg bg-gray-100 text-navy font-bold text-xs hover:bg-navy hover:text-white transition-all active:scale-95">
+              Download Receipt
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
   }
 }
 

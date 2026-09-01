@@ -520,7 +520,8 @@
         pct.textContent = '100% (Ready)';
       } catch (err) {
         console.error(err);
-        pct.textContent = 'Upload error';
+        pct.textContent = 'Upload error: ' + (err.message || 'Failed');
+        alert('Cover upload error: ' + (err.message || 'Please check Cloudinary settings'));
       }
     });
 
@@ -539,6 +540,8 @@
         pct.textContent = '100% (Ready)';
       } catch (err) {
         console.error(err);
+        pct.textContent = 'Upload error: ' + (err.message || 'Failed');
+        alert('PDF upload error: ' + (err.message || 'Please check Cloudinary settings'));
       }
     });
 
@@ -557,6 +560,8 @@
         pct.textContent = '100% (Ready)';
       } catch (err) {
         console.error(err);
+        pct.textContent = 'Upload error: ' + (err.message || 'Failed');
+        alert('Audio upload error: ' + (err.message || 'Please check Cloudinary settings'));
       }
     });
 

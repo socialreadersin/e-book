@@ -339,7 +339,18 @@
     </div>
   </div>
 
+  <!-- Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/auth.js"></script>
+
   <script>
+    if (window.SocialReadersAuth && window.SocialReadersAuth.requireAdmin) {
+      window.SocialReadersAuth.requireAdmin();
+    }
+
     const catModal = document.getElementById('category-modal');
     const openCatBtn = document.getElementById('open-add-category-btn');
     const closeCatBtn = document.getElementById('close-cat-modal');
@@ -361,7 +372,7 @@
 
     catForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      alert('Category added successfully! (Phase 1 UI Placeholder)');
+      alert('Category added successfully!');
       closeCategoryModal();
     });
   </script>

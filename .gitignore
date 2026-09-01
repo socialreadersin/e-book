@@ -9,3 +9,5 @@ firebase-config.js
 .env
 .env.local
 .env.*
+*.csv
+*secret*

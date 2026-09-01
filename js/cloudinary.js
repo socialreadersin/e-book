@@ -8,7 +8,7 @@ window.SocialReadersCloudinary = {
   // Get active Cloudinary configuration
   async getConfig() {
     let cloudName = localStorage.getItem('sr_cloudinary_cloud_name') || 'socialreaders';
-    let uploadPreset = localStorage.getItem('sr_cloudinary_preset') || 'sr_unsigned_preset';
+    let uploadPreset = localStorage.getItem('sr_cloudinary_preset') || 'tfy3lcci';
 
     if (window.SocialReadersDB && window.SocialReadersDB.getSettings) {
       try {
@@ -39,7 +39,7 @@ window.SocialReadersCloudinary = {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', config.uploadPreset);
-    formData.append('folder', 'social-readers');
+    formData.append('folder', 'book/images');
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -68,29 +68,22 @@ window.SocialReadersCloudinary = {
             reject(new Error("Invalid JSON response from Cloudinary"));
           }
         } else {
-          // If Cloudinary preset is demo or offline, provide a simulated safe URL
-          console.warn("Cloudinary upload returned non-200. Simulating upload for demo resilience:", xhr.responseText);
-          const fakeUrl = resourceType === 'image' 
-            ? `assets/${file.name}`
-            : (resourceType === 'raw' ? `https://example.com/books/${file.name}` : `https://example.com/audio/${file.name}`);
-          
-          resolve({
-            secure_url: fakeUrl,
-            public_id: `sr_${Date.now()}_${file.name}`,
-            format: file.name.split('.').pop() || 'dat',
-            bytes: file.size
-          });
+          let errorMsg = `Cloudinary upload failed (HTTP ${xhr.status})`;
+          try {
+            const errData = JSON.parse(xhr.responseText);
+            if (errData && errData.error && errData.error.message) {
+              errorMsg = errData.error.message;
+            }
+          } catch (e) {}
+          console.error("Cloudinary upload error:", errorMsg, xhr.responseText);
+          reject(new Error(errorMsg));
         }
       };
 
       xhr.onerror = () => {
-        console.warn("Cloudinary network error. Using resilient fallback URL.");
-        resolve({
-          secure_url: `assets/${file.name}`,
-          public_id: `sr_local_${Date.now()}`,
-          format: file.name.split('.').pop() || 'dat',
-          bytes: file.size
-        });
+        const errorMsg = "Network error during Cloudinary file upload. Please check your internet connection.";
+        console.error(errorMsg);
+        reject(new Error(errorMsg));
       };
 
       xhr.send(formData);

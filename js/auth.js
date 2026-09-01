@@ -115,34 +115,44 @@ window.SocialReadersAuth = {
   },
 
   async loginUser(email, password) {
+    let name = email.split('@')[0];
+    let uid = "user_" + Date.now();
+
     if (typeof firebase !== 'undefined' && firebase.auth) {
       try {
         const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
-        const user = {
-          uid: userCredential.user.uid,
-          name: userCredential.user.displayName || email.split('@')[0],
-          email: userCredential.user.email,
-          role: 'customer',
-          isLoggedIn: true,
-          memberSince: "2026",
-          libraryCount: 4,
-          totalContributed: 172.50
-        };
-        localStorage.setItem('sr_user_auth', JSON.stringify(user));
-        return { success: true, user };
+        if (userCredential.user) {
+          uid = userCredential.user.uid;
+          name = userCredential.user.displayName || email.split('@')[0];
+        }
       } catch (e) {
         console.warn("Customer auth fallback:", e);
       }
     }
 
+    // Query user's real orders to calculate dynamic libraryCount and totalContributed
+    let userOrders = [];
+    try {
+      if (window.SocialReadersDB && window.SocialReadersDB.getOrders) {
+        const allOrders = await window.SocialReadersDB.getOrders();
+        userOrders = allOrders.filter(o => (o.customerEmail || o.buyerEmail || '').toLowerCase() === email.toLowerCase());
+      }
+    } catch (err) {
+      console.warn("Could not calculate user order stats:", err);
+    }
+
+    const libraryCount = userOrders.length;
+    const totalContributed = userOrders.reduce((sum, o) => sum + (Number(o.causeShare) || (Number(o.amount) * 0.25) || 0), 0);
+
     const user = {
-      name: email.split('@')[0],
+      uid: uid,
+      name: name,
       email: email,
       role: 'customer',
       isLoggedIn: true,
       memberSince: "2026",
-      libraryCount: 4,
-      totalContributed: 172.50
+      libraryCount: libraryCount,
+      totalContributed: Number(totalContributed.toFixed(2))
     };
     localStorage.setItem('sr_user_auth', JSON.stringify(user));
     return { success: true, user };

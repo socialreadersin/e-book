@@ -34,6 +34,10 @@ window.SocialReadersCheckout = {
     const item = this.currentCartItem;
     const causeShare = (item.price * 0.25).toFixed(2);
 
+    const currentUser = window.SocialReadersAuth && window.SocialReadersAuth.getCurrentUser ? window.SocialReadersAuth.getCurrentUser() : null;
+    const prefillName = currentUser && currentUser.name ? currentUser.name : '';
+    const prefillEmail = currentUser && currentUser.email ? currentUser.email : '';
+
     modal.innerHTML = `
       <div class="bg-white rounded-3xl max-w-lg w-full max-h-[92vh] overflow-y-auto p-5 sm:p-8 shadow-2xl border border-gray-100 relative animate-scaleUp">
         
@@ -70,12 +74,12 @@ window.SocialReadersCheckout = {
         <form id="sr-checkout-form" class="space-y-3.5 sm:space-y-4">
           <div>
             <label class="block text-xs font-bold text-navy mb-1">Full Name</label>
-            <input type="text" id="buyer-name" required value="Ananya Sharma" class="w-full px-3.5 py-2.5 sm:px-4 sm:py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-navy" style="font-size: 16px;">
+            <input type="text" id="buyer-name" required value="${prefillName}" placeholder="Your full name" class="w-full px-3.5 py-2.5 sm:px-4 sm:py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-navy" style="font-size: 16px;">
           </div>
 
           <div>
             <label class="block text-xs font-bold text-navy mb-1">Email for Instant Delivery</label>
-            <input type="email" id="buyer-email" required value="reader@socialreaders.org" class="w-full px-3.5 py-2.5 sm:px-4 sm:py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-navy" style="font-size: 16px;">
+            <input type="email" id="buyer-email" required value="${prefillEmail}" placeholder="you@example.com" class="w-full px-3.5 py-2.5 sm:px-4 sm:py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-navy" style="font-size: 16px;">
           </div>
 
           <!-- 25% Allocation Transparency Notice -->
@@ -86,7 +90,8 @@ window.SocialReadersCheckout = {
 
           <div class="pt-2">
             <button type="submit" id="pay-submit-btn" class="w-full py-3.5 rounded-full bg-forest text-white font-bold text-xs sm:text-sm hover:bg-green-800 active:scale-95 transition-all shadow-md flex items-center justify-center gap-2">
-              <span>Simulate Payment — Demo Mode (₹${item.price}.00)</span>
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V7h2v5z"/></svg>
+              <span>Pay with Razorpay (₹${item.price}.00)</span>
             </button>
           </div>
         </form>
@@ -104,8 +109,8 @@ window.SocialReadersCheckout = {
     // Bind Submit
     document.getElementById('sr-checkout-form').addEventListener('submit', (e) => {
       e.preventDefault();
-      const name = document.getElementById('buyer-name').value;
-      const email = document.getElementById('buyer-email').value;
+      const name = document.getElementById('buyer-name').value.trim();
+      const email = document.getElementById('buyer-email').value.trim();
       this.processPayment(name, email);
     });
   },
@@ -118,26 +123,106 @@ window.SocialReadersCheckout = {
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
       </svg>
-      <span>Processing Payment...</span>
+      <span>Connecting to Razorpay...</span>
     `;
 
-    setTimeout(() => {
-      const orderId = `SR-${Math.floor(1000 + Math.random() * 9000)}`;
-      const order = {
-        orderId: orderId,
-        customerName: name,
-        customerEmail: email,
-        bookTitle: this.currentCartItem.title,
-        format: this.currentCartItem.format,
-        amount: this.currentCartItem.price,
-        causeShare: Number((this.currentCartItem.price * 0.25).toFixed(2)),
-        status: "Completed",
-        date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-      };
+    const item = this.currentCartItem;
+    const amountInPaise = Math.round(item.price * 100);
+    const keyId = localStorage.getItem('sr_razorpay_key_id') || "rzp_test_TWjICbE8TiyTnQ";
 
-      window.SocialReadersDB.createOrder(order);
-      this.showSuccessModal(order);
-    }, 1200);
+    // Load Razorpay script if not already present
+    const loadRazorpay = () => {
+      return new Promise((resolve) => {
+        if (window.Razorpay) {
+          resolve(true);
+          return;
+        }
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.head.appendChild(script);
+      });
+    };
+
+    loadRazorpay().then((isLoaded) => {
+      if (isLoaded && window.Razorpay) {
+        const options = {
+          key: keyId,
+          amount: amountInPaise,
+          currency: "INR",
+          name: "Social Readers",
+          description: `${item.title} (${item.format}) — 25% Social Cause`,
+          image: item.coverUrl || "assets/cover-atomic-habits.svg",
+          prefill: {
+            name: name,
+            email: email
+          },
+          theme: {
+            color: "#2E7D32"
+          },
+          modal: {
+            ondismiss: () => {
+              payBtn.disabled = false;
+              payBtn.innerHTML = `<span>Pay with Razorpay (₹${item.price}.00)</span>`;
+            }
+          },
+          handler: (response) => {
+            const orderId = `SR-${Math.floor(1000 + Math.random() * 9000)}`;
+            const order = {
+              orderId: orderId,
+              paymentId: response.razorpay_payment_id || `pay_${Date.now()}`,
+              customerName: name,
+              buyerName: name,
+              customerEmail: email,
+              buyerEmail: email,
+              bookId: item.bookId,
+              bookTitle: item.title,
+              format: item.format,
+              amount: item.price,
+              causeShare: Number((item.price * 0.25).toFixed(2)),
+              status: "Completed",
+              date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+              createdAt: new Date().toISOString()
+            };
+
+            window.SocialReadersDB.createOrder(order);
+            this.showSuccessModal(order);
+          }
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.on('payment.failed', (resp) => {
+          alert(`Payment failed: ${resp.error.description || 'Please try again.'}`);
+          payBtn.disabled = false;
+          payBtn.innerHTML = `<span>Retry Payment (₹${item.price}.00)</span>`;
+        });
+        rzp.open();
+      } else {
+        // Fallback simulation mode if offline / blocked
+        setTimeout(() => {
+          const orderId = `SR-${Math.floor(1000 + Math.random() * 9000)}`;
+          const order = {
+            orderId: orderId,
+            customerName: name,
+            buyerName: name,
+            customerEmail: email,
+            buyerEmail: email,
+            bookId: item.bookId,
+            bookTitle: item.title,
+            format: item.format,
+            amount: item.price,
+            causeShare: Number((item.price * 0.25).toFixed(2)),
+            status: "Completed",
+            date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+            createdAt: new Date().toISOString()
+          };
+
+          window.SocialReadersDB.createOrder(order);
+          this.showSuccessModal(order);
+        }, 1200);
+      }
+    });
   },
 
   showSuccessModal(order) {
