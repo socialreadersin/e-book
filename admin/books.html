@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Manage Books | Admin — Social Readers</title>
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#0B2C5D',
+            forest: '#2E7D32',
+            brandOrange: '#E8720C',
+            cream: '#FAF7F2',
+          },
+          fontFamily: {
+            heading: ['Poppins', 'Noto Sans Tamil', 'sans-serif'],
+            body: ['Inter', 'Noto Sans Tamil', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-[#FAF7F2] text-gray-800 min-h-screen flex flex-col md:flex-row font-body">
+
+  <!-- SIDEBAR (Desktop) -->
+  <aside class="w-64 bg-navy text-white flex-shrink-0 hidden md:flex flex-col justify-between p-6">
+    <div class="space-y-8">
+      <a href="../index.html" class="flex flex-col">
+        <div class="flex items-center gap-1">
+          <span class="text-xl font-extrabold text-white font-heading">SOCIAL</span>
+          <span class="text-xl font-extrabold text-green-400 font-heading">READERS</span>
+        </div>
+        <span class="text-[10px] tracking-widest text-orange-300 font-bold uppercase mt-0.5">Admin Console</span>
+      </a>
+
+      <!-- Navigation Menu Items -->
+      <nav class="space-y-1.5">
+        <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="books.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white font-bold text-sm shadow-sm">
+          <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          <span>Manage Books</span>
+        </a>
+
+        <a href="stories.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+          <span>Manage Stories</span>
+        </a>
+
+        <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+          <span>Orders &amp; Receipts</span>
+        </a>
+
+        <a href="categories.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+          <span>Categories</span>
+        </a>
+
+        <a href="deals.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          <span>Deals</span>
+        </a>
+
+        <a href="settings.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="pt-6 border-t border-white/10 text-xs text-gray-400 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full bg-forest text-white font-bold flex items-center justify-center text-xs">SR</div>
+        <div class="flex flex-col">
+          <span id="sidebar-admin-name" class="text-white font-semibold">Administrator</span>
+          <span class="text-[10px] text-gray-400">Super Admin</span>
+        </div>
+      </div>
+      <button onclick="window.SocialReadersAuth.logoutAdmin()" class="text-orange-300 hover:underline">Logout</button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="flex-grow flex flex-col min-w-0">
+    
+    <!-- Mobile Top Bar -->
+    <div class="md:hidden bg-navy text-white px-3 py-2.5 flex items-center justify-between border-b border-white/10">
+      <a href="../index.html" class="flex items-center gap-1">
+        <span class="text-sm font-extrabold text-white font-heading">SOCIAL</span>
+        <span class="text-sm font-extrabold text-green-400 font-heading">READERS</span>
+        <span class="text-[9px] bg-brandOrange text-white font-bold px-1.5 py-0.5 rounded ml-1">Admin</span>
+      </a>
+      <div class="flex items-center gap-2">
+        <button onclick="window.SocialReadersAuth.logoutAdmin()" class="text-orange-300 text-xs font-semibold hover:underline">Logout</button>
+      </div>
+    </div>
+
+    <!-- Mobile Scrollable Tabs -->
+    <div class="md:hidden bg-white border-b border-gray-200 px-3 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs">
+      <a href="dashboard.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Dashboard</a>
+      <a href="books.html" class="px-3 py-1.5 bg-navy text-white rounded-lg font-bold whitespace-nowrap">Manage Books</a>
+      <a href="stories.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Manage Stories</a>
+      <a href="orders.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Orders</a>
+      <a href="categories.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Categories</a>
+      <a href="deals.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Deals</a>
+      <a href="settings.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Settings</a>
+    </div>
+
+    <!-- Header Content -->
+    <header class="bg-white border-b border-gray-200 px-4 sm:px-8 py-4 sm:py-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div>
+        <h1 class="text-xl sm:text-2xl font-bold text-navy font-heading">Manage Books &amp; Audiobooks</h1>
+        <p class="text-xs text-gray-500 mt-0.5">Publish and manage digital books, bilingual audiobooks, and prices in Cloud Firestore</p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button 
+          id="open-add-book-btn"
+          class="px-4 py-2.5 rounded-xl bg-forest hover:bg-green-700 text-white font-bold text-xs flex items-center gap-2 shadow-sm transition-all active:scale-95"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          <span>+ Add New Book</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <main class="p-4 sm:p-8 space-y-6 flex-grow">
+      
+      <!-- Filter Bar -->
+      <div class="bg-white p-3 sm:p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+        <div class="flex items-center gap-3 flex-1">
+          <div class="relative w-full max-w-sm">
+            <input 
+              type="text" 
+              id="admin-book-search"
+              placeholder="Search title, author, category..." 
+              class="w-full pl-9 pr-4 py-2 text-xs border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:border-navy focus:bg-white transition-colors"
+            >
+            <svg class="w-4 h-4 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </div>
+          <select id="admin-category-filter" class="text-xs border border-gray-200 rounded-xl px-3 py-2 bg-gray-50 text-gray-700 focus:outline-none focus:border-navy">
+            <option value="all">All Categories</option>
+            <option value="selfdev">Self Development</option>
+            <option value="business">Business &amp; Finance</option>
+            <option value="health">Health &amp; Mindset</option>
+            <option value="biography">Biographies</option>
+            <option value="fiction">Fiction</option>
+            <option value="tamil">Tamil</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-2 text-xs text-gray-500">
+          <span id="books-total-count" class="font-bold text-navy">0</span> Books in Firestore
+        </div>
+      </div>
+
+      <!-- BOOKS TABLE -->
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm text-gray-700 min-w-[640px]">
+            <thead class="bg-gray-50 text-navy font-bold text-xs uppercase tracking-wider border-b border-gray-100">
+              <tr>
+                <th class="py-3.5 px-4 sm:px-6">Cover</th>
+                <th class="py-3.5 px-4">Title &amp; Author</th>
+                <th class="py-3.5 px-4">Category</th>
+                <th class="py-3.5 px-4">Ebook Price</th>
+                <th class="py-3.5 px-4">Audio Price</th>
+                <th class="py-3.5 px-4">Status</th>
+                <th class="py-3.5 px-4 sm:px-6 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-books-tbody" class="divide-y divide-gray-100">
+              <tr>
+                <td colspan="7" class="py-8 text-center text-xs text-gray-500">
+                  <div class="animate-pulse">Loading catalog from Firestore...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ADD / EDIT BOOK MODAL (Cloudinary & Firestore Enabled) -->
+  <div id="book-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-gray-100 overflow-hidden">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-[#FAF7F2]">
+        <div>
+          <h3 id="modal-heading" class="font-bold text-navy text-base font-heading">+ Add New Book</h3>
+          <p class="text-[11px] text-gray-500">Add metadata, set format pricing, and upload files to Cloudinary</p>
+        </div>
+        <button id="close-modal-btn" class="p-2 text-gray-400 hover:text-navy rounded-full active:scale-95" aria-label="Close">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <!-- Modal Body (Form) -->
+      <form id="book-form" class="p-6 overflow-y-auto space-y-4 flex-1 text-xs text-gray-700">
+        <input type="hidden" id="edit-book-id" value="">
+        
+        <!-- Titles (Bilingual) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-navy mb-1">Title (English) *</label>
+            <input type="text" id="book-title-en" required placeholder="e.g. Atomic Habits" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy">
+          </div>
+          <div>
+            <label class="block font-bold text-navy mb-1">Title (Tamil / தமிழ்) *</label>
+            <input type="text" id="book-title-ta" required placeholder="e.g. அட்டாமிக் ஹாபிட்ஸ்" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy">
+          </div>
+        </div>
+
+        <!-- Authors (Bilingual) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-navy mb-1">Author (English) *</label>
+            <input type="text" id="book-author-en" required placeholder="e.g. James Clear" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy">
+          </div>
+          <div>
+            <label class="block font-bold text-navy mb-1">Author (Tamil / தமிழ்) *</label>
+            <input type="text" id="book-author-ta" required placeholder="e.g. ஜேம்ஸ் க்ளியர்" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy">
+          </div>
+        </div>
+
+        <!-- Category & Bestseller -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
+          <div>
+            <label class="block font-bold text-navy mb-1">Category *</label>
+            <select id="book-category" required class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy text-xs">
+              <option value="selfdev">Self Development</option>
+              <option value="business">Business &amp; Finance</option>
+              <option value="health">Health &amp; Mindset</option>
+              <option value="biography">Biographies</option>
+              <option value="fiction">Fiction</option>
+              <option value="tamil">Tamil</option>
+            </select>
+          </div>
+          
+          <div class="pt-4 sm:pt-5 flex items-center gap-4">
+            <label class="flex items-center gap-2 cursor-pointer select-none">
+              <input type="checkbox" id="book-is-bestseller" class="w-4 h-4 rounded text-brandOrange focus:ring-brandOrange border-gray-300">
+              <span class="font-bold text-navy">Mark as Bestseller</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Descriptions (Bilingual) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-navy mb-1">Description (English)</label>
+            <textarea id="book-desc-en" rows="2" placeholder="Book overview..." class="w-full px-3.5 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy"></textarea>
+          </div>
+          <div>
+            <label class="block font-bold text-navy mb-1">Description (Tamil / தமிழ்)</label>
+            <textarea id="book-desc-ta" rows="2" placeholder="நூல் விளக்கம்..." class="w-full px-3.5 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy"></textarea>
+          </div>
+        </div>
+
+        <!-- Cover Image Upload (Cloudinary image) -->
+        <div>
+          <label class="block font-bold text-navy mb-1">Cover Image (Upload via Cloudinary) *</label>
+          <div class="p-3.5 border-2 border-dashed border-gray-200 rounded-2xl bg-gray-50 flex flex-col sm:flex-row items-center gap-3">
+            <input type="file" id="cover-file-input" accept="image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-navy file:text-white hover:file:bg-blue-950">
+            <input type="text" id="book-cover-url" placeholder="or paste Image URL" class="w-full sm:w-1/2 px-3 py-1.5 text-xs rounded-lg border border-gray-200 bg-white">
+          </div>
+          <div id="cover-upload-progress" class="hidden mt-1.5 text-[10px] text-forest font-bold">Uploading Cover: <span id="cover-progress-pct">0%</span></div>
+        </div>
+
+        <!-- FORMAT TOGGLE: Ebook only / Audiobook only / Both -->
+        <div class="p-3.5 bg-gray-50 rounded-2xl border border-gray-200 space-y-3">
+          <label class="block font-bold text-navy">Format Availability *</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="flex items-center gap-1.5 p-2 rounded-xl border border-gray-200 bg-white cursor-pointer hover:border-navy transition-colors">
+              <input type="radio" name="format-type" value="ebook" class="text-navy focus:ring-navy">
+              <span class="font-bold text-navy text-[11px]">E-Book Only</span>
+            </label>
+            <label class="flex items-center gap-1.5 p-2 rounded-xl border border-gray-200 bg-white cursor-pointer hover:border-navy transition-colors">
+              <input type="radio" name="format-type" value="audiobook" class="text-navy focus:ring-navy">
+              <span class="font-bold text-navy text-[11px]">Audiobook Only</span>
+            </label>
+            <label class="flex items-center gap-1.5 p-2 rounded-xl border border-navy bg-blue-50/50 cursor-pointer">
+              <input type="radio" name="format-type" value="both" checked class="text-navy focus:ring-navy">
+              <span class="font-bold text-navy text-[11px]">Both Formats</span>
+            </label>
+          </div>
+
+          <!-- Ebook Details Container -->
+          <div id="ebook-fields" class="p-3.5 bg-white rounded-xl border border-gray-200 space-y-2.5">
+            <div class="font-bold text-navy flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+              <span>E-Book Settings</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-medium text-gray-600 mb-1">Ebook Price (₹ INR) *</label>
+                <input type="number" id="book-price-ebook" value="149" class="w-full px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy">
+              </div>
+              <div>
+                <label class="block font-medium text-gray-600 mb-1">PDF File (Cloudinary raw)</label>
+                <input type="file" id="pdf-file-input" accept=".pdf" class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gray-200">
+                <input type="hidden" id="book-pdf-url" value="">
+                <div id="pdf-upload-progress" class="hidden text-[10px] text-forest font-bold mt-1">Uploading PDF: <span id="pdf-progress-pct">0%</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Audiobook Details Container -->
+          <div id="audio-fields" class="p-3.5 bg-white rounded-xl border border-gray-200 space-y-2.5">
+            <div class="font-bold text-navy flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-purple-600"></span>
+              <span>Audiobook Settings</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-medium text-gray-600 mb-1">Audiobook Price (₹ INR) *</label>
+                <input type="number" id="book-price-audio" value="199" class="w-full px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy">
+              </div>
+              <div>
+                <label class="block font-medium text-gray-600 mb-1">MP3 Audio File (Cloudinary video)</label>
+                <input type="file" id="audio-file-input" accept="audio/*" class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gray-200">
+                <input type="hidden" id="book-audio-url" value="">
+                <div id="audio-upload-progress" class="hidden text-[10px] text-forest font-bold mt-1">Uploading Audio: <span id="audio-progress-pct">0%</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Publish Status -->
+        <div>
+          <label class="block font-bold text-navy mb-1">Publish Status</label>
+          <select id="book-status" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy text-xs">
+            <option value="published">Published (Visible in Store)</option>
+            <option value="draft">Draft (Hidden)</option>
+          </select>
+        </div>
+
+        <!-- Modal Footer Actions -->
+        <div class="pt-3 border-t border-gray-100 flex items-center justify-end gap-3">
+          <button type="button" id="cancel-modal-btn" class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-bold hover:bg-gray-100 transition-colors">Cancel</button>
+          <button type="submit" id="save-book-submit-btn" class="px-6 py-2.5 rounded-xl bg-forest hover:bg-green-700 text-white font-bold shadow-md transition-all">Save Book</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/cloudinary.js"></script>
+
+  <script>
+    // Ensure admin auth guard
+    if (window.SocialReadersAuth && window.SocialReadersAuth.requireAdmin) {
+      window.SocialReadersAuth.requireAdmin();
+    }
+
+    let allBooks = [];
+
+    // Load and render books from Firestore
+    async function loadBooks() {
+      allBooks = await window.SocialReadersDB.getBooks(true);
+      renderBooksTable(allBooks);
+      document.getElementById('books-total-count').textContent = allBooks.length;
+    }
+
+    function renderBooksTable(books) {
+      const tbody = document.getElementById('admin-books-tbody');
+      if (!books.length) {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-xs text-gray-500">No books found. Click "+ Add New Book" to publish.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = books.map(book => {
+        const titleEn = typeof book.title === 'object' ? book.title.en : book.title;
+        const titleTa = typeof book.title === 'object' ? book.title.ta : '';
+        const authorEn = typeof book.author === 'object' ? book.author.en : book.author;
+        const ebookPrice = book.priceEbook ? `₹${book.priceEbook}` : '—';
+        const audioPrice = book.priceAudiobook ? `₹${book.priceAudiobook}` : '—';
+        const isDraft = book.status === 'draft';
+        const cover = book.coverUrl || '../assets/cover-atomic-habits.svg';
+
+        return `
+          <tr class="hover:bg-gray-50/80 transition-colors">
+            <td class="py-3 px-4 sm:px-6">
+              <img src="${cover}" alt="${titleEn}" class="w-10 h-14 object-contain rounded-lg border border-gray-200 bg-white p-0.5 shadow-sm">
+            </td>
+            <td class="py-3 px-4">
+              <div class="font-bold text-navy text-xs sm:text-sm">${titleEn}</div>
+              <div class="text-[11px] text-gray-400">${titleTa ? titleTa + ' &bull; ' : ''}${authorEn}</div>
+              ${book.isBestseller ? '<span class="inline-block mt-0.5 text-[9px] font-extrabold px-1.5 py-0.2 rounded bg-orange-100 text-brandOrange">Bestseller</span>' : ''}
+            </td>
+            <td class="py-3 px-4">
+              <span class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-100 capitalize">${book.category || 'General'}</span>
+            </td>
+            <td class="py-3 px-4 font-bold text-navy text-xs">${ebookPrice}</td>
+            <td class="py-3 px-4 font-bold text-forest text-xs">${audioPrice}</td>
+            <td class="py-3 px-4">
+              <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${isDraft ? 'bg-amber-100 text-amber-800' : 'bg-green-100 text-green-800'}">
+                ${isDraft ? 'Draft' : 'Published'}
+              </span>
+            </td>
+            <td class="py-3 px-4 sm:px-6 text-right space-x-2">
+              <button onclick="editBook('${book.id}')" class="text-xs font-bold text-navy hover:text-forest transition-colors">Edit</button>
+              <button onclick="deleteBook('${book.id}', '${titleEn}')" class="text-xs font-bold text-red-500 hover:text-red-700 transition-colors">Delete</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Filter functionality
+    document.getElementById('admin-book-search').addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase().trim();
+      const cat = document.getElementById('admin-category-filter').value;
+      filterBooks(term, cat);
+    });
+
+    document.getElementById('admin-category-filter').addEventListener('change', (e) => {
+      const cat = e.target.value;
+      const term = document.getElementById('admin-book-search').value.toLowerCase().trim();
+      filterBooks(term, cat);
+    });
+
+    function filterBooks(term, cat) {
+      const filtered = allBooks.filter(b => {
+        const title = (typeof b.title === 'object' ? b.title.en + ' ' + b.title.ta : b.title).toLowerCase();
+        const author = (typeof b.author === 'object' ? b.author.en + ' ' + b.author.ta : b.author).toLowerCase();
+        const matchesSearch = !term || title.includes(term) || author.includes(term);
+        const matchesCat = cat === 'all' || (b.category && b.category.toLowerCase() === cat.toLowerCase());
+        return matchesSearch && matchesCat;
+      });
+      renderBooksTable(filtered);
+    }
+
+    // Modal controls
+    const bookModal = document.getElementById('book-modal');
+    const openBtn = document.getElementById('open-add-book-btn');
+    const closeBtn = document.getElementById('close-modal-btn');
+    const cancelBtn = document.getElementById('cancel-modal-btn');
+    const bookForm = document.getElementById('book-form');
+
+    function openModal(isEdit = false) {
+      document.getElementById('modal-heading').textContent = isEdit ? 'Edit Book' : '+ Add New Book';
+      bookModal.classList.remove('hidden');
+      bookModal.classList.add('flex');
+    }
+
+    function closeModal() {
+      bookModal.classList.add('hidden');
+      bookModal.classList.remove('flex');
+      bookForm.reset();
+      document.getElementById('edit-book-id').value = '';
+      document.getElementById('book-cover-url').value = '';
+      document.getElementById('book-pdf-url').value = '';
+      document.getElementById('book-audio-url').value = '';
+    }
+
+    openBtn.addEventListener('click', () => openModal(false));
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+
+    // Format radio switching
+    const formatRadios = document.querySelectorAll('input[name="format-type"]');
+    const ebookFields = document.getElementById('ebook-fields');
+    const audioFields = document.getElementById('audio-fields');
+
+    formatRadios.forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        const val = e.target.value;
+        if (val === 'ebook') {
+          ebookFields.classList.remove('hidden');
+          audioFields.classList.add('hidden');
+        } else if (val === 'audiobook') {
+          ebookFields.classList.add('hidden');
+          audioFields.classList.remove('hidden');
+        } else {
+          ebookFields.classList.remove('hidden');
+          audioFields.classList.remove('hidden');
+        }
+      });
+    });
+
+    // Cloudinary Upload Handlers
+    document.getElementById('cover-file-input').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const prog = document.getElementById('cover-upload-progress');
+      const pct = document.getElementById('cover-progress-pct');
+      prog.classList.remove('hidden');
+
+      try {
+        const res = await window.SocialReadersCloudinary.uploadToCloudinary(file, 'image', (p) => {
+          pct.textContent = `${p}%`;
+        });
+        document.getElementById('book-cover-url').value = res.secure_url;
+        pct.textContent = '100% (Ready)';
+      } catch (err) {
+        console.error(err);
+        pct.textContent = 'Upload error';
+      }
+    });
+
+    document.getElementById('pdf-file-input').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const prog = document.getElementById('pdf-upload-progress');
+      const pct = document.getElementById('pdf-progress-pct');
+      prog.classList.remove('hidden');
+
+      try {
+        const res = await window.SocialReadersCloudinary.uploadToCloudinary(file, 'raw', (p) => {
+          pct.textContent = `${p}%`;
+        });
+        document.getElementById('book-pdf-url').value = res.secure_url;
+        pct.textContent = '100% (Ready)';
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    document.getElementById('audio-file-input').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const prog = document.getElementById('audio-upload-progress');
+      const pct = document.getElementById('audio-progress-pct');
+      prog.classList.remove('hidden');
+
+      try {
+        const res = await window.SocialReadersCloudinary.uploadToCloudinary(file, 'video', (p) => {
+          pct.textContent = `${p}%`;
+        });
+        document.getElementById('book-audio-url').value = res.secure_url;
+        pct.textContent = '100% (Ready)';
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    // Form Submit: Save to Firestore
+    bookForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const saveBtn = document.getElementById('save-book-submit-btn');
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving to Firestore...';
+
+      const existingId = document.getElementById('edit-book-id').value;
+      const formatType = document.querySelector('input[name="format-type"]:checked').value;
+      
+      const priceEbook = formatType !== 'audiobook' ? Number(document.getElementById('book-price-ebook').value || 149) : null;
+      const priceAudio = formatType !== 'ebook' ? Number(document.getElementById('book-price-audio').value || 199) : null;
+
+      const bookData = {
+        id: existingId || `b_${Date.now()}`,
+        title: {
+          en: document.getElementById('book-title-en').value.trim(),
+          ta: document.getElementById('book-title-ta').value.trim()
+        },
+        author: {
+          en: document.getElementById('book-author-en').value.trim(),
+          ta: document.getElementById('book-author-ta').value.trim()
+        },
+        category: document.getElementById('book-category').value,
+        isBestseller: document.getElementById('book-is-bestseller').checked,
+        description: {
+          en: document.getElementById('book-desc-en').value.trim(),
+          ta: document.getElementById('book-desc-ta').value.trim()
+        },
+        coverUrl: document.getElementById('book-cover-url').value.trim() || 'assets/cover-atomic-habits.svg',
+        pdfUrl: document.getElementById('book-pdf-url').value.trim() || null,
+        audioUrl: document.getElementById('book-audio-url').value.trim() || (priceAudio ? 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' : null),
+        priceEbook: priceEbook,
+        priceAudiobook: priceAudio,
+        price: priceEbook || priceAudio || 149,
+        type: formatType,
+        status: document.getElementById('book-status').value
+      };
+
+      await window.SocialReadersDB.saveBook(bookData);
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Save Book';
+      closeModal();
+      await loadBooks();
+    });
+
+    // Edit Book Trigger
+    window.editBook = async function(bookId) {
+      const book = await window.SocialReadersDB.getBookById(bookId);
+      if (!book) return;
+
+      document.getElementById('edit-book-id').value = book.id;
+      document.getElementById('book-title-en').value = typeof book.title === 'object' ? book.title.en : book.title;
+      document.getElementById('book-title-ta').value = typeof book.title === 'object' ? book.title.ta : '';
+      document.getElementById('book-author-en').value = typeof book.author === 'object' ? book.author.en : book.author;
+      document.getElementById('book-author-ta').value = typeof book.author === 'object' ? book.author.ta : '';
+      document.getElementById('book-category').value = book.category || 'selfdev';
+      document.getElementById('book-is-bestseller').checked = !!book.isBestseller;
+      document.getElementById('book-desc-en').value = typeof book.description === 'object' ? book.description.en : (book.description || '');
+      document.getElementById('book-desc-ta').value = typeof book.description === 'object' ? book.description.ta : '';
+      document.getElementById('book-cover-url').value = book.coverUrl || '';
+      document.getElementById('book-pdf-url').value = book.pdfUrl || '';
+      document.getElementById('book-audio-url').value = book.audioUrl || '';
+      document.getElementById('book-price-ebook').value = book.priceEbook || book.price || 149;
+      document.getElementById('book-price-audio').value = book.priceAudiobook || 199;
+      document.getElementById('book-status').value = book.status || 'published';
+
+      openModal(true);
+    };
+
+    // Delete Book Trigger
+    window.deleteBook = async function(bookId, title) {
+      if (confirm(`Are you sure you want to delete "${title}" from Firestore?`)) {
+        await window.SocialReadersDB.deleteBook(bookId);
+        await loadBooks();
+      }
+    };
+
+    // Initial load
+    document.addEventListener('DOMContentLoaded', loadBooks);
+  </script>
+
+</body>
+</html>

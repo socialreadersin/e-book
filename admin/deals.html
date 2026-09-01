@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lightning Deals | Admin — Social Readers</title>
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#0B2C5D',
+            forest: '#2E7D32',
+            brandOrange: '#E8720C',
+            cream: '#FAF7F2',
+          },
+          fontFamily: {
+            heading: ['Poppins', 'Noto Sans Tamil', 'sans-serif'],
+            body: ['Inter', 'Noto Sans Tamil', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-[#FAF7F2] text-gray-800 min-h-screen flex font-body">
+
+  <!-- SIDEBAR (Desktop) -->
+  <aside class="w-64 bg-navy text-white flex-shrink-0 hidden md:flex flex-col justify-between p-6">
+    <div class="space-y-8">
+      <a href="../index.html" class="flex flex-col">
+        <div class="flex items-center gap-1">
+          <span class="text-xl font-extrabold text-white font-heading">SOCIAL</span>
+          <span class="text-xl font-extrabold text-green-400 font-heading">READERS</span>
+        </div>
+        <span class="text-[10px] tracking-widest text-orange-300 font-bold uppercase mt-0.5">Admin Console</span>
+      </a>
+
+      <!-- Navigation Menu Items -->
+      <nav class="space-y-1.5">
+        <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="books.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          <span>Manage Books</span>
+        </a>
+
+        <a href="stories.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+          <span>Manage Stories</span>
+        </a>
+
+        <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+          <span>Orders &amp; Receipts</span>
+        </a>
+
+        <a href="categories.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+          <span>Categories</span>
+        </a>
+
+        <a href="deals.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white font-bold text-sm shadow-sm">
+          <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          <span>Deals</span>
+        </a>
+
+        <a href="settings.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="pt-6 border-t border-white/10 text-xs text-gray-400 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full bg-forest text-white font-bold flex items-center justify-center text-xs">SR</div>
+        <div class="flex flex-col">
+          <span class="text-white font-semibold">S. Raman</span>
+          <span class="text-[10px] text-gray-400">Super Admin</span>
+        </div>
+      </div>
+      <a href="login.html" class="text-orange-300 hover:underline">Logout</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="flex-grow flex flex-col min-w-0">
+    
+    <!-- Mobile Top Bar -->
+    <div class="md:hidden bg-navy text-white px-3 py-2.5 flex items-center justify-between border-b border-white/10">
+      <a href="../index.html" class="flex items-center gap-1">
+        <span class="text-sm font-extrabold text-white font-heading">SOCIAL</span>
+        <span class="text-sm font-extrabold text-green-400 font-heading">READERS</span>
+        <span class="text-[9px] bg-brandOrange text-white font-bold px-1.5 py-0.5 rounded ml-1">Admin</span>
+      </a>
+      <div class="flex items-center gap-2">
+        <a href="login.html" class="text-orange-300 text-xs font-semibold hover:underline">Logout</a>
+      </div>
+    </div>
+
+    <!-- Mobile Scrollable Tabs -->
+    <div class="md:hidden bg-white border-b border-gray-200 px-3 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs">
+      <a href="dashboard.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Dashboard</a>
+      <a href="books.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Manage Books</a>
+      <a href="stories.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Manage Stories</a>
+      <a href="orders.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Orders</a>
+      <a href="categories.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Categories</a>
+      <a href="deals.html" class="px-3 py-1.5 bg-navy text-white rounded-lg font-bold whitespace-nowrap">Deals</a>
+      <a href="settings.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Settings</a>
+    </div>
+
+    <!-- Header Content -->
+    <header class="bg-white border-b border-gray-200 px-6 sm:px-8 py-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1">
+            <svg class="w-3 h-3 text-brandOrange" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path></svg>
+            Promotions &amp; Flash Sales
+          </span>
+        </div>
+        <h1 class="text-2xl font-bold text-navy font-heading">Lightning Deals &amp; Discounts</h1>
+        <p class="text-xs text-gray-500 mt-0.5">Schedule limited-time discount offers on select e-books and audiobooks</p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button 
+          id="open-add-deal-btn"
+          class="px-4 py-2.5 rounded-xl bg-brandOrange hover:bg-orange-600 text-white font-bold text-xs flex items-center gap-2 shadow-sm transition-all"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          <span>+ Add Lightning Deal</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <main class="p-6 sm:p-8 space-y-6 flex-grow">
+      
+      <!-- Summary / Info Card -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
+          <div>
+            <span class="text-xs font-semibold text-gray-500 uppercase">Active Flash Deals</span>
+            <div class="text-xl font-black text-navy font-heading mt-0.5">2 Live Now</div>
+          </div>
+          <span class="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping inline-block"></span>
+          </span>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
+          <div>
+            <span class="text-xs font-semibold text-gray-500 uppercase">Upcoming Scheduled</span>
+            <div class="text-xl font-black text-navy font-heading mt-0.5">2 Scheduled</div>
+          </div>
+          <span class="p-3 bg-blue-50 text-navy rounded-xl">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </span>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
+          <div>
+            <span class="text-xs font-semibold text-gray-500 uppercase">Cause Fund Intact</span>
+            <div class="text-xl font-black text-forest font-heading mt-0.5">25% of final deal price</div>
+          </div>
+          <span class="p-3 bg-orange-50 text-brandOrange rounded-xl">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
+          </span>
+        </div>
+      </div>
+
+      <!-- DEALS TABLE -->
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm text-gray-700">
+            <thead class="bg-gray-50 text-navy font-bold text-xs uppercase tracking-wider border-b border-gray-100">
+              <tr>
+                <th class="py-3.5 px-6">Book / Deal Title</th>
+                <th class="py-3.5 px-4">Original &rarr; Deal Price</th>
+                <th class="py-3.5 px-4">Discount</th>
+                <th class="py-3.5 px-4">Start Time</th>
+                <th class="py-3.5 px-4">End Time</th>
+                <th class="py-3.5 px-4">Status</th>
+                <th class="py-3.5 px-6 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              
+              <!-- Deal 1 -->
+              <tr class="hover:bg-gray-50/80 transition-colors">
+                <td class="py-4 px-6 font-semibold text-navy">
+                  <div class="flex items-center gap-3">
+                    <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=100&auto=format&fit=crop&q=80" alt="Ponniyin Selvan" class="w-10 h-14 object-cover rounded-lg border border-gray-200 shadow-sm">
+                    <div>
+                      <div class="font-bold text-navy text-sm">Ponniyin Selvan (Vol 1)</div>
+                      <div class="text-xs text-gray-400">Ebook Special Promo</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs line-through text-gray-400">₹299</span>
+                    <span class="font-bold text-navy text-base">₹149</span>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-black bg-orange-100 text-brandOrange border border-orange-200">
+                    50% OFF
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-xs text-gray-600">Sep 01, 2026 00:00</td>
+                <td class="py-4 px-4 text-xs font-semibold text-rose-600">Sep 03, 2026 23:59 (Live)</td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                    Active
+                  </span>
+                </td>
+                <td class="py-4 px-6 text-right">
+                  <div class="inline-flex items-center gap-2">
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">End Early</button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Deal 2 -->
+              <tr class="hover:bg-gray-50/80 transition-colors">
+                <td class="py-4 px-6 font-semibold text-navy">
+                  <div class="flex items-center gap-3">
+                    <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=100&auto=format&fit=crop&q=80" alt="Atomic Habits" class="w-10 h-14 object-cover rounded-lg border border-gray-200 shadow-sm">
+                    <div>
+                      <div class="font-bold text-navy text-sm">Atomic Habits (Audiobook)</div>
+                      <div class="text-xs text-gray-400">Flash Audio Week</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs line-through text-gray-400">₹499</span>
+                    <span class="font-bold text-navy text-base">₹349</span>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-black bg-orange-100 text-brandOrange border border-orange-200">
+                    30% OFF
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-xs text-gray-600">Sep 01, 2026 09:00</td>
+                <td class="py-4 px-4 text-xs font-semibold text-rose-600">Sep 02, 2026 21:00 (Live)</td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                    Active
+                  </span>
+                </td>
+                <td class="py-4 px-6 text-right">
+                  <div class="inline-flex items-center gap-2">
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">End Early</button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Deal 3 -->
+              <tr class="hover:bg-gray-50/80 transition-colors">
+                <td class="py-4 px-6 font-semibold text-navy">
+                  <div class="flex items-center gap-3">
+                    <img src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=100&auto=format&fit=crop&q=80" alt="Rich Dad Poor Dad" class="w-10 h-14 object-cover rounded-lg border border-gray-200 shadow-sm">
+                    <div>
+                      <div class="font-bold text-navy text-sm">Rich Dad Poor Dad</div>
+                      <div class="text-xs text-gray-400">Weekend Financial Sprint</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs line-through text-gray-400">₹299</span>
+                    <span class="font-bold text-navy text-base">₹179</span>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-black bg-blue-100 text-navy border border-blue-200">
+                    40% OFF
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-xs text-gray-600">Sep 05, 2026 00:00</td>
+                <td class="py-4 px-4 text-xs text-gray-600">Sep 07, 2026 23:59</td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-navy">
+                    <span class="w-1.5 h-1.5 rounded-full bg-navy"></span>
+                    Scheduled
+                  </span>
+                </td>
+                <td class="py-4 px-6 text-right">
+                  <div class="inline-flex items-center gap-2">
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">Delete</button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Deal 4 -->
+              <tr class="hover:bg-gray-50/80 transition-colors">
+                <td class="py-4 px-6 font-semibold text-navy">
+                  <div class="flex items-center gap-3">
+                    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=100&auto=format&fit=crop&q=80" alt="Wings of Fire" class="w-10 h-14 object-cover rounded-lg border border-gray-200 shadow-sm">
+                    <div>
+                      <div class="font-bold text-navy text-sm">Wings of Fire</div>
+                      <div class="text-xs text-gray-400">Independence Special</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs line-through text-gray-400">₹199</span>
+                    <span class="font-bold text-navy text-base">₹99</span>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-black bg-gray-100 text-gray-600">
+                    50% OFF
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-xs text-gray-400">Aug 15, 2026</td>
+                <td class="py-4 px-4 text-xs text-gray-400">Aug 18, 2026</td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-gray-100 text-gray-500">
+                    Expired
+                  </span>
+                </td>
+                <td class="py-4 px-6 text-right">
+                  <div class="inline-flex items-center gap-2">
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Relist</button>
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">Delete</button>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ADD DEAL MODAL -->
+  <div id="deal-modal" class="fixed inset-0 z-50 bg-navy/60 backdrop-blur-sm hidden items-center justify-center p-4 sm:p-6">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+      <div class="px-6 py-5 bg-navy text-white flex items-center justify-between">
+        <h2 class="text-lg font-bold font-heading">Add Lightning Deal</h2>
+        <button id="close-deal-modal" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <form id="deal-form" class="p-6 space-y-4 text-xs text-gray-700">
+        <div>
+          <label class="block font-bold text-navy mb-1">Select Book / Audiobook *</label>
+          <select required class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy text-xs">
+            <option value="">-- Choose Book --</option>
+            <option value="1">Ponniyin Selvan (Vol 1-5) — Regular ₹299</option>
+            <option value="2">Atomic Habits — Regular ₹349</option>
+            <option value="3">Wings of Fire — Regular ₹199</option>
+            <option value="4">Rich Dad Poor Dad — Regular ₹299</option>
+            <option value="5">Ikigai — Regular ₹249</option>
+            <option value="6">Velpari — Regular ₹399</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-navy mb-1">Discount Percentage (%) *</label>
+          <div class="flex items-center gap-3">
+            <input type="number" required min="5" max="90" value="40" placeholder="40" class="w-24 px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy font-bold text-sm text-navy">
+            <span class="text-xs text-gray-500">% off original price</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-navy mb-1">Start Datetime *</label>
+            <input type="datetime-local" required class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy text-xs">
+          </div>
+          <div>
+            <label class="block font-bold text-navy mb-1">End Datetime *</label>
+            <input type="datetime-local" required class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy text-xs">
+          </div>
+        </div>
+
+        <div class="p-3 bg-blue-50/70 border border-blue-100 rounded-xl text-navy text-[11px]">
+          <strong>Note:</strong> The 25% social fund calculation automatically applies to the discounted price upon checkout.
+        </div>
+
+        <div class="pt-3 border-t border-gray-100 flex items-center justify-end gap-3">
+          <button type="button" id="cancel-deal-modal" class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-bold hover:bg-gray-100 transition-colors">Cancel</button>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-brandOrange hover:bg-orange-600 text-white font-bold shadow-md transition-all">Schedule Deal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const dealModal = document.getElementById('deal-modal');
+    const openDealBtn = document.getElementById('open-add-deal-btn');
+    const closeDealBtn = document.getElementById('close-deal-modal');
+    const cancelDealBtn = document.getElementById('cancel-deal-modal');
+    const dealForm = document.getElementById('deal-form');
+
+    openDealBtn.addEventListener('click', () => {
+      dealModal.classList.remove('hidden');
+      dealModal.classList.add('flex');
+    });
+
+    function closeDealModalFn() {
+      dealModal.classList.add('hidden');
+      dealModal.classList.remove('flex');
+    }
+
+    closeDealBtn.addEventListener('click', closeDealModalFn);
+    cancelDealBtn.addEventListener('click', closeDealModalFn);
+
+    dealForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Lightning Deal scheduled successfully! (Phase 1 UI Placeholder)');
+      closeDealModalFn();
+    });
+  </script>
+
+</body>
+</html>

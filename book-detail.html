@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Atomic Habits - James Clear | Social Readers</title>
-  <meta name="description" content="Atomic Habits e-book & audiobook. 25% of this purchase supports underprivileged students and athlete sports kits.">
+  <title id="page-title">Book Details | Social Readers</title>
+  <meta name="description" content="Digital e-book & audiobook. 25% of this purchase supports underprivileged students and athlete sports kits.">
   
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -79,7 +79,7 @@
       </div>
     </div>
 
-    <!-- Tier 2: Amazon Sub-Navigation Category Rail -->
+    <!-- Tier 2: Category Rail -->
     <div class="bg-[#0B2C5D] text-white border-b border-white/10 shadow-inner">
       <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div class="category-subnav flex items-center py-2 gap-1 text-xs">
@@ -128,7 +128,7 @@
           <span>Back to Catalog</span>
         </a>
         <span class="hidden sm:inline">/</span>
-        <span class="text-navy font-semibold hidden sm:inline">Atomic Habits</span>
+        <span id="breadcrumb-title" class="text-navy font-semibold hidden sm:inline">Book Details</span>
       </nav>
 
       <span class="px-2.5 py-0.5 rounded-full bg-orange-100 text-brandOrange text-[10px] sm:text-xs font-bold uppercase tracking-wider">
@@ -136,13 +136,13 @@
       </span>
     </div>
 
-    <!-- Book Hero Detail Section -->
-    <div class="bg-white rounded-3xl p-4 sm:p-8 md:p-10 border border-gray-100 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10">
+    <!-- Book Hero Detail Section (Populated Dynamically) -->
+    <div id="book-detail-container" class="bg-white rounded-3xl p-4 sm:p-8 md:p-10 border border-gray-100 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10">
       
       <!-- Left Column: Cover & Sample Player -->
       <div class="lg:col-span-5 flex flex-col items-center">
         <div class="relative w-full max-w-xs sm:max-w-sm aspect-[3/4] bg-[#FAF7F2] p-4 rounded-2xl border border-gray-100 flex items-center justify-center shadow-inner">
-          <img src="assets/cover-atomic-habits.svg" alt="Atomic Habits Cover" class="w-full h-full object-contain drop-shadow-xl rounded-lg">
+          <img id="detail-cover-img" src="assets/cover-atomic-habits.svg" alt="Book Cover" class="w-full h-full object-contain drop-shadow-xl rounded-lg">
           <button type="button" class="wishlist-btn absolute top-3 right-3 sm:top-4 sm:right-4 p-2.5 sm:p-3 bg-white rounded-full shadow-lg text-brandOrange hover:scale-110 active:scale-95 transition-transform" data-liked="false" aria-label="Wishlist">
             <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="#E8720C" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
           </button>
@@ -152,6 +152,7 @@
         <div class="w-full max-w-xs sm:max-w-sm mt-4 grid grid-cols-2 gap-2.5">
           <button 
             type="button" 
+            id="detail-read-sample-btn"
             data-read-sample="true" 
             data-book-id="b1"
             class="p-2.5 rounded-2xl bg-blue-50/80 hover:bg-blue-100 text-navy font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-xs border border-blue-200/60"
@@ -162,11 +163,7 @@
 
           <button 
             type="button" 
-            data-listen-sample="true"
-            data-book-title="Atomic Habits"
-            data-book-author="James Clear"
-            data-audio-url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-            data-cover-url="assets/cover-atomic-habits.svg"
+            id="detail-listen-sample-btn"
             class="p-2.5 rounded-2xl bg-orange-50/80 hover:bg-orange-100 text-brandOrange font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-xs border border-orange-200/60"
           >
             <svg class="w-4 h-4 fill-current text-brandOrange" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -181,47 +178,38 @@
         
         <div>
           <div class="flex items-center gap-2 mb-2">
-            <span class="px-2.5 py-0.5 rounded bg-blue-100 text-navy font-bold text-[10px] sm:text-xs uppercase">Self Development</span>
-            <span data-i18n="book.badge.bestseller" class="px-2.5 py-0.5 rounded bg-green-100 text-forest font-bold text-[10px] sm:text-xs">Bestseller</span>
+            <span id="detail-category-badge" class="px-2.5 py-0.5 rounded bg-blue-100 text-navy font-bold text-[10px] sm:text-xs uppercase">Self Development</span>
+            <span id="detail-bestseller-badge" class="hidden px-2.5 py-0.5 rounded bg-green-100 text-forest font-bold text-[10px] sm:text-xs">Bestseller</span>
           </div>
 
-          <h1 data-i18n="book1.title" class="text-2xl sm:text-4xl font-extrabold text-navy tracking-tight">
-            Atomic Habits
+          <h1 id="detail-title" class="text-2xl sm:text-4xl font-extrabold text-navy tracking-tight font-heading">
+            Loading...
           </h1>
           <p class="text-sm sm:text-base text-gray-600 mt-0.5 sm:mt-1">
-            By <span data-i18n="book1.author" class="font-bold text-navy">James Clear</span>
+            By <span id="detail-author" class="font-bold text-navy">...</span>
           </p>
 
           <div class="flex flex-wrap items-center gap-2 sm:gap-4 mt-2 sm:mt-3 text-xs text-gray-500">
             <div class="flex items-center text-amber-500 font-bold">
-              ★ ★ ★ ★ ★ <span class="text-gray-700 ml-1 font-semibold" data-i18n="detail.rating">4.9 (420+ reviews)</span>
+              ★ ★ ★ ★ ★ <span id="detail-rating-text" class="text-gray-700 ml-1 font-semibold">4.9 (420+ reviews)</span>
             </div>
             <span>•</span>
-            <span data-i18n="detail.language">Language: English / Tamil Edition</span>
+            <span id="detail-lang-text">Language: English / Tamil Edition</span>
           </div>
         </div>
 
-        <!-- Format Options -->
+        <!-- Format Options Switcher -->
         <div class="space-y-2">
           <label class="block text-xs font-bold text-navy uppercase tracking-wider">Choose Edition</label>
-          <div class="grid grid-cols-2 gap-2 sm:gap-3">
-            <button type="button" class="p-3 sm:p-3.5 rounded-2xl border-2 border-forest bg-green-50/50 text-left transition-all active:scale-98">
-              <span class="text-xs font-bold text-navy block">📖 E-Book Edition</span>
-              <span class="text-xs font-extrabold text-forest mt-0.5 block">₹149.00</span>
-              <span class="text-[10px] text-gray-500">PDF, ePub &amp; Kindle</span>
-            </button>
-            <button type="button" onclick="window.SocialReadersAudioPlayer.playTrack('Atomic Habits', 'James Clear', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', 'assets/cover-atomic-habits.svg')" class="p-3 sm:p-3.5 rounded-2xl border border-gray-200 hover:border-navy text-left transition-all active:scale-98">
-              <span class="text-xs font-bold text-navy block">🎧 Audiobook Edition</span>
-              <span class="text-xs font-extrabold text-forest mt-0.5 block">₹149.00</span>
-              <span class="text-[10px] text-gray-500">5 hrs 35 mins MP3</span>
-            </button>
+          <div id="format-options-container" class="grid grid-cols-2 gap-2 sm:gap-3">
+            <!-- Dynamic Format Buttons -->
           </div>
         </div>
 
         <!-- Pricing -->
         <div class="flex items-baseline gap-3 pt-1">
-          <span data-i18n="book1.price" class="text-2xl sm:text-3xl font-extrabold text-forest">₹149</span>
-          <span class="text-xs sm:text-sm text-gray-400 line-through">₹499</span>
+          <span id="detail-current-price" class="text-2xl sm:text-3xl font-extrabold text-forest">₹149</span>
+          <span id="detail-strike-price" class="text-xs sm:text-sm text-gray-400 line-through">₹499</span>
           <span class="text-[10px] sm:text-xs font-bold text-brandOrange bg-orange-50 px-2 py-0.5 rounded">Save 70%</span>
         </div>
 
@@ -233,10 +221,10 @@
             </svg>
           </div>
           <div>
-            <h3 data-i18n="detail.impact_box_title" class="font-bold text-navy text-xs sm:text-base">
+            <h3 class="font-bold text-navy text-xs sm:text-base">
               Your Impact With This Purchase
             </h3>
-            <p data-i18n="detail.impact_box_text" class="text-xs sm:text-sm text-gray-700 mt-1 leading-relaxed">
+            <p id="detail-impact-text" class="text-xs sm:text-sm text-gray-700 mt-1 leading-relaxed">
               ₹37.25 (25%) from this purchase goes directly to sponsor school textbooks and sports shoes for children in need.
             </p>
           </div>
@@ -244,18 +232,18 @@
 
         <!-- Description -->
         <div>
-          <h3 data-i18n="detail.overview_tab" class="font-bold text-navy text-xs sm:text-sm uppercase tracking-wider mb-1.5 sm:mb-2">Book Overview</h3>
-          <p data-i18n="book1.desc" class="text-xs sm:text-sm text-gray-600 leading-relaxed">
-            An easy &amp; proven way to build good habits &amp; break bad ones. No matter your goals, Atomic Habits offers a proven framework for improving--every day. James Clear reveals practical strategies to form good habits, break bad ones, and master the tiny behaviors that lead to remarkable results.
+          <h3 class="font-bold text-navy text-xs sm:text-sm uppercase tracking-wider mb-1.5 sm:mb-2">Book Overview</h3>
+          <p id="detail-description" class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+            ...
           </p>
         </div>
 
         <!-- CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-3 pt-3 sm:pt-4 border-t border-gray-100">
-          <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b1', 'ebook')" data-i18n="book.btn.buy" class="w-full sm:w-1/2 py-3.5 rounded-full bg-forest text-white font-bold text-sm hover:bg-green-800 shadow-md active:scale-95 transition-all text-center">
+          <button type="button" id="detail-buy-btn" class="w-full sm:w-1/2 py-3.5 rounded-full bg-forest text-white font-bold text-sm hover:bg-green-800 shadow-md active:scale-95 transition-all text-center">
             Buy Now (₹149)
           </button>
-          <button type="button" data-read-sample="true" data-book-id="b1" class="w-full sm:w-1/2 py-3.5 rounded-full border-2 border-navy text-navy font-bold text-sm hover:bg-navy hover:text-white active:scale-95 transition-all text-center flex items-center justify-center gap-2">
+          <button type="button" id="detail-read-sample-cta" data-read-sample="true" class="w-full sm:w-1/2 py-3.5 rounded-full border-2 border-navy text-navy font-bold text-sm hover:bg-navy hover:text-white active:scale-95 transition-all text-center flex items-center justify-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
             <span>Read Sample Free</span>
           </button>
@@ -267,15 +255,15 @@
 
     <!-- Highlights -->
     <div class="mt-6 sm:mt-10 bg-white rounded-3xl p-4 sm:p-8 md:p-10 border border-gray-100 shadow-sm">
-      <h3 data-i18n="detail.table_of_contents" class="text-lg sm:text-xl font-bold text-navy mb-3 sm:mb-4">Key Highlights</h3>
+      <h3 class="text-lg sm:text-xl font-bold text-navy mb-3 sm:mb-4 font-heading">Key Highlights &amp; Social Value</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm text-gray-600">
         <div class="flex items-start gap-2.5 sm:gap-3 p-3.5 sm:p-4 rounded-xl bg-gray-50">
           <span class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-forest text-white flex items-center justify-center text-xs font-bold flex-shrink-0">✓</span>
-          <p>How tiny changes of 1% every single day compound into massive long-term success.</p>
+          <p>Instant digital delivery: Read online in reader mode or listen in bilingual audio narration.</p>
         </div>
         <div class="flex items-start gap-2.5 sm:gap-3 p-3.5 sm:p-4 rounded-xl bg-gray-50">
           <span class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-forest text-white flex items-center justify-center text-xs font-bold flex-shrink-0">✓</span>
-          <p>The 4 Laws of Behavior Change: Make it Obvious, Attractive, Easy, and Satisfying.</p>
+          <p>Verified 25% Social Contribution directly logged and allocated to education and sports.</p>
         </div>
       </div>
     </div>
@@ -286,24 +274,24 @@
   <div class="mobile-sticky-action-bar transition-all duration-300">
     <div class="flex items-center justify-between gap-3">
       <div class="min-w-0 flex-1">
-        <h4 class="font-bold text-navy text-xs truncate">Atomic Habits</h4>
+        <h4 id="sticky-title" class="font-bold text-navy text-xs truncate">Book Title</h4>
         <div class="flex items-center gap-1.5">
-          <span class="text-sm font-extrabold text-forest">₹149</span>
+          <span id="sticky-price" class="text-sm font-extrabold text-forest">₹149</span>
           <span class="text-[10px] text-brandOrange font-semibold">25% for Cause</span>
         </div>
       </div>
       <div class="flex items-center gap-2 flex-shrink-0">
-        <button type="button" data-read-sample="true" data-book-id="b1" class="px-3 py-2 rounded-full border border-navy text-navy font-bold text-xs active:scale-95 transition-all">
+        <button type="button" id="sticky-sample-btn" data-read-sample="true" class="px-3 py-2 rounded-full border border-navy text-navy font-bold text-xs active:scale-95 transition-all">
           Sample
         </button>
-        <button type="button" onclick="window.SocialReadersCheckout.openCheckout('b1', 'ebook')" class="px-4 py-2 rounded-full bg-forest text-white font-bold text-xs shadow-md hover:bg-green-800 active:scale-95 transition-all">
+        <button type="button" id="sticky-buy-btn" class="px-4 py-2 rounded-full bg-forest text-white font-bold text-xs shadow-md hover:bg-green-800 active:scale-95 transition-all">
           Buy Now
         </button>
       </div>
     </div>
   </div>
 
-  <!-- FOOTER -->
+  <!-- CANONICAL FOOTER -->
   <footer class="bg-white border-t border-gray-200 mt-12 sm:mt-16 pb-20 md:pb-8">
     
     <!-- Footer Tagline Highlight Banner -->
@@ -318,7 +306,7 @@
       </div>
     </div>
 
-    <!-- Main Footer Links (Mobile-optimized 2-column + 1-column layout) -->
+    <!-- Main Footer Links -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8">
         
@@ -401,9 +389,7 @@
     </div>
   </footer>
 
-  <!-- =========================================================================
-       MOBILE BOTTOM NAVIGATION (FLIPKART/AMAZON APP STYLE)
-       ========================================================================= -->
+  <!-- CANONICAL MOBILE BOTTOM NAVIGATION -->
   <nav class="md:hidden mobile-bottom-nav fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-2xl flex justify-around items-center h-16 px-1">
     
     <!-- Tab 1: Home -->
@@ -423,11 +409,11 @@
     </a>
 
     <!-- Tab 3: Catalog -->
-    <a href="books.html" class="mobile-tab-item flex flex-col items-center justify-center w-full py-1 text-gray-500 hover:text-navy transition-colors">
+    <a href="books.html" class="mobile-tab-item flex flex-col items-center justify-center w-full py-1 text-navy font-bold transition-colors">
       <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
       </svg>
-      <span data-i18n="nav.library" class="text-[10px] font-medium">Catalog</span>
+      <span data-i18n="nav.library" class="text-[10px] font-bold">Catalog</span>
     </a>
 
     <!-- Tab 4: Audiobooks -->
@@ -458,11 +444,151 @@
 
   </nav>
 
+  <!-- Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <script src="js/firebase-config.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/audio-player.js"></script>
   <script src="js/checkout.js"></script>
   <script src="js/reader.js"></script>
   <script src="js/main.js"></script>
+
+  <script>
+    let currentBook = null;
+    let selectedFormat = 'ebook';
+
+    async function loadBookDetail() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const bookId = urlParams.get('id') || 'b1';
+
+      currentBook = await window.SocialReadersDB.getBookById(bookId);
+      if (!currentBook) {
+        currentBook = (await window.SocialReadersDB.getBooks())[0];
+      }
+
+      const isTa = localStorage.getItem('sr_lang') === 'ta';
+      const title = typeof currentBook.title === 'object' ? (isTa && currentBook.title.ta ? currentBook.title.ta : currentBook.title.en) : currentBook.title;
+      const author = typeof currentBook.author === 'object' ? (isTa && currentBook.author.ta ? currentBook.author.ta : currentBook.author.en) : currentBook.author;
+      const desc = typeof currentBook.description === 'object' ? (isTa && currentBook.description.ta ? currentBook.description.ta : currentBook.description.en) : (currentBook.description || '');
+
+      document.getElementById('page-title').textContent = `${title} - ${author} | Social Readers`;
+      document.getElementById('breadcrumb-title').textContent = title;
+      document.getElementById('detail-title').textContent = title;
+      document.getElementById('detail-author').textContent = author;
+      document.getElementById('detail-description').textContent = desc;
+      document.getElementById('detail-cover-img').src = currentBook.coverUrl || 'assets/cover-atomic-habits.svg';
+      document.getElementById('detail-category-badge').textContent = currentBook.category || 'General';
+
+      if (currentBook.isBestseller) {
+        document.getElementById('detail-bestseller-badge').classList.remove('hidden');
+      }
+
+      // Configure Formats
+      const hasEbook = currentBook.priceEbook !== null && currentBook.priceEbook !== undefined;
+      const hasAudio = (currentBook.priceAudiobook !== null && currentBook.priceAudiobook !== undefined) || !!currentBook.audioUrl;
+
+      const formatContainer = document.getElementById('format-options-container');
+      formatContainer.innerHTML = '';
+
+      if (hasEbook && hasAudio) {
+        selectedFormat = 'ebook';
+        formatContainer.className = "grid grid-cols-2 gap-2 sm:gap-3";
+        formatContainer.innerHTML = `
+          <button type="button" id="fmt-ebook-btn" onclick="selectFormat('ebook')" class="p-3 sm:p-3.5 rounded-2xl border-2 border-forest bg-green-50/50 text-left transition-all active:scale-98">
+            <span class="text-xs font-bold text-navy block">📖 E-Book Edition</span>
+            <span class="text-xs font-extrabold text-forest mt-0.5 block">₹${currentBook.priceEbook || 149}.00</span>
+            <span class="text-[10px] text-gray-500">PDF &amp; Web Reader</span>
+          </button>
+          <button type="button" id="fmt-audio-btn" onclick="selectFormat('audiobook')" class="p-3 sm:p-3.5 rounded-2xl border border-gray-200 hover:border-navy text-left transition-all active:scale-98">
+            <span class="text-xs font-bold text-navy block">🎧 Audiobook Edition</span>
+            <span class="text-xs font-extrabold text-forest mt-0.5 block">₹${currentBook.priceAudiobook || 199}.00</span>
+            <span class="text-[10px] text-gray-500">Full Audio MP3</span>
+          </button>
+        `;
+      } else if (hasAudio && !hasEbook) {
+        selectedFormat = 'audiobook';
+        formatContainer.className = "grid grid-cols-1 gap-2";
+        formatContainer.innerHTML = `
+          <button type="button" class="p-3 sm:p-3.5 rounded-2xl border-2 border-forest bg-green-50/50 text-left">
+            <span class="text-xs font-bold text-navy block">🎧 Audiobook Edition</span>
+            <span class="text-xs font-extrabold text-forest mt-0.5 block">₹${currentBook.priceAudiobook || currentBook.price || 199}.00</span>
+            <span class="text-[10px] text-gray-500">Full Audio MP3</span>
+          </button>
+        `;
+      } else {
+        selectedFormat = 'ebook';
+        formatContainer.className = "grid grid-cols-1 gap-2";
+        formatContainer.innerHTML = `
+          <button type="button" class="p-3 sm:p-3.5 rounded-2xl border-2 border-forest bg-green-50/50 text-left">
+            <span class="text-xs font-bold text-navy block">📖 E-Book Edition</span>
+            <span class="text-xs font-extrabold text-forest mt-0.5 block">₹${currentBook.priceEbook || currentBook.price || 149}.00</span>
+            <span class="text-[10px] text-gray-500">PDF &amp; Web Reader</span>
+          </button>
+        `;
+      }
+
+      updatePricingDisplay();
+
+      // Sample Triggers
+      document.getElementById('detail-read-sample-btn').setAttribute('data-book-id', currentBook.id);
+      document.getElementById('detail-read-sample-cta').setAttribute('data-book-id', currentBook.id);
+      document.getElementById('sticky-sample-btn').setAttribute('data-book-id', currentBook.id);
+
+      const audioBtn = document.getElementById('detail-listen-sample-btn');
+      if (currentBook.audioUrl) {
+        audioBtn.classList.remove('hidden');
+        audioBtn.onclick = () => {
+          if (window.SocialReadersAudioPlayer) {
+            window.SocialReadersAudioPlayer.playTrack(title, author, currentBook.audioUrl, currentBook.coverUrl);
+          }
+        };
+      } else {
+        audioBtn.classList.add('hidden');
+      }
+
+      // Buy triggers
+      const buyFn = () => {
+        if (window.SocialReadersCheckout) {
+          window.SocialReadersCheckout.openCheckout(currentBook.id, selectedFormat);
+        }
+      };
+      document.getElementById('detail-buy-btn').onclick = buyFn;
+      document.getElementById('sticky-buy-btn').onclick = buyFn;
+    }
+
+    window.selectFormat = function(fmt) {
+      selectedFormat = fmt;
+      const ebookBtn = document.getElementById('fmt-ebook-btn');
+      const audioBtn = document.getElementById('fmt-audio-btn');
+
+      if (fmt === 'ebook') {
+        if (ebookBtn) ebookBtn.className = "p-3 sm:p-3.5 rounded-2xl border-2 border-forest bg-green-50/50 text-left transition-all active:scale-98";
+        if (audioBtn) audioBtn.className = "p-3 sm:p-3.5 rounded-2xl border border-gray-200 hover:border-navy text-left transition-all active:scale-98";
+      } else {
+        if (ebookBtn) ebookBtn.className = "p-3 sm:p-3.5 rounded-2xl border border-gray-200 hover:border-navy text-left transition-all active:scale-98";
+        if (audioBtn) audioBtn.className = "p-3 sm:p-3.5 rounded-2xl border-2 border-forest bg-green-50/50 text-left transition-all active:scale-98";
+      }
+      updatePricingDisplay();
+    };
+
+    function updatePricingDisplay() {
+      if (!currentBook) return;
+      const price = selectedFormat === 'audiobook' 
+        ? (currentBook.priceAudiobook || currentBook.price || 199) 
+        : (currentBook.priceEbook || currentBook.price || 149);
+
+      const causeShare = (price * 0.25).toFixed(2);
+
+      document.getElementById('detail-current-price').textContent = `₹${price}`;
+      document.getElementById('detail-buy-btn').textContent = `Buy Now (₹${price})`;
+      document.getElementById('sticky-price').textContent = `₹${price}`;
+      document.getElementById('sticky-title').textContent = typeof currentBook.title === 'object' ? currentBook.title.en : currentBook.title;
+      document.getElementById('detail-impact-text').textContent = `₹${causeShare} (25%) from this purchase goes directly to sponsor school textbooks and sports shoes for children in need.`;
+    }
+
+    document.addEventListener('DOMContentLoaded', loadBookDetail);
+  </script>
 </body>
 </html>

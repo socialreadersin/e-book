@@ -86,7 +86,7 @@ window.SocialReadersCheckout = {
 
           <div class="pt-2">
             <button type="submit" id="pay-submit-btn" class="w-full py-3.5 rounded-full bg-forest text-white font-bold text-xs sm:text-sm hover:bg-green-800 active:scale-95 transition-all shadow-md flex items-center justify-center gap-2">
-              <span>Pay ₹${item.price}.00 (Razorpay / UPI / Card)</span>
+              <span>Simulate Payment — Demo Mode (₹${item.price}.00)</span>
             </button>
           </div>
         </form>

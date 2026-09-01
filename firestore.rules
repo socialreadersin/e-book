@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Books collection: public read for published books, admin write only
+    match /books/{bookId} {
+      allow read: if resource.data.status == "published" || (request.auth != null && exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
+      allow write: if request.auth != null && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    
+    // Orders collection: anyone can create (checkout), read/update only by buyer or admin
+    match /orders/{orderId} {
+      allow create: if true;
+      allow read, update: if (request.auth != null && exists(/databases/$(database)/documents/admins/$(request.auth.uid))) || 
+                             (request.auth != null && request.auth.token.email == resource.data.buyerEmail);
+      allow delete: if request.auth != null && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    
+    // Admins collection: read/write only by existing admins
+    match /admins/{uid} {
+      allow read, write: if request.auth != null && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    
+    // Store settings & Cloudinary configurations
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // Stories collection: public read, admin write
+    match /stories/{storyId} {
+      allow read: if true;
+      allow write: if request.auth != null && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+  }
+}

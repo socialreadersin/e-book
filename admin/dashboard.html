@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Admin Dashboard | Social Readers</title>
   
   <!-- Tailwind CSS via CDN -->
@@ -30,7 +30,7 @@
   </script>
   <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="bg-[#FAF7F2] text-gray-800 min-h-screen flex">
+<body class="bg-[#FAF7F2] text-gray-800 min-h-screen flex flex-col md:flex-row font-body">
 
   <!-- SIDEBAR (Desktop) -->
   <aside class="w-64 bg-navy text-white flex-shrink-0 hidden md:flex flex-col justify-between p-6">
@@ -39,42 +39,47 @@
       <!-- Brand in Sidebar -->
       <a href="../index.html" class="flex flex-col">
         <div class="flex items-center gap-1">
-          <span class="text-xl font-extrabold text-white">SOCIAL</span>
-          <span class="text-xl font-extrabold text-green-400">READERS</span>
+          <span class="text-xl font-extrabold text-white font-heading">SOCIAL</span>
+          <span class="text-xl font-extrabold text-green-400 font-heading">READERS</span>
         </div>
         <span class="text-[10px] tracking-widest text-orange-300 font-bold uppercase mt-0.5">Admin Console</span>
       </a>
 
       <!-- Navigation Menu Items -->
-      <nav class="space-y-2">
-        <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white font-bold text-sm">
+      <nav class="space-y-1.5">
+        <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white font-bold text-sm shadow-sm">
           <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-          <span data-i18n="admin.dash.nav.dashboard">Dashboard</span>
+          <span>Dashboard</span>
         </a>
 
-        <a href="manage-stories.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+        <a href="books.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          <span>Manage Books</span>
+        </a>
+
+        <a href="stories.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
           <span>Manage Stories</span>
         </a>
 
-        <a href="manage-books.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-          <span data-i18n="admin.dash.nav.books">Manage Books</span>
-        </a>
-
         <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-          <span data-i18n="admin.dash.nav.orders">Orders &amp; Receipts</span>
+          <span>Orders &amp; Receipts</span>
         </a>
 
         <a href="categories.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
-          <span data-i18n="admin.dash.nav.categories">Categories</span>
+          <span>Categories</span>
+        </a>
+
+        <a href="deals.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          <span>Deals</span>
         </a>
 
         <a href="settings.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-          <span data-i18n="admin.dash.nav.settings">Settings</span>
+          <span>Settings</span>
         </a>
       </nav>
 
@@ -82,8 +87,14 @@
 
     <!-- Bottom Sidebar info -->
     <div class="pt-6 border-t border-white/10 text-xs text-gray-400 flex items-center justify-between">
-      <span>Admin: S. Raman</span>
-      <button onclick="SocialReadersAuth.logoutAdmin()" class="text-orange-300 hover:underline">Logout</button>
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full bg-forest text-white font-bold flex items-center justify-center text-xs">SR</div>
+        <div class="flex flex-col">
+          <span class="text-white font-semibold">Administrator</span>
+          <span class="text-[10px] text-gray-400">Super Admin</span>
+        </div>
+      </div>
+      <button onclick="window.SocialReadersAuth.logoutAdmin()" class="text-orange-300 hover:underline">Logout</button>
     </div>
   </aside>
 
@@ -93,154 +104,281 @@
     <!-- Mobile Admin Top Bar -->
     <div class="md:hidden bg-navy text-white px-3 py-2.5 flex items-center justify-between border-b border-white/10">
       <a href="../index.html" class="flex items-center gap-1">
-        <span class="text-sm font-extrabold text-white">SOCIAL</span>
-        <span class="text-sm font-extrabold text-green-400">READERS</span>
+        <span class="text-sm font-extrabold text-white font-heading">SOCIAL</span>
+        <span class="text-sm font-extrabold text-green-400 font-heading">READERS</span>
         <span class="text-[9px] bg-brandOrange text-white font-bold px-1.5 py-0.5 rounded ml-1">Admin</span>
       </a>
       <div class="flex items-center gap-2">
-        <button type="button" class="lang-toggle-btn px-2 py-0.5 rounded-full border border-white/30 text-white font-bold text-[10px]">
-          EN | த
-        </button>
-        <button onclick="SocialReadersAuth.logoutAdmin()" class="text-orange-300 text-xs font-semibold hover:underline">Logout</button>
+        <button onclick="window.SocialReadersAuth.logoutAdmin()" class="text-orange-300 text-xs font-semibold hover:underline">Logout</button>
       </div>
     </div>
 
     <!-- Mobile Admin Nav Scrollable Tabs -->
     <div class="md:hidden bg-white border-b border-gray-200 px-3 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs">
-      <a href="dashboard.html" class="px-3 py-1 rounded-full bg-navy text-white font-bold whitespace-nowrap">Dashboard</a>
-      <a href="manage-books.html" class="px-3 py-1 rounded-full text-gray-600 hover:bg-gray-100 whitespace-nowrap">Books</a>
-      <a href="orders.html" class="px-3 py-1 rounded-full text-gray-600 hover:bg-gray-100 whitespace-nowrap">Orders</a>
-      <a href="categories.html" class="px-3 py-1 rounded-full text-gray-600 hover:bg-gray-100 whitespace-nowrap">Categories</a>
-      <a href="settings.html" class="px-3 py-1 rounded-full text-gray-600 hover:bg-gray-100 whitespace-nowrap">Settings</a>
-      <a href="../index.html" class="px-3 py-1 rounded-full text-forest font-bold hover:bg-green-50 whitespace-nowrap">Live Store &rarr;</a>
+      <a href="dashboard.html" class="px-3 py-1.5 bg-navy text-white rounded-lg font-bold whitespace-nowrap">Dashboard</a>
+      <a href="books.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Manage Books</a>
+      <a href="stories.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Manage Stories</a>
+      <a href="orders.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Orders</a>
+      <a href="categories.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Categories</a>
+      <a href="deals.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Deals</a>
+      <a href="settings.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Settings</a>
     </div>
-    
-    <!-- Top Header (Desktop) -->
-    <header class="hidden md:flex bg-white border-b border-gray-100 px-6 py-4 items-center justify-between">
-      <div class="flex items-center gap-3">
-        <h1 data-i18n="admin.dash.title" class="text-lg font-bold text-navy">Dashboard Overview</h1>
+
+    <!-- Header Content -->
+    <header class="bg-white border-b border-gray-200 px-4 sm:px-8 py-4 sm:py-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div>
+        <h1 class="text-xl sm:text-2xl font-bold text-navy font-heading">Overview Dashboard</h1>
+        <p class="text-xs text-gray-500 mt-0.5">Platform metrics, 25% cause contribution audit, and live Firestore activity</p>
       </div>
 
-      <div class="flex items-center gap-4">
-        <button type="button" class="lang-toggle-btn px-3 py-1 rounded-full border border-navy text-navy font-bold text-xs hover:bg-navy hover:text-white transition-all">
-          EN | த
-        </button>
-        <a href="../index.html" class="text-xs font-semibold text-forest hover:underline">
-          View Live Store &rarr;
+      <div class="flex items-center gap-3">
+        <a href="books.html" class="px-4 py-2 rounded-xl bg-forest hover:bg-green-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          <span>Add Book</span>
+        </a>
+        <a href="stories.html" class="px-4 py-2 rounded-xl bg-navy hover:bg-blue-950 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+          <span>Add Story</span>
         </a>
       </div>
     </header>
 
-    <!-- Main Content Area -->
-    <main class="p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8 flex-grow">
+    <!-- Content Area -->
+    <main class="p-4 sm:p-8 space-y-6 sm:space-y-8 flex-grow">
       
-      <!-- Stat Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- TOP KPI CARDS (6 Total in responsive grid) -->
+      <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
         
-        <!-- Stat Card 1: Total Books & Audiobooks -->
-        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex items-center justify-between">
-          <div>
-            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Titles &amp; Audiobooks</p>
-            <h3 id="stat-total-books" class="text-3xl font-extrabold text-navy mt-1">--</h3>
-            <span class="text-xs text-forest font-semibold mt-1 inline-block">100% digital catalog</span>
+        <!-- 1. Total Books -->
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Total Books</span>
+            <span class="w-7 h-7 rounded-xl bg-blue-50 text-navy flex items-center justify-center">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            </span>
           </div>
-          <div class="w-12 h-12 rounded-2xl bg-blue-50 text-navy flex items-center justify-center">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          <div>
+            <div id="kpi-total-books" class="text-xl sm:text-2xl font-black text-navy font-heading">--</div>
+            <div class="text-[10px] text-emerald-600 font-semibold mt-1">Firestore Catalog</div>
           </div>
         </div>
 
-        <!-- Stat Card 2: Total Orders -->
-        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex items-center justify-between">
-          <div>
-            <p data-i18n="admin.dash.total_orders" class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Orders</p>
-            <h3 id="stat-total-orders" class="text-3xl font-extrabold text-navy mt-1">--</h3>
-            <span class="text-xs text-forest font-semibold mt-1 inline-block">Instant automated delivery</span>
+        <!-- 2. Total Audiobooks -->
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Audiobooks</span>
+            <span class="w-7 h-7 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+            </span>
           </div>
-          <div class="w-12 h-12 rounded-2xl bg-green-50 text-forest flex items-center justify-center">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+          <div>
+            <div id="kpi-total-audio" class="text-xl sm:text-2xl font-black text-navy font-heading">--</div>
+            <div class="text-[10px] text-purple-600 font-semibold mt-1">Narrated Edition</div>
           </div>
         </div>
 
-        <!-- Stat Card 3: Total Revenue & 25% Fund Allocated -->
-        <div class="bg-white p-6 rounded-3xl border border-orange-100 shadow-sm bg-gradient-to-br from-white to-orange-50/50 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between">
-              <p data-i18n="admin.dash.total_revenue" class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Revenue</p>
-              <span id="stat-total-rev" class="text-xs font-extrabold text-navy">₹--</span>
-            </div>
-            <div class="mt-2 pt-2 border-t border-orange-100">
-              <p data-i18n="admin.dash.fund_allocated" class="text-xs font-bold text-brandOrange">25% Social Fund Allocated</p>
-              <h3 id="stat-total-fund" class="text-2xl font-extrabold text-brandOrange mt-0.5">₹--</h3>
-            </div>
+        <!-- 3. Total Stories -->
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Stories</span>
+            <span class="w-7 h-7 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+            </span>
           </div>
-          <span class="text-[11px] text-gray-500 mt-2">Disbursed to rural schools &amp; sports clubs</span>
+          <div>
+            <div id="kpi-total-stories" class="text-xl sm:text-2xl font-black text-navy font-heading">16</div>
+            <div class="text-[10px] text-amber-600 font-semibold mt-1">Free Series</div>
+          </div>
+        </div>
+
+        <!-- 4. Total Orders -->
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Total Orders</span>
+            <span class="w-7 h-7 rounded-xl bg-emerald-50 text-forest flex items-center justify-center">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+            </span>
+          </div>
+          <div>
+            <div id="kpi-total-orders" class="text-xl sm:text-2xl font-black text-navy font-heading">--</div>
+            <div class="text-[10px] text-emerald-600 font-semibold mt-1">Completed</div>
+          </div>
+        </div>
+
+        <!-- 5. Total Revenue -->
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Total Revenue</span>
+            <span class="w-7 h-7 rounded-xl bg-orange-50 text-brandOrange flex items-center justify-center">
+              <span class="font-bold text-xs">₹</span>
+            </span>
+          </div>
+          <div>
+            <div id="kpi-total-revenue" class="text-xl sm:text-2xl font-black text-navy font-heading">--</div>
+            <div class="text-[10px] text-brandOrange font-semibold mt-1">Gross Sales</div>
+          </div>
+        </div>
+
+        <!-- 6. 25% Social Fund Allocated -->
+        <div class="bg-gradient-to-br from-emerald-600 to-forest text-white p-4 sm:p-5 rounded-2xl shadow-md flex flex-col justify-between col-span-2 sm:col-span-1">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-bold text-green-100 uppercase tracking-wider">25% Cause Fund</span>
+            <span class="w-7 h-7 rounded-xl bg-white/20 text-white flex items-center justify-center">
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
+            </span>
+          </div>
+          <div>
+            <div id="kpi-cause-fund" class="text-xl sm:text-2xl font-black text-white font-heading">--</div>
+            <div class="text-[10px] text-green-100 font-medium mt-1">Guaranteed Share</div>
+          </div>
         </div>
 
       </div>
 
-      <!-- Recent Orders Table Section -->
-      <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 sm:p-8">
-        <div class="flex justify-between items-center mb-6">
-          <h2 data-i18n="admin.dash.recent_orders" class="text-lg font-bold text-navy">Recent Orders</h2>
-          <a href="orders.html" class="text-xs font-bold text-forest hover:underline">View All Orders &rarr;</a>
+      <!-- Cause Allocation Breakdown Bar -->
+      <div class="bg-white p-5 sm:p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-forest"></span>
+            <h2 class="text-sm sm:text-base font-bold text-navy font-heading">25% Social Fund Allocation Tracking</h2>
+          </div>
+          <p class="text-xs text-gray-500">Every paid transaction automatically earmarks 25% of purchase revenue directly to designated causes.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3 text-xs">
+          <div class="bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span class="font-bold">Education Aid (15%):</span>
+            <span id="stat-edu-fund" class="font-extrabold text-navy">₹0.00</span>
+          </div>
+          <div class="bg-orange-50 text-orange-800 border border-orange-200 px-3 py-1.5 rounded-xl flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-brandOrange"></span>
+            <span class="font-bold">Rural Sports (10%):</span>
+            <span id="stat-sports-fund" class="font-extrabold text-navy">₹0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECENT ORDERS TABLE (Live from Firestore) -->
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        
+        <!-- Table Header & Controls -->
+        <div class="p-4 sm:p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-base sm:text-lg font-bold text-navy font-heading">Recent Orders</h2>
+            <p class="text-xs text-gray-500">Latest customer purchases with verified 25% social cause contribution</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <a href="orders.html" class="text-xs font-bold text-forest hover:text-green-700 flex items-center gap-1">
+              <span>View All Orders</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </a>
+          </div>
         </div>
 
+        <!-- Table Container -->
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-xs sm:text-sm">
-            <thead class="bg-[#FAF7F2] text-navy font-bold border-b border-gray-200">
+          <table class="w-full text-left text-sm text-gray-700 min-w-[640px]">
+            <thead class="bg-gray-50 text-navy font-bold text-xs uppercase tracking-wider border-b border-gray-100">
               <tr>
-                <th class="p-3 sm:p-4">Order ID</th>
-                <th class="p-3 sm:p-4">Customer</th>
-                <th class="p-3 sm:p-4">Book Title</th>
-                <th class="p-3 sm:p-4">Price</th>
-                <th class="p-3 sm:p-4">25% Allocated</th>
-                <th class="p-3 sm:p-4">Status</th>
+                <th class="py-3 px-4 sm:px-6">Book / Title</th>
+                <th class="py-3 px-4">Format</th>
+                <th class="py-3 px-4">Buyer Name</th>
+                <th class="py-3 px-4">Buyer Email</th>
+                <th class="py-3 px-4">Amount</th>
+                <th class="py-3 px-4">Cause Share (25%)</th>
+                <th class="py-3 px-4">Status</th>
+                <th class="py-3 px-4 sm:px-6">Date</th>
               </tr>
             </thead>
-            <tbody id="dash-orders-table" class="divide-y divide-gray-100 text-gray-600">
-              <!-- Dynamically rendered -->
+            <tbody id="dashboard-orders-tbody" class="divide-y divide-gray-100">
+              <tr>
+                <td colspan="8" class="py-6 text-center text-xs text-gray-500">Loading orders from Firestore...</td>
+              </tr>
             </tbody>
           </table>
         </div>
       </div>
 
     </main>
-
   </div>
 
+  <!-- Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <script src="../js/firebase-config.js"></script>
   <script src="../js/auth.js"></script>
-  <script src="../js/i18n.js"></script>
+
   <script>
-    SocialReadersAuth.requireAdmin();
+    if (window.SocialReadersAuth && window.SocialReadersAuth.requireAdmin) {
+      window.SocialReadersAuth.requireAdmin();
+    }
 
-    function initDashboard() {
-      const books = SocialReadersDB.getBooks();
-      const orders = SocialReadersDB.getOrders();
+    async function initDashboard() {
+      const books = await window.SocialReadersDB.getBooks(true);
+      const orders = await window.SocialReadersDB.getOrders();
 
-      document.getElementById('stat-total-books').textContent = books.length;
-      document.getElementById('stat-total-orders').textContent = orders.length.toLocaleString();
+      const totalBooks = books.length;
+      const totalAudio = books.filter(b => b.type === 'audiobook' || b.type === 'both' || b.audioUrl || b.priceAudiobook).length;
+      const totalOrdersCount = orders.length;
 
-      const totalRevenue = orders.reduce((sum, o) => sum + Number(o.amount), 0) + 211000;
-      const totalFund = totalRevenue * 0.25;
+      let totalRevenue = 0;
+      orders.forEach(o => {
+        totalRevenue += Number(o.amount || 0);
+      });
+      const totalCause = totalRevenue * 0.25;
 
-      document.getElementById('stat-total-rev').textContent = `₹${totalRevenue.toLocaleString()}`;
-      document.getElementById('stat-total-fund').textContent = `₹${totalFund.toFixed(2)}`;
+      document.getElementById('kpi-total-books').textContent = totalBooks;
+      document.getElementById('kpi-total-audio').textContent = totalAudio;
+      document.getElementById('kpi-total-orders').textContent = totalOrdersCount;
+      document.getElementById('kpi-total-revenue').textContent = `₹${totalRevenue.toLocaleString('en-IN')}`;
+      document.getElementById('kpi-cause-fund').textContent = `₹${totalCause.toLocaleString('en-IN')}`;
 
-      const tbody = document.getElementById('dash-orders-table');
-      tbody.innerHTML = orders.slice(0, 5).map(o => `
-        <tr>
-          <td class="p-3 sm:p-4 font-mono font-bold text-navy">#${o.orderId}</td>
-          <td class="p-3 sm:p-4">${o.customerName}</td>
-          <td class="p-3 sm:p-4 font-semibold text-gray-800">${o.bookTitle}</td>
-          <td class="p-3 sm:p-4 font-bold text-navy">₹${o.amount}</td>
-          <td class="p-3 sm:p-4 font-bold text-brandOrange">₹${o.causeShare}</td>
-          <td class="p-3 sm:p-4"><span class="px-2 py-0.5 rounded-full bg-green-100 text-forest text-[11px] font-bold">${o.status}</span></td>
-        </tr>
-      `).join('');
+      document.getElementById('stat-edu-fund').textContent = `₹${(totalRevenue * 0.15).toFixed(2)}`;
+      document.getElementById('stat-sports-fund').textContent = `₹${(totalRevenue * 0.10).toFixed(2)}`;
+
+      // Render Recent Orders
+      const tbody = document.getElementById('dashboard-orders-tbody');
+      if (!orders.length) {
+        tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-xs text-gray-500">No orders recorded yet.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = orders.slice(0, 6).map(order => {
+        const title = order.bookTitle || 'Book Purchase';
+        const format = order.format || 'E-Book';
+        const name = order.customerName || 'Reader';
+        const email = order.customerEmail || '—';
+        const amt = Number(order.amount || 0);
+        const cause = Number(order.causeShare || amt * 0.25);
+        const date = order.date || (order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'Recent');
+
+        return `
+          <tr class="hover:bg-gray-50/80 transition-colors">
+            <td class="py-3 px-4 sm:px-6 font-semibold text-navy text-xs sm:text-sm">${title}</td>
+            <td class="py-3 px-4">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold ${format.toLowerCase().includes('audio') ? 'bg-purple-50 text-purple-700' : 'bg-blue-50 text-blue-700'}">
+                ${format}
+              </span>
+            </td>
+            <td class="py-3 px-4 font-medium text-gray-900 text-xs">${name}</td>
+            <td class="py-3 px-4 text-xs text-gray-500">${email}</td>
+            <td class="py-3 px-4 font-bold text-navy text-xs">₹${amt}</td>
+            <td class="py-3 px-4 font-bold text-forest text-xs">₹${cause.toFixed(2)}</td>
+            <td class="py-3 px-4">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                ${order.status || 'Completed'}
+              </span>
+            </td>
+            <td class="py-3 px-4 sm:px-6 text-xs text-gray-500">${date}</td>
+          </tr>
+        `;
+      }).join('');
     }
 
     document.addEventListener('DOMContentLoaded', initDashboard);
   </script>
+
 </body>
 </html>

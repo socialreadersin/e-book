@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Orders &amp; Receipts | Admin — Social Readers</title>
   
   <!-- Tailwind CSS via CDN -->
@@ -30,31 +30,37 @@
   </script>
   <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="bg-[#FAF7F2] text-gray-800 min-h-screen flex">
+<body class="bg-[#FAF7F2] text-gray-800 min-h-screen flex flex-col md:flex-row font-body">
 
-  <!-- SIDEBAR -->
+  <!-- SIDEBAR (Desktop) -->
   <aside class="w-64 bg-navy text-white flex-shrink-0 hidden md:flex flex-col justify-between p-6">
     <div class="space-y-8">
       <a href="../index.html" class="flex flex-col">
         <div class="flex items-center gap-1">
-          <span class="text-xl font-extrabold text-white">SOCIAL</span>
-          <span class="text-xl font-extrabold text-green-400">READERS</span>
+          <span class="text-xl font-extrabold text-white font-heading">SOCIAL</span>
+          <span class="text-xl font-extrabold text-green-400 font-heading">READERS</span>
         </div>
         <span class="text-[10px] tracking-widest text-orange-300 font-bold uppercase mt-0.5">Admin Console</span>
       </a>
 
-      <nav class="space-y-2">
+      <!-- Navigation Menu Items -->
+      <nav class="space-y-1.5">
         <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
           <span>Dashboard</span>
         </a>
 
-        <a href="manage-books.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+        <a href="books.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
           <span>Manage Books</span>
         </a>
 
-        <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white font-bold text-sm">
+        <a href="stories.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+          <span>Manage Stories</span>
+        </a>
+
+        <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white font-bold text-sm shadow-sm">
           <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
           <span>Orders &amp; Receipts</span>
         </a>
@@ -64,74 +70,121 @@
           <span>Categories</span>
         </a>
 
+        <a href="deals.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          <span>Deals</span>
+        </a>
+
         <a href="settings.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
           <span>Settings</span>
         </a>
       </nav>
-
     </div>
 
     <div class="pt-6 border-t border-white/10 text-xs text-gray-400 flex items-center justify-between">
-      <span>Admin: S. Raman</span>
-      <a href="login.html" class="text-orange-300 hover:underline">Logout</a>
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full bg-forest text-white font-bold flex items-center justify-center text-xs">SR</div>
+        <div class="flex flex-col">
+          <span class="text-white font-semibold">Administrator</span>
+          <span class="text-[10px] text-gray-400">Super Admin</span>
+        </div>
+      </div>
+      <button onclick="window.SocialReadersAuth.logoutAdmin()" class="text-orange-300 hover:underline">Logout</button>
     </div>
   </aside>
 
   <!-- MAIN CONTENT -->
   <div class="flex-grow flex flex-col min-w-0">
     
-    <!-- Mobile Admin Top Bar -->
+    <!-- Mobile Top Bar -->
     <div class="md:hidden bg-navy text-white px-3 py-2.5 flex items-center justify-between border-b border-white/10">
       <a href="../index.html" class="flex items-center gap-1">
-        <span class="text-sm font-extrabold text-white">SOCIAL</span>
-        <span class="text-sm font-extrabold text-green-400">READERS</span>
+        <span class="text-sm font-extrabold text-white font-heading">SOCIAL</span>
+        <span class="text-sm font-extrabold text-green-400 font-heading">READERS</span>
         <span class="text-[9px] bg-brandOrange text-white font-bold px-1.5 py-0.5 rounded ml-1">Admin</span>
       </a>
       <div class="flex items-center gap-2">
-        <button type="button" class="lang-toggle-btn px-2 py-0.5 rounded-full border border-white/30 text-white font-bold text-[10px]">
-          EN | த
-        </button>
-        <a href="login.html" class="text-orange-300 text-xs font-semibold hover:underline">Logout</a>
+        <button onclick="window.SocialReadersAuth.logoutAdmin()" class="text-orange-300 text-xs font-semibold hover:underline">Logout</button>
       </div>
     </div>
 
-    <!-- Mobile Admin Nav Scrollable Tabs -->
+    <!-- Mobile Scrollable Tabs -->
     <div class="md:hidden bg-white border-b border-gray-200 px-3 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs">
-      <a href="dashboard.html" class="px-3 py-1 rounded-full text-gray-600 hover:bg-gray-100 whitespace-nowrap">Dashboard</a>
-      <a href="manage-books.html" class="px-3 py-1 rounded-full text-gray-600 hover:bg-gray-100 whitespace-nowrap">Books</a>
-      <a href="orders.html" class="px-3 py-1 rounded-full bg-navy text-white font-bold whitespace-nowrap">Orders</a>
-      <a href="categories.html" class="px-3 py-1 rounded-full text-gray-600 hover:bg-gray-100 whitespace-nowrap">Categories</a>
-      <a href="settings.html" class="px-3 py-1 rounded-full text-gray-600 hover:bg-gray-100 whitespace-nowrap">Settings</a>
-      <a href="../index.html" class="px-3 py-1 rounded-full text-forest font-bold hover:bg-green-50 whitespace-nowrap">Live Store &rarr;</a>
+      <a href="dashboard.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Dashboard</a>
+      <a href="books.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Manage Books</a>
+      <a href="stories.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Manage Stories</a>
+      <a href="orders.html" class="px-3 py-1.5 bg-navy text-white rounded-lg font-bold whitespace-nowrap">Orders</a>
+      <a href="categories.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Categories</a>
+      <a href="deals.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Deals</a>
+      <a href="settings.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Settings</a>
     </div>
 
-    <header class="bg-white border-b border-gray-100 px-4 sm:px-6 py-3.5 sm:py-4 flex items-center justify-between">
-      <h1 class="text-base sm:text-lg font-bold text-navy">Customer Orders &amp; Social Allocations</h1>
-      <button onclick="exportOrdersCSV()" class="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-navy text-navy font-bold text-xs hover:bg-navy hover:text-white transition-colors flex items-center gap-1.5 shadow-sm active:scale-95">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-        <span>Export</span>
-      </button>
+    <!-- Header Content -->
+    <header class="bg-white border-b border-gray-200 px-4 sm:px-8 py-4 sm:py-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div>
+        <h1 class="text-xl sm:text-2xl font-bold text-navy font-heading">Customer Orders &amp; Receipts</h1>
+        <p class="text-xs text-gray-500 mt-0.5">Audit digital book orders, payment logs, and 25% social fund allocations in Firestore</p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button 
+          id="export-csv-btn"
+          class="px-4 py-2.5 rounded-xl bg-navy hover:bg-blue-950 text-white font-bold text-xs flex items-center gap-2 shadow-sm transition-all active:scale-95"
+        >
+          <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          <span>Export Orders CSV</span>
+        </button>
+      </div>
     </header>
 
-    <main class="p-3 sm:p-6 md:p-8 space-y-6 flex-grow">
+    <!-- Content Area -->
+    <main class="p-4 sm:p-8 space-y-6 flex-grow">
       
-      <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-4 sm:p-6 md:p-8">
+      <!-- Filter Bar -->
+      <div class="bg-white p-3 sm:p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+        <div class="flex items-center gap-3 flex-1">
+          <div class="relative w-full max-w-sm">
+            <input 
+              type="text" 
+              id="order-search-input"
+              placeholder="Search order ID, buyer name, book..." 
+              class="w-full pl-9 pr-4 py-2 text-xs border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:border-navy focus:bg-white transition-colors"
+            >
+            <svg class="w-4 h-4 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </div>
+          <select id="order-status-filter" class="text-xs border border-gray-200 rounded-xl px-3 py-2 bg-gray-50 text-gray-700 focus:outline-none focus:border-navy">
+            <option value="all">All Statuses</option>
+            <option value="Completed">Completed</option>
+            <option value="Success">Success</option>
+            <option value="Pending">Pending</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-2 text-xs text-gray-500">
+          <span id="orders-total-count" class="font-bold text-navy">0</span> Transactions Logged
+        </div>
+      </div>
+
+      <!-- ORDERS TABLE -->
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-xs sm:text-sm">
-            <thead class="bg-[#FAF7F2] text-navy font-bold border-b border-gray-200">
+          <table class="w-full text-left text-sm text-gray-700 min-w-[640px]">
+            <thead class="bg-gray-50 text-navy font-bold text-xs uppercase tracking-wider border-b border-gray-100">
               <tr>
-                <th class="p-3 sm:p-4">Order ID</th>
-                <th class="p-3 sm:p-4">Date</th>
-                <th class="p-3 sm:p-4">Customer</th>
-                <th class="p-3 sm:p-4">Title &amp; Format</th>
-                <th class="p-3 sm:p-4">Paid</th>
-                <th class="p-3 sm:p-4">25% Cause Earmark</th>
-                <th class="p-3 sm:p-4">Status</th>
+                <th class="py-3 px-4 sm:px-6">Order ID</th>
+                <th class="py-3 px-4">Item &amp; Format</th>
+                <th class="py-3 px-4">Buyer Details</th>
+                <th class="py-3 px-4">Amount</th>
+                <th class="py-3 px-4">Cause Share (25%)</th>
+                <th class="py-3 px-4">Status</th>
+                <th class="py-3 px-4 sm:px-6 text-right">Timestamp</th>
               </tr>
             </thead>
-            <tbody id="orders-table-body" class="divide-y divide-gray-100 text-gray-600">
-              <!-- Dynamically populated -->
+            <tbody id="admin-orders-tbody" class="divide-y divide-gray-100">
+              <tr>
+                <td colspan="7" class="py-8 text-center text-xs text-gray-500">Loading orders from Firestore...</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -140,56 +193,123 @@
     </main>
   </div>
 
+  <!-- Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <script src="../js/firebase-config.js"></script>
   <script src="../js/auth.js"></script>
-  <script>
-    SocialReadersAuth.requireAdmin();
 
-    function renderOrders() {
-      const orders = SocialReadersDB.getOrders();
-      const tbody = document.getElementById('orders-table-body');
-      
-      tbody.innerHTML = orders.map(ord => `
-        <tr class="hover:bg-gray-50 transition-colors">
-          <td class="p-3 sm:p-4 font-mono font-bold text-navy">#${ord.orderId}</td>
-          <td class="p-3 sm:p-4 text-xs text-gray-400">${ord.date}</td>
-          <td class="p-3 sm:p-4">
-            <span class="font-bold text-navy block">${ord.customerName}</span>
-            <span class="text-xs text-gray-400">${ord.customerEmail}</span>
-          </td>
-          <td class="p-3 sm:p-4">
-            <span class="font-semibold text-gray-800 block">${ord.bookTitle}</span>
-            <span class="text-xs text-forest">${ord.format || 'Digital E-Book'}</span>
-          </td>
-          <td class="p-3 sm:p-4 font-bold text-navy">₹${ord.amount}</td>
-          <td class="p-3 sm:p-4 font-bold text-brandOrange">₹${ord.causeShare}</td>
-          <td class="p-3 sm:p-4">
-            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${ord.status === 'Completed' ? 'bg-green-100 text-forest' : 'bg-amber-100 text-amber-700'}">
-              ${ord.status}
-            </span>
-          </td>
-        </tr>
-      `).join('');
+  <script>
+    if (window.SocialReadersAuth && window.SocialReadersAuth.requireAdmin) {
+      window.SocialReadersAuth.requireAdmin();
     }
 
-    window.exportOrdersCSV = function() {
-      const orders = SocialReadersDB.getOrders();
-      let csvContent = "data:text/csv;charset=utf-8,Order ID,Date,Customer,Email,Book,Format,Amount,25% Cause Share,Status\n";
-      
-      orders.forEach(o => {
-        csvContent += `"${o.orderId}","${o.date}","${o.customerName}","${o.customerEmail}","${o.bookTitle}","${o.format || 'E-Book'}","${o.amount}","${o.causeShare}","${o.status}"\n`;
+    let allOrders = [];
+
+    async function loadOrders() {
+      allOrders = await window.SocialReadersDB.getOrders();
+      renderOrders(allOrders);
+      document.getElementById('orders-total-count').textContent = allOrders.length;
+    }
+
+    function renderOrders(orders) {
+      const tbody = document.getElementById('admin-orders-tbody');
+      if (!orders.length) {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-xs text-gray-500">No orders found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = orders.map(order => {
+        const id = order.orderId || 'SR-0000';
+        const title = order.bookTitle || 'Book Purchase';
+        const format = order.format || 'E-Book';
+        const name = order.customerName || 'Reader';
+        const email = order.customerEmail || '—';
+        const amt = Number(order.amount || 0);
+        const cause = Number(order.causeShare || amt * 0.25);
+        const status = order.status || 'Completed';
+        const date = order.date || (order.createdAt ? new Date(order.createdAt).toLocaleString() : 'Recent');
+
+        return `
+          <tr class="hover:bg-gray-50/80 transition-colors">
+            <td class="py-3 px-4 sm:px-6 font-mono text-xs font-bold text-navy">#${id}</td>
+            <td class="py-3 px-4">
+              <div class="font-bold text-navy text-xs sm:text-sm">${title}</div>
+              <span class="inline-block mt-0.5 px-2 py-0.2 rounded-full text-[10px] font-bold ${format.toLowerCase().includes('audio') ? 'bg-purple-50 text-purple-700' : 'bg-blue-50 text-blue-700'}">${format}</span>
+            </td>
+            <td class="py-3 px-4">
+              <div class="font-medium text-gray-900 text-xs">${name}</div>
+              <div class="text-[11px] text-gray-400">${email}</div>
+            </td>
+            <td class="py-3 px-4 font-bold text-navy text-xs">₹${amt}</td>
+            <td class="py-3 px-4 font-bold text-forest text-xs">₹${cause.toFixed(2)}</td>
+            <td class="py-3 px-4">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                ${status}
+              </span>
+            </td>
+            <td class="py-3 px-4 sm:px-6 text-xs text-gray-500 text-right">${date}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Filter Logic
+    document.getElementById('order-search-input').addEventListener('input', applyFilters);
+    document.getElementById('order-status-filter').addEventListener('change', applyFilters);
+
+    function applyFilters() {
+      const term = document.getElementById('order-search-input').value.toLowerCase().trim();
+      const statusFilter = document.getElementById('order-status-filter').value;
+
+      const filtered = allOrders.filter(o => {
+        const matchesTerm = !term ||
+          (o.orderId && o.orderId.toLowerCase().includes(term)) ||
+          (o.customerName && o.customerName.toLowerCase().includes(term)) ||
+          (o.customerEmail && o.customerEmail.toLowerCase().includes(term)) ||
+          (o.bookTitle && o.bookTitle.toLowerCase().includes(term));
+
+        const matchesStatus = statusFilter === 'all' || (o.status && o.status.toLowerCase() === statusFilter.toLowerCase());
+        return matchesTerm && matchesStatus;
       });
 
+      renderOrders(filtered);
+    }
+
+    // Real CSV Export
+    document.getElementById('export-csv-btn').addEventListener('click', () => {
+      if (!allOrders.length) {
+        alert('No orders available to export.');
+        return;
+      }
+
+      const headers = ['OrderID', 'BookTitle', 'Format', 'BuyerName', 'BuyerEmail', 'Amount_INR', 'CauseShare_INR', 'Status', 'Date'];
+      const rows = allOrders.map(o => [
+        `"${o.orderId || ''}"`,
+        `"${(o.bookTitle || '').replace(/"/g, '""')}"`,
+        `"${o.format || 'E-Book'}"`,
+        `"${(o.customerName || '').replace(/"/g, '""')}"`,
+        `"${o.customerEmail || ''}"`,
+        o.amount || 0,
+        (o.causeShare || (o.amount || 0) * 0.25).toFixed(2),
+        `"${o.status || 'Completed'}"`,
+        `"${o.date || o.createdAt || ''}"`
+      ]);
+
+      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
       const encodedUri = encodeURI(csvContent);
-      const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `social_readers_orders_${Date.now()}.csv`);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `social_readers_orders_${Date.now()}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    };
+    });
 
-    document.addEventListener('DOMContentLoaded', renderOrders);
+    document.addEventListener('DOMContentLoaded', loadOrders);
   </script>
+
 </body>
 </html>

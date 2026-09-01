@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Stories | Admin — Social Readers</title>
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#0B2C5D',
+            forest: '#2E7D32',
+            brandOrange: '#E8720C',
+            cream: '#FAF7F2',
+          },
+          fontFamily: {
+            heading: ['Poppins', 'Noto Sans Tamil', 'sans-serif'],
+            body: ['Inter', 'Noto Sans Tamil', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-[#FAF7F2] text-gray-800 min-h-screen flex font-body">
+
+  <!-- SIDEBAR (Desktop) -->
+  <aside class="w-64 bg-navy text-white flex-shrink-0 hidden md:flex flex-col justify-between p-6">
+    <div class="space-y-8">
+      <a href="../index.html" class="flex flex-col">
+        <div class="flex items-center gap-1">
+          <span class="text-xl font-extrabold text-white font-heading">SOCIAL</span>
+          <span class="text-xl font-extrabold text-green-400 font-heading">READERS</span>
+        </div>
+        <span class="text-[10px] tracking-widest text-orange-300 font-bold uppercase mt-0.5">Admin Console</span>
+      </a>
+
+      <!-- Navigation Menu Items -->
+      <nav class="space-y-1.5">
+        <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="books.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          <span>Manage Books</span>
+        </a>
+
+        <a href="stories.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white font-bold text-sm shadow-sm">
+          <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+          <span>Manage Stories</span>
+        </a>
+
+        <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+          <span>Orders &amp; Receipts</span>
+        </a>
+
+        <a href="categories.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+          <span>Categories</span>
+        </a>
+
+        <a href="deals.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          <span>Deals</span>
+        </a>
+
+        <a href="settings.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="pt-6 border-t border-white/10 text-xs text-gray-400 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full bg-forest text-white font-bold flex items-center justify-center text-xs">SR</div>
+        <div class="flex flex-col">
+          <span class="text-white font-semibold">S. Raman</span>
+          <span class="text-[10px] text-gray-400">Super Admin</span>
+        </div>
+      </div>
+      <a href="login.html" class="text-orange-300 hover:underline">Logout</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="flex-grow flex flex-col min-w-0">
+    
+    <!-- Mobile Top Bar -->
+    <div class="md:hidden bg-navy text-white px-3 py-2.5 flex items-center justify-between border-b border-white/10">
+      <a href="../index.html" class="flex items-center gap-1">
+        <span class="text-sm font-extrabold text-white font-heading">SOCIAL</span>
+        <span class="text-sm font-extrabold text-green-400 font-heading">READERS</span>
+        <span class="text-[9px] bg-brandOrange text-white font-bold px-1.5 py-0.5 rounded ml-1">Admin</span>
+      </a>
+      <div class="flex items-center gap-2">
+        <a href="login.html" class="text-orange-300 text-xs font-semibold hover:underline">Logout</a>
+      </div>
+    </div>
+
+    <!-- Mobile Scrollable Tabs -->
+    <div class="md:hidden bg-white border-b border-gray-200 px-3 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs">
+      <a href="dashboard.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Dashboard</a>
+      <a href="books.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Manage Books</a>
+      <a href="stories.html" class="px-3 py-1.5 bg-navy text-white rounded-lg font-bold whitespace-nowrap">Manage Stories</a>
+      <a href="orders.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Orders</a>
+      <a href="categories.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Categories</a>
+      <a href="deals.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Deals</a>
+      <a href="settings.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Settings</a>
+    </div>
+
+    <!-- Header Content with Distinct Visual Badge for Free Stories -->
+    <header class="bg-white border-b border-gray-200 px-6 sm:px-8 py-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="px-2.5 py-0.5 rounded-md bg-indigo-100 text-indigo-800 text-[10px] font-extrabold uppercase tracking-wider">
+            Free Serialized Content
+          </span>
+          <span class="text-xs text-gray-400">&bull; Episodic Reader</span>
+        </div>
+        <h1 class="text-2xl font-bold text-navy font-heading">Manage Free Stories &amp; Serials</h1>
+        <p class="text-xs text-gray-500 mt-0.5">Author, organize, and release chapter-by-chapter free serials for community engagement</p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button 
+          id="open-add-story-btn"
+          class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center gap-2 shadow-sm transition-all"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          <span>+ Add New Story</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <main class="p-6 sm:p-8 space-y-6 flex-grow">
+      
+      <!-- Distinct Info Banner for Stories Section -->
+      <div class="bg-gradient-to-r from-indigo-900 via-indigo-800 to-navy text-white p-5 rounded-2xl shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3.5">
+          <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-indigo-300 flex-shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-white font-heading">Free Episodic Web Stories</h2>
+            <p class="text-xs text-indigo-200">Stories are completely free for all readers on the platform. Readers can track reading progress and save chapters.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <span class="px-3 py-1.5 rounded-xl bg-white/15 text-white font-semibold">16 Active Series</span>
+          <span class="px-3 py-1.5 rounded-xl bg-white/15 text-white font-semibold">142 Total Chapters</span>
+        </div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+        <div class="flex items-center gap-3 flex-1">
+          <div class="relative w-full max-w-sm">
+            <input 
+              type="text" 
+              placeholder="Search story title, genre..." 
+              class="w-full pl-9 pr-4 py-2 text-xs border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:border-navy focus:bg-white transition-colors"
+            >
+            <svg class="w-4 h-4 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </div>
+          <select class="text-xs border border-gray-200 rounded-xl px-3 py-2 bg-gray-50 text-gray-700 focus:outline-none focus:border-navy">
+            <option>All Genres</option>
+            <option>Historical Fiction</option>
+            <option>Mystery &amp; Thriller</option>
+            <option>Science Fiction</option>
+            <option>Contemporary Romance</option>
+            <option>Folklore &amp; Mythology</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- STORIES TABLE -->
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm text-gray-700">
+            <thead class="bg-gray-50 text-navy font-bold text-xs uppercase tracking-wider border-b border-gray-100">
+              <tr>
+                <th class="py-3.5 px-6">Story Title</th>
+                <th class="py-3.5 px-4">Category / Genre</th>
+                <th class="py-3.5 px-4">Chapters</th>
+                <th class="py-3.5 px-4">Status</th>
+                <th class="py-3.5 px-4">Last Updated</th>
+                <th class="py-3.5 px-6 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              
+              <!-- Story 1 -->
+              <tr class="hover:bg-gray-50/80 transition-colors">
+                <td class="py-4 px-6 font-semibold text-navy">
+                  <div class="flex items-center gap-3">
+                    <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=100&auto=format&fit=crop&q=80" alt="Chronicles of Tanjore" class="w-10 h-14 object-cover rounded-lg border border-gray-200 shadow-sm">
+                    <div>
+                      <div class="font-bold text-navy text-sm">The Chronicles of Tanjore</div>
+                      <div class="text-xs text-gray-400">தஞ்சை நாயகர்கள் &bull; Epic Series</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-800 border border-indigo-100">Historical Fiction</span>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="font-bold text-navy text-xs bg-gray-100 px-2.5 py-1 rounded-lg">18 Chapters</span>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                    Published
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-xs text-gray-500">Today, 10:30 AM</td>
+                <td class="py-4 px-6 text-right">
+                  <div class="inline-flex items-center gap-2">
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-indigo-200 hover:bg-indigo-50 text-indigo-700 transition-colors">+ Chapters</button>
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">Delete</button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Story 2 -->
+              <tr class="hover:bg-gray-50/80 transition-colors">
+                <td class="py-4 px-6 font-semibold text-navy">
+                  <div class="flex items-center gap-3">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=100&auto=format&fit=crop&q=80" alt="Silicon Valley Dreams" class="w-10 h-14 object-cover rounded-lg border border-gray-200 shadow-sm">
+                    <div>
+                      <div class="font-bold text-navy text-sm">Silicon Valley Kanavugal</div>
+                      <div class="text-xs text-gray-400">சிலிகான் வேலி கனவுகள் &bull; Modern Tech Fiction</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-100">Contemporary</span>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="font-bold text-navy text-xs bg-gray-100 px-2.5 py-1 rounded-lg">12 Chapters</span>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                    Published
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-xs text-gray-500">Aug 31, 2026</td>
+                <td class="py-4 px-6 text-right">
+                  <div class="inline-flex items-center gap-2">
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-indigo-200 hover:bg-indigo-50 text-indigo-700 transition-colors">+ Chapters</button>
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">Delete</button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Story 3 -->
+              <tr class="hover:bg-gray-50/80 transition-colors">
+                <td class="py-4 px-6 font-semibold text-navy">
+                  <div class="flex items-center gap-3">
+                    <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=100&auto=format&fit=crop&q=80" alt="Secrets of Western Ghats" class="w-10 h-14 object-cover rounded-lg border border-gray-200 shadow-sm">
+                    <div>
+                      <div class="font-bold text-navy text-sm">Secrets of the Western Ghats</div>
+                      <div class="text-xs text-gray-400">மேற்குத் தொடர்ச்சி மலை மர்மங்கள்</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-800 border border-purple-100">Mystery &amp; Thriller</span>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="font-bold text-navy text-xs bg-gray-100 px-2.5 py-1 rounded-lg">8 Chapters</span>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                    Published
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-xs text-gray-500">Aug 28, 2026</td>
+                <td class="py-4 px-6 text-right">
+                  <div class="inline-flex items-center gap-2">
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-indigo-200 hover:bg-indigo-50 text-indigo-700 transition-colors">+ Chapters</button>
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">Delete</button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Story 4 -->
+              <tr class="hover:bg-gray-50/80 transition-colors">
+                <td class="py-4 px-6 font-semibold text-navy">
+                  <div class="flex items-center gap-3">
+                    <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=100&auto=format&fit=crop&q=80" alt="The Star Weaver" class="w-10 h-14 object-cover rounded-lg border border-gray-200 shadow-sm">
+                    <div>
+                      <div class="font-bold text-navy text-sm">The Star Weaver / விண்மீன் நெசவாளி</div>
+                      <div class="text-xs text-gray-400">Sci-Fi Fantasy Serial</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold bg-teal-50 text-teal-800 border border-teal-100">Science Fiction</span>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="font-bold text-navy text-xs bg-gray-100 px-2.5 py-1 rounded-lg">4 Chapters</span>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                    Draft
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-xs text-gray-500">Aug 26, 2026</td>
+                <td class="py-4 px-6 text-right">
+                  <div class="inline-flex items-center gap-2">
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-indigo-200 hover:bg-indigo-50 text-indigo-700 transition-colors">+ Chapters</button>
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
+                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">Delete</button>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ADD / EDIT STORY MODAL -->
+  <div id="story-modal" class="fixed inset-0 z-50 bg-navy/60 backdrop-blur-sm hidden items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-gray-100 overflow-hidden my-8 max-h-[90vh] flex flex-col">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-5 bg-indigo-900 text-white flex items-center justify-between">
+        <div>
+          <div class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-300">Free Story Serial</div>
+          <h2 class="text-lg font-bold font-heading">Add New Story / Series</h2>
+        </div>
+        <button id="close-story-modal-btn" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <!-- Modal Body (Form) -->
+      <form id="story-form" class="p-6 overflow-y-auto space-y-5 flex-1 text-xs text-gray-700">
+        
+        <!-- Titles (Bilingual) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-navy mb-1">Story Title (English) *</label>
+            <input type="text" required placeholder="e.g. The Chronicles of Tanjore" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-indigo-600">
+          </div>
+          <div>
+            <label class="block font-bold text-navy mb-1">Story Title (Tamil / தமிழ்) *</label>
+            <input type="text" required placeholder="e.g. தஞ்சை நாயகர்கள்" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-indigo-600">
+          </div>
+        </div>
+
+        <!-- Genre & Cover -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-navy mb-1">Genre / Category *</label>
+            <select required class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-indigo-600 text-xs">
+              <option value="Historical Fiction">Historical Fiction</option>
+              <option value="Mystery & Thriller">Mystery &amp; Thriller</option>
+              <option value="Science Fiction">Science Fiction</option>
+              <option value="Contemporary Romance">Contemporary Romance</option>
+              <option value="Folklore & Mythology">Folklore &amp; Mythology</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-navy mb-1">Cover Image (Placeholder)</label>
+            <input type="file" accept="image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-100 file:text-indigo-800 hover:file:bg-indigo-200">
+          </div>
+        </div>
+
+        <!-- CHAPTER LIST SECTION -->
+        <div class="p-4 bg-gray-50 rounded-2xl border border-gray-200 space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-bold text-navy text-sm">Story Chapters</h3>
+              <p class="text-[11px] text-gray-500">Add episodic chapters with title and story text</p>
+            </div>
+            <button 
+              type="button" 
+              id="add-chapter-row-btn"
+              class="px-3 py-1.5 rounded-lg bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-bold text-xs flex items-center gap-1 transition-colors"
+            >
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+              <span>Add Chapter</span>
+            </button>
+          </div>
+
+          <!-- Dynamic Chapter Containers -->
+          <div id="chapters-list" class="space-y-4">
+            
+            <!-- Chapter 1 -->
+            <div class="chapter-item p-4 bg-white rounded-xl border border-gray-200 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-navy text-xs">Chapter 1</span>
+                <span class="text-[10px] text-gray-400">Opening Episode</span>
+              </div>
+              <input type="text" placeholder="Chapter Title (e.g. Chapter 1: The Gathering Shadows)" class="w-full px-3 py-2 text-xs rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-indigo-600">
+              <textarea rows="4" placeholder="Chapter content text / body..." class="w-full px-3 py-2 text-xs rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-indigo-600"></textarea>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Publish Toggle -->
+        <div>
+          <label class="block font-bold text-navy mb-1">Publish Status</label>
+          <select class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-indigo-600 text-xs">
+            <option value="published">Published (Live in Free Stories catalog)</option>
+            <option value="draft">Draft (Private / Work in Progress)</option>
+          </select>
+        </div>
+
+        <!-- Modal Footer Actions -->
+        <div class="pt-4 border-t border-gray-100 flex items-center justify-end gap-3">
+          <button type="button" id="cancel-story-modal-btn" class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-bold hover:bg-gray-100 transition-colors">Cancel</button>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-md transition-all">Save Story</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Modal toggle
+    const storyModal = document.getElementById('story-modal');
+    const openStoryBtn = document.getElementById('open-add-story-btn');
+    const closeStoryBtn = document.getElementById('close-story-modal-btn');
+    const cancelStoryBtn = document.getElementById('cancel-story-modal-btn');
+    const storyForm = document.getElementById('story-form');
+    const addChapterBtn = document.getElementById('add-chapter-row-btn');
+    const chaptersList = document.getElementById('chapters-list');
+
+    openStoryBtn.addEventListener('click', () => {
+      storyModal.classList.remove('hidden');
+      storyModal.classList.add('flex');
+    });
+
+    function closeStoryModal() {
+      storyModal.classList.add('hidden');
+      storyModal.classList.remove('flex');
+    }
+
+    closeStoryBtn.addEventListener('click', closeStoryModal);
+    cancelStoryBtn.addEventListener('click', closeStoryModal);
+
+    let chapterCount = 1;
+    addChapterBtn.addEventListener('click', () => {
+      chapterCount++;
+      const chapterDiv = document.createElement('div');
+      chapterDiv.className = 'chapter-item p-4 bg-white rounded-xl border border-gray-200 space-y-3';
+      
+      const headerDiv = document.createElement('div');
+      headerDiv.className = 'flex items-center justify-between';
+      
+      const label = document.createElement('span');
+      label.className = 'font-bold text-navy text-xs';
+      label.textContent = 'Chapter ' + chapterCount;
+      
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'text-[11px] text-red-500 hover:underline font-semibold';
+      removeBtn.textContent = 'Remove';
+      removeBtn.addEventListener('click', () => {
+        chapterDiv.remove();
+      });
+
+      headerDiv.appendChild(label);
+      headerDiv.appendChild(removeBtn);
+
+      const titleInput = document.createElement('input');
+      titleInput.type = 'text';
+      titleInput.placeholder = 'Chapter ' + chapterCount + ' Title';
+      titleInput.className = 'w-full px-3 py-2 text-xs rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-indigo-600';
+
+      const bodyTextarea = document.createElement('textarea');
+      bodyTextarea.rows = 4;
+      bodyTextarea.placeholder = 'Chapter content text / body...';
+      bodyTextarea.className = 'w-full px-3 py-2 text-xs rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-indigo-600';
+
+      chapterDiv.appendChild(headerDiv);
+      chapterDiv.appendChild(titleInput);
+      chapterDiv.appendChild(bodyTextarea);
+
+      chaptersList.appendChild(chapterDiv);
+    });
+
+    storyForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Story saved successfully! (Phase 1 UI Placeholder)');
+      closeStoryModal();
+    });
+  </script>
+
+</body>
+</html>
