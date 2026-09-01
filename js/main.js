@@ -639,6 +639,11 @@ function showToast(message) {
     toast.classList.remove('translate-y-0', 'opacity-100');
   }, 2500);
 }
+window.showToast = showToast;
+
+function initToastSystem() {
+  // Global Toast initialized
+}
 
 /**
  * Amazon / Flipkart Style Hero Slider Controller
