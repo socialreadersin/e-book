@@ -12,7 +12,12 @@
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
-/css/*
+/css/*.css
+  Content-Type: text/css; charset=utf-8
+  Cache-Control: public, max-age=86400
+
+/js/*.js
+  Content-Type: application/javascript; charset=utf-8
   Cache-Control: public, max-age=86400
 
 /js/*

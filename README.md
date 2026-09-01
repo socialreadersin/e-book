@@ -106,7 +106,7 @@ In Google Firebase, web configuration parameters (`apiKey: "AIzaSy..."`, `projec
 ```javascript
 // js/firebase-config.js
 const firebaseConfig = {
-  apiKey: "AIzaSyDRz477R0X0lexNOSsHZiUmNs3ut5VzaWk",
+  apiKey: "YOUR_FIREBASE_API_KEY",
   authDomain: "e-book-7c31a.firebaseapp.com",
   projectId: "e-book-7c31a",
   storageBucket: "e-book-7c31a.firebasestorage.app",

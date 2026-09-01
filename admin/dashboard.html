@@ -131,7 +131,11 @@
         <p class="text-xs text-gray-500 mt-0.5">Platform metrics, 25% cause contribution audit, and live Firestore activity</p>
       </div>
 
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+        <button onclick="seedFirestoreDemoData()" id="btn-seed-firestore" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+          <span>⚡ Seed Firestore Data</span>
+        </button>
         <a href="books.html" class="px-4 py-2 rounded-xl bg-forest hover:bg-green-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
           <span>Add Book</span>
@@ -306,7 +310,9 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="/js/firebase-config.js"></script>
   <script src="../js/firebase-config.js"></script>
+  <script src="/js/auth.js"></script>
   <script src="../js/auth.js"></script>
 
   <script>
@@ -315,66 +321,109 @@
     }
 
     async function initDashboard() {
-      const books = await window.SocialReadersDB.getBooks(true);
-      const orders = await window.SocialReadersDB.getOrders();
-
-      const totalBooks = books.length;
-      const totalAudio = books.filter(b => b.type === 'audiobook' || b.type === 'both' || b.audioUrl || b.priceAudiobook).length;
-      const totalOrdersCount = orders.length;
-
-      let totalRevenue = 0;
-      orders.forEach(o => {
-        totalRevenue += Number(o.amount || 0);
-      });
-      const totalCause = totalRevenue * 0.25;
-
-      document.getElementById('kpi-total-books').textContent = totalBooks;
-      document.getElementById('kpi-total-audio').textContent = totalAudio;
-      document.getElementById('kpi-total-orders').textContent = totalOrdersCount;
-      document.getElementById('kpi-total-revenue').textContent = `₹${totalRevenue.toLocaleString('en-IN')}`;
-      document.getElementById('kpi-cause-fund').textContent = `₹${totalCause.toLocaleString('en-IN')}`;
-
-      document.getElementById('stat-edu-fund').textContent = `₹${(totalRevenue * 0.15).toFixed(2)}`;
-      document.getElementById('stat-sports-fund').textContent = `₹${(totalRevenue * 0.10).toFixed(2)}`;
-
-      // Render Recent Orders
-      const tbody = document.getElementById('dashboard-orders-tbody');
-      if (!orders.length) {
-        tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-xs text-gray-500">No orders recorded yet.</td></tr>`;
+      if (!window.SocialReadersDB) {
+        console.warn("Waiting for SocialReadersDB initialization...");
+        setTimeout(initDashboard, 200);
         return;
       }
 
-      tbody.innerHTML = orders.slice(0, 6).map(order => {
-        const title = order.bookTitle || 'Book Purchase';
-        const format = order.format || 'E-Book';
-        const name = order.customerName || 'Reader';
-        const email = order.customerEmail || '—';
-        const amt = Number(order.amount || 0);
-        const cause = Number(order.causeShare || amt * 0.25);
-        const date = order.date || (order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'Recent');
+      try {
+        const books = await window.SocialReadersDB.getBooks(true);
+        const orders = await window.SocialReadersDB.getOrders();
 
-        return `
-          <tr class="hover:bg-gray-50/80 transition-colors">
-            <td class="py-3 px-4 sm:px-6 font-semibold text-navy text-xs sm:text-sm">${title}</td>
-            <td class="py-3 px-4">
-              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold ${format.toLowerCase().includes('audio') ? 'bg-purple-50 text-purple-700' : 'bg-blue-50 text-blue-700'}">
-                ${format}
-              </span>
-            </td>
-            <td class="py-3 px-4 font-medium text-gray-900 text-xs">${name}</td>
-            <td class="py-3 px-4 text-xs text-gray-500">${email}</td>
-            <td class="py-3 px-4 font-bold text-navy text-xs">₹${amt}</td>
-            <td class="py-3 px-4 font-bold text-forest text-xs">₹${cause.toFixed(2)}</td>
-            <td class="py-3 px-4">
-              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                ${order.status || 'Completed'}
-              </span>
-            </td>
-            <td class="py-3 px-4 sm:px-6 text-xs text-gray-500">${date}</td>
-          </tr>
-        `;
-      }).join('');
+        const totalBooks = books.length;
+        const totalAudio = books.filter(b => b.type === 'audiobook' || b.type === 'both' || b.audioUrl || b.priceAudiobook).length;
+        const totalOrdersCount = orders.length;
+
+        let totalRevenue = 0;
+        orders.forEach(o => {
+          totalRevenue += Number(o.amount || 0);
+        });
+        const totalCause = totalRevenue * 0.25;
+
+        const elTotalBooks = document.getElementById('kpi-total-books');
+        const elTotalAudio = document.getElementById('kpi-total-audio');
+        const elTotalOrders = document.getElementById('kpi-total-orders');
+        const elTotalRevenue = document.getElementById('kpi-total-revenue');
+        const elCauseFund = document.getElementById('kpi-cause-fund');
+        const elEduFund = document.getElementById('stat-edu-fund');
+        const elSportsFund = document.getElementById('stat-sports-fund');
+
+        if (elTotalBooks) elTotalBooks.textContent = totalBooks;
+        if (elTotalAudio) elTotalAudio.textContent = totalAudio;
+        if (elTotalOrders) elTotalOrders.textContent = totalOrdersCount;
+        if (elTotalRevenue) elTotalRevenue.textContent = `₹${totalRevenue.toLocaleString('en-IN')}`;
+        if (elCauseFund) elCauseFund.textContent = `₹${totalCause.toLocaleString('en-IN')}`;
+        if (elEduFund) elEduFund.textContent = `₹${(totalRevenue * 0.15).toFixed(2)}`;
+        if (elSportsFund) elSportsFund.textContent = `₹${(totalRevenue * 0.10).toFixed(2)}`;
+
+        // Render Recent Orders
+        const tbody = document.getElementById('dashboard-orders-tbody');
+        if (tbody) {
+          if (!orders.length) {
+            tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-xs text-gray-500">No orders recorded yet.</td></tr>`;
+          } else {
+            tbody.innerHTML = orders.slice(0, 6).map(order => {
+              const title = order.bookTitle || 'Book Purchase';
+              const format = order.format || 'E-Book';
+              const name = order.customerName || 'Reader';
+              const email = order.customerEmail || '—';
+              const amt = Number(order.amount || 0);
+              const cause = Number(order.causeShare || amt * 0.25);
+              const date = order.date || (order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'Recent');
+
+              return `
+                <tr class="hover:bg-gray-50/80 transition-colors">
+                  <td class="py-3 px-4 sm:px-6 font-semibold text-navy text-xs sm:text-sm">${title}</td>
+                  <td class="py-3 px-4">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold ${format.toLowerCase().includes('audio') ? 'bg-purple-50 text-purple-700' : 'bg-blue-50 text-blue-700'}">
+                      ${format}
+                    </span>
+                  </td>
+                  <td class="py-3 px-4 font-medium text-gray-900 text-xs">${name}</td>
+                  <td class="py-3 px-4 text-xs text-gray-500">${email}</td>
+                  <td class="py-3 px-4 font-bold text-navy text-xs">₹${amt}</td>
+                  <td class="py-3 px-4 font-bold text-forest text-xs">₹${cause.toFixed(2)}</td>
+                  <td class="py-3 px-4">
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                      ${order.status || 'Completed'}
+                    </span>
+                  </td>
+                  <td class="py-3 px-4 sm:px-6 text-xs text-gray-500">${date}</td>
+                </tr>
+              `;
+            }).join('');
+          }
+        }
+      } catch (err) {
+        console.error("initDashboard error:", err);
+      }
+    }
+
+    async function seedFirestoreDemoData() {
+      const btn = document.getElementById('btn-seed-firestore');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span>⏳ Seeding Firestore...</span>`;
+      }
+      try {
+        if (window.SocialReadersDB && window.SocialReadersDB.seedDemoData) {
+          await window.SocialReadersDB.seedDemoData();
+          alert("✅ Success: All books, categories, deals, stories, and store settings have been populated directly into Cloud Firestore!");
+          await initDashboard();
+        } else {
+          alert("⚠️ Firebase database connection not ready yet. Please check your network connection.");
+        }
+      } catch (e) {
+        console.error("Seed error:", e);
+        alert("Firestore seeding error: " + (e.message || e));
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg><span>⚡ Seed Firestore Data</span>`;
+        }
+      }
     }
 
     document.addEventListener('DOMContentLoaded', initDashboard);
