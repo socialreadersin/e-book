@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="gValley" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14532d"/>
+      <stop offset="60%" stop-color="#16a34a"/>
+      <stop offset="100%" stop-color="#fde047"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="16" fill="url(#gValley)"/>
+  <!-- Mountain Valley Silhouette -->
+  <polygon points="20,180 80,90 140,180" fill="#052e16"/>
+  <polygon points="90,180 150,80 200,180" fill="#022c22"/>
+  <circle cx="100" cy="60" r="15" fill="#fef08a"/>
+</svg>

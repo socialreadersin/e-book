@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 560" width="100%" height="100%">
+  <defs>
+    <linearGradient id="histBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#451a03"/>
+      <stop offset="40%" stop-color="#b45309"/>
+      <stop offset="80%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#1c1917"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="560" fill="url(#histBg)"/>
+  <!-- Ancient Temple Tower silhouette -->
+  <polygon points="200,60 160,180 240,180" fill="#292524"/>
+  <rect x="150" y="180" width="100" height="80" fill="#292524"/>
+  <polygon points="200,40 190,60 210,60" fill="#f59e0b"/>
+  <!-- Ancient Chola Ship & Waves -->
+  <path d="M40,380 C120,360 280,360 360,380 L320,440 L80,440 Z" fill="#1c1917"/>
+  <path d="M195,240 L205,240 L205,380 L195,380 Z" fill="#1c1917"/>
+  <polygon points="205,260 280,310 205,360" fill="#fef3c7" opacity="0.8"/>
+  <!-- Water -->
+  <rect x="0" y="420" width="400" height="140" fill="#0c0a09"/>
+</svg>

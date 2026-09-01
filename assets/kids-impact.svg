@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 240" width="100%" height="100%">
+  <defs>
+    <linearGradient id="warmBg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="50%" stop-color="#fed7aa"/>
+      <stop offset="100%" stop-color="#fde68a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1000" height="240" rx="16" fill="url(#warmBg)"/>
+  
+  <!-- Smiling Group of 5 School Kids in green uniforms holding books -->
+  <g transform="translate(480, 20)">
+    <!-- Kid 1 -->
+    <circle cx="60" cy="65" r="32" fill="#78350f"/>
+    <path d="M30,190 L40,110 C46,95 74,95 80,110 L90,190 Z" fill="#15803d"/>
+    <!-- Collar & Tie -->
+    <polygon points="52,110 60,140 68,110" fill="#ffffff"/>
+    <rect x="58" y="115" width="4" height="25" fill="#b91c1c"/>
+    <!-- Book -->
+    <rect x="42" y="145" width="36" height="40" rx="4" fill="#0284c7"/>
+
+    <!-- Kid 2 (Center Hero) -->
+    <circle cx="150" cy="50" r="36" fill="#854d0e"/>
+    <path d="M110,190 L125,100 C132,85 168,85 175,100 L190,190 Z" fill="#166534"/>
+    <polygon points="142,100 150,135 158,100" fill="#ffffff"/>
+    <rect x="148" y="105" width="4" height="30" fill="#b91c1c"/>
+    <!-- Notebook -->
+    <rect x="130" y="138" width="40" height="45" rx="4" fill="#ea580c"/>
+
+    <!-- Kid 3 -->
+    <circle cx="240" cy="55" r="34" fill="#713f12"/>
+    <path d="M205,190 L218,105 C224,90 256,90 262,105 L275,190 Z" fill="#15803d"/>
+    <polygon points="232,105 240,135 248,105" fill="#ffffff"/>
+    <rect x="238" y="110" width="4" height="25" fill="#b91c1c"/>
+    <!-- Book -->
+    <rect x="220" y="140" width="40" height="42" rx="4" fill="#eab308"/>
+
+    <!-- Kid 4 -->
+    <circle cx="330" cy="60" r="33" fill="#78350f"/>
+    <path d="M295,190 L310,110 C316,95 344,95 350,110 L365,190 Z" fill="#166534"/>
+    <polygon points="322,110 330,138 338,110" fill="#ffffff"/>
+    <rect x="328" y="115" width="4" height="25" fill="#b91c1c"/>
+    <!-- Book -->
+    <rect x="312" y="142" width="36" height="40" rx="4" fill="#9333ea"/>
+
+    <!-- Kid 5 -->
+    <circle cx="420" cy="65" r="32" fill="#854d0e"/>
+    <path d="M390,190 L400,112 C406,98 434,98 440,112 L450,190 Z" fill="#15803d"/>
+    <polygon points="412,112 420,138 428,112" fill="#ffffff"/>
+    <rect x="418" y="116" width="4" height="24" fill="#b91c1c"/>
+    <!-- Book -->
+    <rect x="402" y="145" width="36" height="38" rx="4" fill="#059669"/>
+  </g>
+</svg>

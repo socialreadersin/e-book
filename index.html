@@ -1212,5 +1212,24 @@
   <script src="js/checkout.js"></script>
   <script src="js/reader.js"></script>
   <script src="js/main.js"></script>
+
+  <!-- Firebase App & Analytics SDK (Modular & Sanitized) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-analytics.js";
+
+    try {
+      const config = window.SocialReadersDB?.config || {
+        apiKey: "DEMO_KEY",
+        projectId: "e-book-7c31a"
+      };
+      const app = initializeApp(config);
+      const analytics = getAnalytics(app);
+      window.firebaseApp = app;
+      window.firebaseAnalytics = analytics;
+    } catch (e) {
+      console.warn("Firebase initialization notice:", e);
+    }
+  </script>
 </body>
 </html>

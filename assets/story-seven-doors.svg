@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="40%" stop-color="#1e1b4b"/>
+      <stop offset="80%" stop-color="#311042"/>
+      <stop offset="100%" stop-color="#ca8a04"/>
+    </linearGradient>
+    <linearGradient id="archGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2d1b4e"/>
+      <stop offset="100%" stop-color="#090614"/>
+    </linearGradient>
+    <radialGradient id="portalGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fef08a" stop-opacity="0.9"/>
+      <stop offset="40%" stop-color="#f59e0b" stop-opacity="0.6"/>
+      <stop offset="70%" stop-color="#d97706" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="800" fill="url(#skyGrad)"/>
+
+  <!-- Glowing Portal / Castle in distance -->
+  <circle cx="380" cy="320" r="160" fill="url(#portalGlow)"/>
+  
+  <!-- Distant spires & citadel -->
+  <path d="M330,340 L350,230 L365,340 Z" fill="#d97706" opacity="0.6"/>
+  <path d="M360,350 L380,180 L400,350 Z" fill="#b45309" opacity="0.7"/>
+  <path d="M395,350 L410,240 L425,350 Z" fill="#d97706" opacity="0.6"/>
+  <path d="M320,380 L440,380 L430,330 L330,330 Z" fill="#78350f" opacity="0.5"/>
+
+  <!-- Ancient Grand Stone Archway -->
+  <path d="M60,800 L60,320 C60,140 220,60 380,60 C540,60 560,180 560,320 L560,800 L490,800 L490,340 C490,200 450,140 370,140 C280,140 140,200 140,340 L140,800 Z" fill="url(#archGrad)"/>
+
+  <!-- Stone Wall Engravings & Vines -->
+  <path d="M80,260 Q120,220 100,160 Q140,180 120,280" stroke="#a855f7" stroke-width="3" fill="none" opacity="0.4"/>
+  <path d="M520,240 Q470,200 500,140" stroke="#f59e0b" stroke-width="3" fill="none" opacity="0.4"/>
+
+  <!-- Cobblestone Ground Path -->
+  <path d="M0,800 L600,800 L460,540 L160,540 Z" fill="#0d0b18"/>
+  <ellipse cx="340" cy="620" rx="140" ry="25" fill="#f59e0b" opacity="0.25"/>
+  <ellipse cx="350" cy="680" rx="180" ry="30" fill="#fef08a" opacity="0.15"/>
+
+  <!-- Cloaked Explorer Silhouette holding lantern -->
+  <g transform="translate(300, 390)">
+    <!-- Cloak & Body -->
+    <path d="M40,220 C20,180 10,120 25,60 C32,25 48,25 55,60 C70,120 60,180 40,220 Z" fill="#05030a"/>
+    <!-- Hood / Head -->
+    <circle cx="40" cy="30" r="14" fill="#05030a"/>
+    <!-- Flowing Cloak wings -->
+    <path d="M15,160 C0,200 5,235 25,240 C35,210 30,170 25,160 Z" fill="#05030a"/>
+    <path d="M65,160 C80,200 75,235 55,240 C45,210 50,170 55,160 Z" fill="#05030a"/>
+    <!-- Lantern / Light -->
+    <circle cx="75" cy="110" r="12" fill="#fef08a" opacity="0.9"/>
+    <circle cx="75" cy="110" r="28" fill="#f59e0b" opacity="0.4"/>
+    <rect x="73" y="104" width="4" height="12" fill="#78350f"/>
+  </g>
+
+  <!-- Dramatic Dark Vignette -->
+  <rect width="600" height="800" fill="none" stroke="#000000" stroke-width="20" opacity="0.4"/>
+</svg>

@@ -59,7 +59,9 @@
 
 | Page | Purpose |
 |---|---|
-| `index.html` | Home: hero, 3 value props, pull quote, popular categories, impact banner, featured books, how-it-works, footer |
+| `index.html` | Home: Hero Trending Novel banner, Genre icon chips, Continue Your Stories progress rail, Listen to Audio with waveform player, Explore eBooks, 25% Impact banner, Social Readers Premium card, Mobile bottom nav |
+| `stories.html` | Episodic Novel Series catalog with day-of-week release schedule filters (Monday-Sunday) and genre pills |
+| `story-reader.html` | Clean episodic chapter reader with progress auto-save, theme switcher, font scaling, and chapter drawer |
 | `categories.html` | All categories grid |
 | `books.html` | Full E-book catalog, filterable by category, search |
 | `audiobooks.html` | Full Audiobook catalog with interactive audio sample preview player |
@@ -74,7 +76,8 @@
 | Page | Purpose |
 |---|---|
 | `admin/login.html` | Admin login form with secure auth guard (`SocialReadersAuth`) |
-| `admin/dashboard.html` | Stat cards (Total Books, Total Orders, Total Revenue, 25% Social Fund Allocated) + live Recent Orders table |
+| `admin/dashboard.html` | Stat cards (Total Books, Active Novel Series, Total Revenue, 25% Social Fund Allocated) + live Recent Orders table |
+| `admin/manage-stories.html` | Complete CRUD for Novel Series, weekly chapter/episode upload workflow, scheduled release day assignments |
 | `admin/manage-books.html` | Complete CRUD for Books & Audiobooks, Cover upload via Cloudinary image endpoint, PDF/MP3 via `resource_type: raw` |
 | `admin/orders.html` | Full customer orders table with 25% cause audit tally and CSV export |
 | `admin/categories.html` | Store category taxonomy manager |

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="audioLibBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#020617"/>
+      <stop offset="60%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <radialGradient id="libGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="500" height="500" fill="url(#audioLibBg)"/>
+  <circle cx="250" cy="250" r="180" fill="url(#libGlow)"/>
+  <!-- Library Bookshelves & Vault Arches -->
+  <path d="M80,500 L80,180 C80,120 160,80 250,80 C340,80 420,120 420,180 L420,500 Z" fill="#090b14"/>
+  <!-- Glowing book on pedestal -->
+  <polygon points="210,320 250,300 290,320 250,340" fill="#38bdf8"/>
+  <path d="M210,320 L250,340 L250,355 L210,335 Z" fill="#0284c7"/>
+  <path d="M290,320 L250,340 L250,355 L290,335 Z" fill="#0369a1"/>
+  <!-- Figure silhouette -->
+  <circle cx="250" cy="380" r="16" fill="#ffffff" opacity="0.9"/>
+  <path d="M230,460 L240,400 C245,395 255,395 260,400 L270,460 Z" fill="#ffffff" opacity="0.9"/>
+</svg>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Novel Stories | Social Readers</title>
+  <meta name="description" content="Read episodic web novels with weekly chapter releases. 25% of all proceeds support youth education.">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#0B2C5D',
+            forest: '#2E7D32',
+            brandOrange: '#E8720C',
+            cream: '#FAF7F2',
+          },
+          fontFamily: {
+            heading: ['Poppins', 'Noto Sans Tamil', 'sans-serif'],
+            body: ['Inter', 'Noto Sans Tamil', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-[#FAF7F2] text-gray-800 flex flex-col min-h-screen pb-20 md:pb-8">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16 sm:h-20 gap-4">
+        <!-- Logo -->
+        <a href="index.html" class="flex flex-col items-start group">
+          <div class="flex items-center gap-1">
+            <span class="text-xl sm:text-2xl font-extrabold text-navy">SOCIAL</span>
+            <span class="text-xl sm:text-2xl font-extrabold text-forest">READERS</span>
+          </div>
+          <span data-i18n="brand.tagline" class="text-[9px] tracking-widest uppercase font-bold text-gray-500">
+            READ FOR CHANGE ❤️
+          </span>
+        </a>
+
+        <!-- Search input -->
+        <div class="hidden md:flex flex-1 max-w-md mx-4">
+          <div class="relative w-full">
+            <input type="search" id="storySearchInput" placeholder="Search novel series, authors..." class="w-full pl-10 pr-4 py-2 text-xs bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:border-brandOrange">
+            <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Right actions -->
+        <div class="flex items-center space-x-3">
+          <a href="impact.html" class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-50 border border-orange-200 text-xs font-bold text-brandOrange">
+            <span class="w-2 h-2 rounded-full bg-brandOrange animate-pulse"></span>
+            25% Cause Audit
+          </a>
+
+          <button class="lang-toggle-btn px-3 py-1.5 rounded-full border-2 border-navy text-navy font-bold text-xs hover:bg-navy hover:text-white transition-all">
+            EN | த
+          </button>
+
+          <a href="account.html" class="p-2 text-gray-600 hover:text-navy" title="Account">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Title & Release Schedule Filter Rail -->
+  <section class="bg-navy text-white py-8 px-4 sm:px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">EPISODIC WEB NOVELS</span>
+          <h1 class="text-2xl sm:text-4xl font-extrabold font-heading mt-1" data-i18n="nav.stories">
+            Novel Series &amp; Stories
+          </h1>
+          <p class="text-xs sm:text-sm text-gray-300 mt-1 max-w-xl">
+            Explore serial web fiction released day-by-day. Read new episodes weekly and track your progress.
+          </p>
+        </div>
+
+        <a href="admin/manage-stories.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          <span>Admin: Upload Episodes</span>
+        </a>
+      </div>
+
+      <!-- Weekly Schedule Day Filter Tabs -->
+      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar mt-6 pt-4 border-t border-white/10" id="dayFilterRail">
+        <button class="day-tab px-4 py-2 rounded-xl text-xs font-bold bg-white text-navy transition-all" data-day="all">
+          All Days
+        </button>
+        <button class="day-tab px-4 py-2 rounded-xl text-xs font-bold bg-white/10 text-white hover:bg-white/20 transition-all" data-day="Monday">
+          Monday Releases
+        </button>
+        <button class="day-tab px-4 py-2 rounded-xl text-xs font-bold bg-white/10 text-white hover:bg-white/20 transition-all" data-day="Tuesday">
+          Tuesday Releases
+        </button>
+        <button class="day-tab px-4 py-2 rounded-xl text-xs font-bold bg-white/10 text-white hover:bg-white/20 transition-all" data-day="Wednesday">
+          Wednesday Releases
+        </button>
+        <button class="day-tab px-4 py-2 rounded-xl text-xs font-bold bg-white/10 text-white hover:bg-white/20 transition-all" data-day="Thursday">
+          Thursday Releases
+        </button>
+        <button class="day-tab px-4 py-2 rounded-xl text-xs font-bold bg-white/10 text-white hover:bg-white/20 transition-all" data-day="Friday">
+          Friday Releases
+        </button>
+        <button class="day-tab px-4 py-2 rounded-xl text-xs font-bold bg-white/10 text-white hover:bg-white/20 transition-all" data-day="Saturday">
+          Saturday Releases
+        </button>
+        <button class="day-tab px-4 py-2 rounded-xl text-xs font-bold bg-white/10 text-white hover:bg-white/20 transition-all" data-day="Sunday">
+          Sunday Releases
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Catalog Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
+    
+    <!-- Genre Filter Pills -->
+    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-4 mb-6" id="genreFilterBar">
+      <button class="genre-filter-pill px-4 py-1.5 rounded-full text-xs font-bold bg-navy text-white shadow-sm" data-genre="all">
+        All Genres
+      </button>
+      <button class="genre-filter-pill px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-gray-200 text-gray-700 hover:border-navy" data-genre="fantasy">
+        🏰 Fantasy
+      </button>
+      <button class="genre-filter-pill px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-gray-200 text-gray-700 hover:border-navy" data-genre="mystery">
+        🔍 Mystery
+      </button>
+      <button class="genre-filter-pill px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-gray-200 text-gray-700 hover:border-navy" data-genre="horror">
+        👻 Horror
+      </button>
+      <button class="genre-filter-pill px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-gray-200 text-gray-700 hover:border-navy" data-genre="romance">
+        💖 Romance
+      </button>
+      <button class="genre-filter-pill px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-gray-200 text-gray-700 hover:border-navy" data-genre="historical">
+        🏛️ Historical
+      </button>
+      <button class="genre-filter-pill px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-gray-200 text-gray-700 hover:border-navy" data-genre="kids">
+        🧒 Kids
+      </button>
+    </div>
+
+    <!-- Stories Grid Container -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="storiesGrid">
+      <!-- Injected via JavaScript -->
+    </div>
+  </main>
+
+  <!-- App-Style Bottom Navigation Bar (Mobile / Responsive) -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-200 px-4 py-2 flex items-center justify-around shadow-lg">
+    <a href="index.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-navy">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+      </svg>
+      <span class="text-[10px] font-bold" data-i18n="nav.home">Home</span>
+    </a>
+
+    <a href="stories.html" class="flex flex-col items-center gap-1 text-forest font-bold">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+      </svg>
+      <span class="text-[10px] font-bold" data-i18n="nav.stories">Stories</span>
+    </a>
+
+    <a href="books.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-navy">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+      </svg>
+      <span class="text-[10px] font-bold" data-i18n="nav.ebooks">eBooks</span>
+    </a>
+
+    <a href="audiobooks.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-navy">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+      </svg>
+      <span class="text-[10px] font-bold" data-i18n="nav.audio">Audio</span>
+    </a>
+
+    <a href="account.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-navy">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+      </svg>
+      <span class="text-[10px] font-bold" data-i18n="nav.my_library">My Library</span>
+    </a>
+  </nav>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/stories.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let activeDay = 'all';
+      let activeGenre = 'all';
+      let searchQuery = '';
+
+      const storiesGrid = document.getElementById('storiesGrid');
+      const dayTabs = document.querySelectorAll('.day-tab');
+      const genrePills = document.querySelectorAll('.genre-filter-pill');
+      const storySearchInput = document.getElementById('storySearchInput');
+
+      function renderStoriesList() {
+        const stories = SocialReadersStories.getAllStories();
+        const lang = getLanguage() || 'en';
+
+        const filtered = stories.filter(s => {
+          const matchDay = activeDay === 'all' || s.releaseDay.toLowerCase() === activeDay.toLowerCase();
+          const matchGenre = activeGenre === 'all' || s.genre.toLowerCase() === activeGenre.toLowerCase();
+          const title = (s.title[lang] || s.title.en).toLowerCase();
+          const author = (s.author[lang] || s.author.en).toLowerCase();
+          const matchSearch = searchQuery === '' || title.includes(searchQuery) || author.includes(searchQuery);
+          return matchDay && matchGenre && matchSearch;
+        });
+
+        if (filtered.length === 0) {
+          storiesGrid.innerHTML = `
+            <div class="col-span-full py-16 text-center">
+              <p class="text-gray-400 font-bold text-lg">No novel series match this filter.</p>
+              <button onclick="resetFilters()" class="mt-4 px-4 py-2 rounded-xl bg-navy text-white text-xs font-bold">Reset Filters</button>
+            </div>
+          `;
+          return;
+        }
+
+        storiesGrid.innerHTML = filtered.map(story => {
+          const title = story.title[lang] || story.title.en;
+          const author = story.author[lang] || story.author.en;
+          const progress = SocialReadersStories.getUserProgress(story.id);
+          const currentEp = progress.currentEp || story.currentEpisode || 1;
+          const totalEp = story.totalEpisodes || 20;
+          const percent = progress.percent || Math.round((currentEp / totalEp) * 100);
+
+          return `
+            <div class="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-lg transition-all flex flex-col group">
+              <!-- Cover Image Area -->
+              <div class="relative aspect-[3/4] overflow-hidden bg-slate-900">
+                <img src="${story.coverUrl}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                
+                <!-- Genre Tag Pill -->
+                <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-navy/80 text-white backdrop-blur-md border border-white/20">
+                  ${story.genre}
+                </span>
+
+                <!-- Release Day Badge -->
+                <span class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-600/90 text-white backdrop-blur-md">
+                  ${story.releaseDay}s
+                </span>
+              </div>
+
+              <!-- Content Area -->
+              <div class="p-4 flex flex-col flex-1 justify-between">
+                <div>
+                  <h3 class="font-bold text-navy text-base line-clamp-1 group-hover:text-brandOrange transition-colors">${title}</h3>
+                  <p class="text-xs text-gray-500 font-medium mt-0.5">By ${author}</p>
+                </div>
+
+                <!-- Progress and Action Area -->
+                <div class="mt-4 pt-3 border-t border-gray-100">
+                  <div class="flex items-center justify-between text-xs font-bold mb-1.5">
+                    <span class="text-gray-700">Episode ${String(currentEp).padStart(2, '0')} / ${totalEp}</span>
+                    <span class="text-forest">${percent}%</span>
+                  </div>
+                  <div class="story-progress-bg">
+                    <div class="story-progress-fill" style="width: ${percent}%"></div>
+                  </div>
+
+                  <a href="story-reader.html?id=${story.id}&ep=${currentEp}" class="mt-4 w-full py-2.5 rounded-xl bg-forest hover:bg-green-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-sm">
+                    <span>Read Episode ${currentEp}</span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      window.resetFilters = function() {
+        activeDay = 'all';
+        activeGenre = 'all';
+        searchQuery = '';
+        dayTabs.forEach(t => t.className = t.dataset.day === 'all' ? 'day-tab px-4 py-2 rounded-xl text-xs font-bold bg-white text-navy' : 'day-tab px-4 py-2 rounded-xl text-xs font-bold bg-white/10 text-white hover:bg-white/20');
+        genrePills.forEach(p => p.className = p.dataset.genre === 'all' ? 'genre-filter-pill px-4 py-1.5 rounded-full text-xs font-bold bg-navy text-white' : 'genre-filter-pill px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-gray-200 text-gray-700');
+        renderStoriesList();
+      };
+
+      // Day filter rail clicks
+      dayTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          dayTabs.forEach(t => t.className = 'day-tab px-4 py-2 rounded-xl text-xs font-bold bg-white/10 text-white hover:bg-white/20 transition-all');
+          tab.className = 'day-tab px-4 py-2 rounded-xl text-xs font-bold bg-white text-navy shadow-sm transition-all';
+          activeDay = tab.getAttribute('data-day');
+          renderStoriesList();
+        });
+      });
+
+      // Genre filter pills clicks
+      genrePills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          genrePills.forEach(p => p.className = 'genre-filter-pill px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-gray-200 text-gray-700 hover:border-navy');
+          pill.className = 'genre-filter-pill px-4 py-1.5 rounded-full text-xs font-bold bg-navy text-white shadow-sm';
+          activeGenre = pill.getAttribute('data-genre');
+          renderStoriesList();
+        });
+      });
+
+      // Search input
+      storySearchInput?.addEventListener('input', (e) => {
+        searchQuery = e.target.value.toLowerCase().trim();
+        renderStoriesList();
+      });
+
+      renderStoriesList();
+    });
+  </script>
+</body>
+</html>

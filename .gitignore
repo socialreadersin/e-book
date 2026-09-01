@@ -4,3 +4,8 @@ node_modules/
 *.log
 bun.lock
 bun.lockb
+js/firebase-config.js
+firebase-config.js
+.env
+.env.local
+.env.*

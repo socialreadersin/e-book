@@ -482,3 +482,170 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   text-transform: uppercase;
 }
 
+/* 7. Episodic Novel Stories & Mockup Component Styles */
+.genre-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 0.5rem;
+  border-radius: 1rem;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.genre-chip:hover {
+  transform: translateY(-3px);
+  border-color: #0B2C5D;
+  box-shadow: 0 8px 16px -4px rgba(11, 44, 93, 0.08);
+}
+
+.genre-chip.active {
+  background: #0B2C5D;
+  color: #FFFFFF;
+  border-color: #0B2C5D;
+}
+
+.genre-chip.active span {
+  color: #FFFFFF !important;
+}
+
+/* Progress bar inside story cards */
+.story-progress-bg {
+  width: 100%;
+  height: 4px;
+  background: #E5E7EB;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.story-progress-fill {
+  height: 100%;
+  background: #16A34A;
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+/* Waveform Bars in Audio Section */
+.waveform-container {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 24px;
+}
+
+.waveform-bar {
+  width: 3px;
+  border-radius: 3px;
+  background: #38BDF8;
+  opacity: 0.8;
+  transition: height 0.2s ease;
+}
+
+@keyframes waveAnimate {
+  0%, 100% { height: 6px; }
+  50% { height: 22px; }
+}
+
+.waveform-playing .waveform-bar {
+  animation: waveAnimate 1.2s infinite ease-in-out;
+}
+
+.waveform-playing .waveform-bar:nth-child(2n) {
+  animation-delay: 0.2s;
+}
+
+.waveform-playing .waveform-bar:nth-child(3n) {
+  animation-delay: 0.4s;
+}
+
+.waveform-playing .waveform-bar:nth-child(4n) {
+  animation-delay: 0.15s;
+}
+
+.waveform-playing .waveform-bar:nth-child(5n) {
+  animation-delay: 0.35s;
+}
+
+/* Premium Card Gold Glow */
+.premium-gold-gradient {
+  background: linear-gradient(135deg, #091E3A 0%, #0B2C5D 60%, #173B6C 100%);
+  border: 1px solid rgba(253, 224, 71, 0.3);
+}
+
+.gold-btn {
+  background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+  color: #0B2C5D;
+  font-weight: 800;
+  transition: all 0.2s ease;
+}
+
+.gold-btn:hover {
+  background: linear-gradient(135deg, #FDE047 0%, #FBBF24 100%);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+}
+
+/* 8. Professional E-Book & Web Novel Visual Polish */
+.ebook-cover-wrapper {
+  position: relative;
+  border-radius: 0.875rem;
+  overflow: hidden;
+  box-shadow: 0 10px 25px -5px rgba(11, 44, 93, 0.15), 0 8px 10px -6px rgba(11, 44, 93, 0.1);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+}
+
+.ebook-cover-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.4) 0%, rgba(0,0,0,0.15) 60%, rgba(0,0,0,0.4) 100%);
+  z-index: 5;
+}
+
+.ebook-cover-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.25) 100%);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.ebook-cover-wrapper:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 30px -10px rgba(11, 44, 93, 0.25), 0 10px 15px -5px rgba(11, 44, 93, 0.15);
+}
+
+/* Subtle Glassmorphic Badges */
+.glass-pill {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Premium Card Elevation */
+.pro-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(229, 231, 235, 0.9);
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 20px -2px rgba(11, 44, 93, 0.04);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pro-card:hover {
+  border-color: rgba(11, 44, 93, 0.18);
+  box-shadow: 0 12px 28px -6px rgba(11, 44, 93, 0.08);
+}
+
+
+
