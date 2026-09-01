@@ -299,22 +299,31 @@ const AUDIO_STORIES = [
 ];
 
 window.SocialReadersStories = {
-  // Get all stories (from localStorage or DEFAULT)
+  // Get all stories from SocialReadersDB (Firestore) or fallback
   getAllStories() {
-    try {
-      const custom = JSON.parse(localStorage.getItem('sr_custom_stories'));
-      if (custom && Array.isArray(custom) && custom.length > 0) {
-        return custom;
-      }
-    } catch (e) {
-      console.warn("Error parsing custom stories:", e);
+    if (window.SocialReadersDB && window.SocialReadersDB._cache && window.SocialReadersDB._cache.stories) {
+      return window.SocialReadersDB._cache.stories;
     }
     return DEFAULT_STORIES;
+  },
+
+  async getAllStoriesAsync() {
+    if (window.SocialReadersDB && window.SocialReadersDB.getStories) {
+      return await window.SocialReadersDB.getStories();
+    }
+    return this.getAllStories();
   },
 
   getStoryById(id) {
     const stories = this.getAllStories();
     return stories.find(s => s.id === id) || DEFAULT_STORIES[0];
+  },
+
+  async getStoryByIdAsync(id) {
+    if (window.SocialReadersDB && window.SocialReadersDB.getStoryById) {
+      return await window.SocialReadersDB.getStoryById(id);
+    }
+    return this.getStoryById(id);
   },
 
   getTrendingStory() {
@@ -372,24 +381,17 @@ window.SocialReadersStories = {
     }
   },
 
-  // Admin: Save or update series
-  saveStory(storyData) {
-    const stories = this.getAllStories();
-    const existingIndex = stories.findIndex(s => s.id === storyData.id);
-    if (existingIndex >= 0) {
-      stories[existingIndex] = { ...stories[existingIndex], ...storyData };
-    } else {
-      storyData.id = storyData.id || `story_${Date.now()}`;
-      stories.push(storyData);
+  // Save story directly to Firestore
+  async saveStory(storyData) {
+    if (window.SocialReadersDB && window.SocialReadersDB.saveStory) {
+      return await window.SocialReadersDB.saveStory(storyData);
     }
-    localStorage.setItem('sr_custom_stories', JSON.stringify(stories));
     return storyData;
   },
 
-  // Admin: Add episode to series
-  addEpisode(storyId, episodeData) {
-    const stories = this.getAllStories();
-    const story = stories.find(s => s.id === storyId);
+  // Add episode to series
+  async addEpisode(storyId, episodeData) {
+    const story = await this.getStoryByIdAsync(storyId);
     if (!story) return null;
     if (!story.episodes) story.episodes = [];
     episodeData.id = episodeData.id || `ep_${storyId}_${Date.now()}`;
@@ -398,14 +400,14 @@ window.SocialReadersStories = {
     if (story.currentEpisode > story.totalEpisodes) {
       story.totalEpisodes = story.currentEpisode;
     }
-    this.saveStory(story);
+    await this.saveStory(story);
     return episodeData;
   },
 
-  deleteStory(storyId) {
-    let stories = this.getAllStories();
-    stories = stories.filter(s => s.id !== storyId);
-    localStorage.setItem('sr_custom_stories', JSON.stringify(stories));
+  async deleteStory(storyId) {
+    if (window.SocialReadersDB && window.SocialReadersDB.deleteStory) {
+      return await window.SocialReadersDB.deleteStory(storyId);
+    }
     return true;
   }
 };

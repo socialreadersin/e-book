@@ -155,146 +155,10 @@
                 <th class="py-3.5 px-6 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-gray-100">
-              
-              <!-- Cat 1 -->
-              <tr class="hover:bg-gray-50/80 transition-colors">
-                <td class="py-4 px-6 font-semibold text-navy">
-                  <div class="font-bold text-sm">Self Development</div>
-                  <div class="text-xs text-gray-400">சுய முன்னேற்றம்</div>
-                </td>
-                <td class="py-4 px-4 font-mono text-xs text-gray-500">self-development</td>
-                <td class="py-4 px-4 font-bold text-navy">14 Books</td>
-                <td class="py-4 px-4 font-bold text-purple-700">8 Audio</td>
-                <td class="py-4 px-4">
-                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                    Active
-                  </span>
-                </td>
-                <td class="py-4 px-6 text-right">
-                  <div class="inline-flex items-center gap-2">
-                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
-                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">Delete</button>
-                  </div>
-                </td>
+            <tbody id="admin-categories-tbody" class="divide-y divide-gray-100">
+              <tr>
+                <td colspan="6" class="py-8 text-center text-xs text-gray-500">Loading categories from Firestore...</td>
               </tr>
-
-              <!-- Cat 2 -->
-              <tr class="hover:bg-gray-50/80 transition-colors">
-                <td class="py-4 px-6 font-semibold text-navy">
-                  <div class="font-bold text-sm">Business &amp; Finance</div>
-                  <div class="text-xs text-gray-400">வணிகம் மற்றும் நிதி</div>
-                </td>
-                <td class="py-4 px-4 font-mono text-xs text-gray-500">business-finance</td>
-                <td class="py-4 px-4 font-bold text-navy">10 Books</td>
-                <td class="py-4 px-4 font-bold text-purple-700">5 Audio</td>
-                <td class="py-4 px-4">
-                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                    Active
-                  </span>
-                </td>
-                <td class="py-4 px-6 text-right">
-                  <div class="inline-flex items-center gap-2">
-                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
-                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">Delete</button>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Cat 3 -->
-              <tr class="hover:bg-gray-50/80 transition-colors">
-                <td class="py-4 px-6 font-semibold text-navy">
-                  <div class="font-bold text-sm">Health &amp; Mindset</div>
-                  <div class="text-xs text-gray-400">ஆரோக்கியம் மற்றும் மனநிலை</div>
-                </td>
-                <td class="py-4 px-4 font-mono text-xs text-gray-500">health-mindset</td>
-                <td class="py-4 px-4 font-bold text-navy">6 Books</td>
-                <td class="py-4 px-4 font-bold text-purple-700">3 Audio</td>
-                <td class="py-4 px-4">
-                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                    Active
-                  </span>
-                </td>
-                <td class="py-4 px-6 text-right">
-                  <div class="inline-flex items-center gap-2">
-                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
-                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">Delete</button>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Cat 4 -->
-              <tr class="hover:bg-gray-50/80 transition-colors">
-                <td class="py-4 px-6 font-semibold text-navy">
-                  <div class="font-bold text-sm">Biographies &amp; Memoirs</div>
-                  <div class="text-xs text-gray-400">சுயசரிதைகள்</div>
-                </td>
-                <td class="py-4 px-4 font-mono text-xs text-gray-500">biographies</td>
-                <td class="py-4 px-4 font-bold text-navy">8 Books</td>
-                <td class="py-4 px-4 font-bold text-purple-700">4 Audio</td>
-                <td class="py-4 px-4">
-                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                    Active
-                  </span>
-                </td>
-                <td class="py-4 px-6 text-right">
-                  <div class="inline-flex items-center gap-2">
-                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
-                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">Delete</button>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Cat 5 -->
-              <tr class="hover:bg-gray-50/80 transition-colors">
-                <td class="py-4 px-6 font-semibold text-navy">
-                  <div class="font-bold text-sm">Fiction &amp; Literature</div>
-                  <div class="text-xs text-gray-400">புனைகதை மற்றும் இலக்கியம்</div>
-                </td>
-                <td class="py-4 px-4 font-mono text-xs text-gray-500">fiction</td>
-                <td class="py-4 px-4 font-bold text-navy">5 Books</td>
-                <td class="py-4 px-4 font-bold text-purple-700">2 Audio</td>
-                <td class="py-4 px-4">
-                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                    Active
-                  </span>
-                </td>
-                <td class="py-4 px-6 text-right">
-                  <div class="inline-flex items-center gap-2">
-                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
-                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">Delete</button>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Cat 6 -->
-              <tr class="hover:bg-gray-50/80 transition-colors">
-                <td class="py-4 px-6 font-semibold text-navy">
-                  <div class="font-bold text-sm">Tamil Classics &amp; Novels</div>
-                  <div class="text-xs text-gray-400">தமிழ் நாவல்கள் &bull; சிறப்புத் தொகுப்பு</div>
-                </td>
-                <td class="py-4 px-4 font-mono text-xs text-gray-500">tamil</td>
-                <td class="py-4 px-4 font-bold text-navy">5 Books</td>
-                <td class="py-4 px-4 font-bold text-purple-700">2 Audio</td>
-                <td class="py-4 px-4">
-                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                    Active
-                  </span>
-                </td>
-                <td class="py-4 px-6 text-right">
-                  <div class="inline-flex items-center gap-2">
-                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
-                    <button class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">Delete</button>
-                  </div>
-                </td>
-              </tr>
-
             </tbody>
           </table>
         </div>
@@ -303,37 +167,39 @@
     </main>
   </div>
 
-  <!-- ADD CATEGORY MODAL -->
+  <!-- ADD / EDIT CATEGORY MODAL -->
   <div id="category-modal" class="fixed inset-0 z-50 bg-navy/60 backdrop-blur-sm hidden items-center justify-center p-4 sm:p-6">
     <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
       <div class="px-6 py-5 bg-navy text-white flex items-center justify-between">
-        <h2 class="text-lg font-bold font-heading">Add Category</h2>
+        <h2 id="cat-modal-title" class="text-lg font-bold font-heading">Add Category</h2>
         <button id="close-cat-modal" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
       </div>
 
       <form id="category-form" class="p-6 space-y-4 text-xs text-gray-700">
+        <input type="hidden" id="edit-cat-id" value="">
+
         <div>
           <label class="block font-bold text-navy mb-1">Category Name (English) *</label>
-          <input type="text" required placeholder="e.g. Science & Technology" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy">
+          <input type="text" id="cat-name-en" required placeholder="e.g. Science & Technology" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy">
         </div>
         <div>
           <label class="block font-bold text-navy mb-1">Category Name (Tamil / தமிழ்) *</label>
-          <input type="text" required placeholder="e.g. அறிவியல் மற்றும் தொழில்நுட்பம்" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy">
+          <input type="text" id="cat-name-ta" required placeholder="e.g. அறிவியல் மற்றும் தொழில்நுட்பம்" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy">
         </div>
         <div>
           <label class="block font-bold text-navy mb-1">URL Slug</label>
-          <input type="text" placeholder="e.g. science-tech" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy">
+          <input type="text" id="cat-slug" placeholder="e.g. science-tech" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy">
         </div>
         <div>
           <label class="block font-bold text-navy mb-1">Description (Optional)</label>
-          <textarea rows="2" placeholder="Brief category description..." class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy"></textarea>
+          <textarea id="cat-desc" rows="2" placeholder="Brief category description..." class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy"></textarea>
         </div>
 
         <div class="pt-3 border-t border-gray-100 flex items-center justify-end gap-3">
           <button type="button" id="cancel-cat-modal" class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-bold hover:bg-gray-100 transition-colors">Cancel</button>
-          <button type="submit" class="px-6 py-2.5 rounded-xl bg-forest hover:bg-green-700 text-white font-bold shadow-md transition-all">Save Category</button>
+          <button type="submit" id="save-cat-submit-btn" class="px-6 py-2.5 rounded-xl bg-forest hover:bg-green-700 text-white font-bold shadow-md transition-all">Save Category</button>
         </div>
       </form>
     </div>
@@ -357,24 +223,134 @@
     const cancelCatBtn = document.getElementById('cancel-cat-modal');
     const catForm = document.getElementById('category-form');
 
-    openCatBtn.addEventListener('click', () => {
+    let allCategories = [];
+    let allBooks = [];
+
+    async function loadCategories() {
+      const tbody = document.getElementById('admin-categories-tbody');
+      tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-gray-500">Loading categories from Firestore...</td></tr>`;
+
+      try {
+        allCategories = await window.SocialReadersDB.getCategories();
+        allBooks = await window.SocialReadersDB.getBooks(true);
+        renderCategories();
+      } catch (err) {
+        console.error("Error loading categories:", err);
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-red-500">Error loading categories. Please check Firestore connection.</td></tr>`;
+      }
+    }
+
+    function renderCategories() {
+      const tbody = document.getElementById('admin-categories-tbody');
+      if (!allCategories.length) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-gray-500">No categories found. Click "Add Category" to create one.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = allCategories.map(cat => {
+        const nameEn = typeof cat.name === 'object' ? cat.name.en : (cat.name || 'Category');
+        const nameTa = typeof cat.name === 'object' ? (cat.name.ta || '') : '';
+        const slug = cat.slug || cat.id;
+
+        // Calculate actual books in this category
+        const catBooks = allBooks.filter(b => b.category === cat.id || b.category === slug);
+        const bookCount = catBooks.length;
+        const audioCount = catBooks.filter(b => b.type === 'audiobook' || b.type === 'both' || b.audioUrl).length;
+
+        return `
+          <tr class="hover:bg-gray-50/80 transition-colors">
+            <td class="py-4 px-6 font-semibold text-navy">
+              <div class="font-bold text-sm">${nameEn}</div>
+              <div class="text-xs text-gray-400 font-tamil">${nameTa}</div>
+            </td>
+            <td class="py-4 px-4 font-mono text-xs text-gray-500">${slug}</td>
+            <td class="py-4 px-4 font-bold text-navy">${bookCount} Books</td>
+            <td class="py-4 px-4 font-bold text-purple-700">${audioCount} Audio</td>
+            <td class="py-4 px-4">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                Active
+              </span>
+            </td>
+            <td class="py-4 px-6 text-right">
+              <div class="inline-flex items-center gap-2">
+                <button type="button" onclick="editCategory('${cat.id}')" class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
+                <button type="button" onclick="deleteCategory('${cat.id}', '${nameEn}')" class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">Delete</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openCategoryModal(isEdit = false) {
+      document.getElementById('cat-modal-title').textContent = isEdit ? 'Edit Category' : 'Add Category';
       catModal.classList.remove('hidden');
       catModal.classList.add('flex');
-    });
+    }
 
     function closeCategoryModal() {
       catModal.classList.add('hidden');
       catModal.classList.remove('flex');
+      catForm.reset();
+      document.getElementById('edit-cat-id').value = '';
     }
 
+    openCatBtn.addEventListener('click', () => openCategoryModal(false));
     closeCatBtn.addEventListener('click', closeCategoryModal);
     cancelCatBtn.addEventListener('click', closeCategoryModal);
 
-    catForm.addEventListener('submit', (e) => {
+    window.editCategory = function(catId) {
+      const cat = allCategories.find(c => c.id === catId);
+      if (!cat) return;
+
+      document.getElementById('edit-cat-id').value = cat.id;
+      document.getElementById('cat-name-en').value = typeof cat.name === 'object' ? cat.name.en : cat.name;
+      document.getElementById('cat-name-ta').value = typeof cat.name === 'object' ? (cat.name.ta || '') : '';
+      document.getElementById('cat-slug').value = cat.slug || cat.id;
+      document.getElementById('cat-desc').value = cat.description || '';
+
+      openCategoryModal(true);
+    };
+
+    window.deleteCategory = async function(catId, catName) {
+      if (confirm(`Are you sure you want to delete category "${catName}" from Firestore?`)) {
+        await window.SocialReadersDB.deleteCategory(catId);
+        await loadCategories();
+      }
+    };
+
+    catForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      alert('Category added successfully!');
+      const saveBtn = document.getElementById('save-cat-submit-btn');
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving to Firestore...';
+
+      const existingId = document.getElementById('edit-cat-id').value;
+      const nameEn = document.getElementById('cat-name-en').value.trim();
+      const nameTa = document.getElementById('cat-name-ta').value.trim();
+      const slugInput = document.getElementById('cat-slug').value.trim();
+      const slug = slugInput || nameEn.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+      const catData = {
+        id: existingId || slug,
+        slug: slug,
+        name: {
+          en: nameEn,
+          ta: nameTa
+        },
+        description: document.getElementById('cat-desc').value.trim(),
+        status: 'active'
+      };
+
+      await window.SocialReadersDB.saveCategory(catData);
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Save Category';
       closeCategoryModal();
+      await loadCategories();
     });
+
+    document.addEventListener('DOMContentLoaded', loadCategories);
   </script>
 
 </body>

@@ -1,14 +1,14 @@
 /**
- * Social Readers - Real Firebase Configuration & Firestore Integration
+ * Social Readers - Pure Firebase Firestore Integration
  * Firebase Web SDK (v10+ Compat CDN)
- * Supports Cloud Firestore, Firebase Auth, and Store Settings
+ * Full First-Class CRUD for Books, Categories, Deals, Stories, Orders, and Store Settings
  */
 
 const firebaseConfig = {
-  apiKey: localStorage.getItem('sr_firebase_api_key') || "AIzaSyDRz477R0X0lexNOSsHZiUmNs3ut5VzaWk",
-  authDomain: localStorage.getItem('sr_firebase_auth_domain') || "e-book-7c31a.firebaseapp.com",
-  projectId: localStorage.getItem('sr_firebase_project_id') || "e-book-7c31a",
-  storageBucket: localStorage.getItem('sr_firebase_storage_bucket') || "e-book-7c31a.firebasestorage.app",
+  apiKey: "AIzaSyDRz477R0X0lexNOSsHZiUmNs3ut5VzaWk",
+  authDomain: "e-book-7c31a.firebaseapp.com",
+  projectId: "e-book-7c31a",
+  storageBucket: "e-book-7c31a.firebasestorage.app",
   messagingSenderId: "34774269799",
   appId: "1:34774269799:web:225f344859794de1a139c2",
   measurementId: "G-Y5HDMGDDPR"
@@ -30,7 +30,7 @@ try {
     firebaseAuth = firebase.auth();
   }
 } catch (err) {
-  console.warn("Firebase initialization warning (running in resilience mode):", err);
+  console.warn("Firebase initialization notice:", err);
 }
 
 // Global Firebase / Firestore database wrapper
@@ -41,7 +41,19 @@ window.SocialReadersDB = {
   auth: firebaseAuth,
   isLive: !!firestoreDb,
 
-  // Initial seed data for books
+  // In-memory runtime cache for high-speed synchronous rendering
+  _cache: {
+    books: null,
+    categories: null,
+    deals: null,
+    stories: null,
+    orders: null,
+    settings: null
+  },
+
+  // -------------------------------------------------------------
+  // INITIAL SEED DATA DEFINITIONS (Populated directly into Firestore)
+  // -------------------------------------------------------------
   getInitialBooks() {
     return [
       {
@@ -157,17 +169,17 @@ window.SocialReadersDB = {
         rating: 5.0,
         reviewsCount: 1240,
         description: {
-          en: "An inspiring autobiography of an ordinary boy from Rameswaram who went on to become the Missile Man of India.",
-          ta: "ராமேஸ்வரத்தில் பிறந்து இந்தியாவின் ஏவுகணை மனிதராக உயர்ந்த ஒரு மாமனிதரின் உத்வேக சுயசரிதை."
+          en: "The inspiring autobiography of India's Missile Man and beloved former President, Dr. A.P.J. Abdul Kalam.",
+          ta: "இந்தியாவின் ஏவுகணை நாயகன் மற்றும் பாரத ரத்னா டாக்டர் ஏ.பி.ஜே. அப்துல் கலாமின் உத்வேகமூட்டும் வாழ்க்கை வரலாறு."
         },
         createdAt: new Date().toISOString()
       },
       {
         id: "b6",
-        title: { en: "Ikigai: The Japanese Secret", ta: "இக்கிகாய்" },
-        author: { en: "Héctor García & F. Miralles", ta: "ஹெக்டர் கார்சியா" },
+        title: { en: "Ikigai", ta: "இக்கிகாய்" },
+        author: { en: "Héctor García", ta: "ஹெக்டர் கார்சியா" },
         priceEbook: 169,
-        priceAudiobook: 199,
+        priceAudiobook: 229,
         price: 169,
         category: "health",
         type: "audiobook",
@@ -176,13 +188,13 @@ window.SocialReadersDB = {
         coverUrl: "assets/cover-ikigai.svg",
         pdfUrl: "",
         audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
-        audioDuration: "3 hrs 50 mins",
-        narrator: "Naoko Mori",
+        audioDuration: "4 hrs 50 mins",
+        narrator: "Héctor García",
         rating: 4.7,
-        reviewsCount: 260,
+        reviewsCount: 290,
         description: {
-          en: "The Japanese secret to a long, happy and purposeful life. Discover your reason for getting up every morning.",
-          ta: "நீண்ட மற்றும் மகிழ்ச்சியான வாழ்விற்கான ஜப்பானிய ரகசியம். வாழ்வின் நோக்கத்தைக் கண்டறியுங்கள்."
+          en: "The Japanese secret to a long and happy life. Discover your reason for being and live with purpose.",
+          ta: "நீண்ட மற்றும் மகிழ்ச்சியான வாழ்க்கைக்கான ஜப்பானிய ரகசியம். உங்கள் வாழ்க்கையின் நோக்கத்தைக் கண்டறியுங்கள்."
         },
         createdAt: new Date().toISOString()
       },
@@ -235,7 +247,130 @@ window.SocialReadersDB = {
     ];
   },
 
-  // Fetch all books (async with Firestore, falls back to local cache)
+  getInitialCategories() {
+    return [
+      {
+        id: "selfdev",
+        slug: "self-development",
+        name: { en: "Self Development", ta: "சுய முன்னேற்றம்" },
+        description: "Actionable guides on habit building, mindset, focus, and life success.",
+        status: "active",
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: "business",
+        slug: "business-finance",
+        name: { en: "Business & Finance", ta: "வணிகம் மற்றும் நிதி" },
+        description: "Wealth building, investing, entrepreneurship, and economics.",
+        status: "active",
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: "health",
+        slug: "health-mindset",
+        name: { en: "Health & Mindset", ta: "ஆரோக்கியம் மற்றும் மனநிலை" },
+        description: "Mental resilience, wellness, longevity, and mindfulness.",
+        status: "active",
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: "biography",
+        slug: "biographies",
+        name: { en: "Biographies & Memoirs", ta: "சுயசரிதைகள்" },
+        description: "Inspiring life journeys of visionary leaders and change-makers.",
+        status: "active",
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: "fiction",
+        slug: "fiction",
+        name: { en: "Fiction & Literature", ta: "புனைகதை மற்றும் இலக்கியம்" },
+        description: "Classic stories, gripping dramas, and contemporary tales.",
+        status: "active",
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: "tamil",
+        slug: "tamil-classics",
+        name: { en: "Tamil Classics & Novels", ta: "தமிழ் நாவல்கள்" },
+        description: "Timeless Tamil literary epics and modern serials.",
+        status: "active",
+        createdAt: new Date().toISOString()
+      }
+    ];
+  },
+
+  getInitialDeals() {
+    return [
+      {
+        id: "d1",
+        bookId: "b1",
+        title: "Atomic Habits (Audiobook Flash Deal)",
+        coverUrl: "assets/cover-atomic-habits.svg",
+        originalPrice: 299,
+        dealPrice: 149,
+        discountPercent: 50,
+        startTime: "2026-09-01T00:00:00.000Z",
+        endTime: "2026-09-05T23:59:59.000Z",
+        status: "active",
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: "d2",
+        bookId: "b4",
+        title: "Rich Dad Poor Dad (Special Promo)",
+        coverUrl: "assets/cover-rich-dad.svg",
+        originalPrice: 249,
+        dealPrice: 159,
+        discountPercent: 36,
+        startTime: "2026-09-01T00:00:00.000Z",
+        endTime: "2026-09-06T23:59:59.000Z",
+        status: "active",
+        createdAt: new Date().toISOString()
+      }
+    ];
+  },
+
+  getInitialStories() {
+    return [
+      {
+        id: "s1",
+        title: { en: "Chronicles of the Chola Horizon", ta: "சோழர் அடிவானத்தின் சரித்திரம்" },
+        author: { en: "K. R. Sundaram", ta: "கே. ஆர். சுந்தரம்" },
+        genre: "Historical Fiction",
+        releaseDay: "Friday",
+        coverUrl: "assets/cover-atomic-habits.svg",
+        totalEpisodes: 24,
+        currentEpisode: 12,
+        status: "ongoing",
+        description: {
+          en: "A gripping epic following seafaring warriors across the Bay of Bengal defending ancient trade routes.",
+          ta: "வங்காள விரிகுடாவில் பண்டைய வர்த்தகப் பாதைகளைப் பாதுகாக்கும் கடற்படை வீரர்களின் வீரகதை."
+        },
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: "s2",
+        title: { en: "Whispers of the Nilgiri Mists", ta: "நீலகிரி மூடுபனியின் ரகசியங்கள்" },
+        author: { en: "Ananya Sharma", ta: "அனன்யா சர்மா" },
+        genre: "Mystery / Thriller",
+        releaseDay: "Sunday",
+        coverUrl: "assets/cover-mindset.svg",
+        totalEpisodes: 16,
+        currentEpisode: 8,
+        status: "ongoing",
+        description: {
+          en: "An unsolved disappearance in an isolated tea estate unravels three decades of forgotten secrets.",
+          ta: "ஒரு தனிமைப்படுத்தப்பட்ட தேயிலைத் தோட்டத்தில் நடக்கும் புதிரான மர்ம நாவல்."
+        },
+        createdAt: new Date().toISOString()
+      }
+    ];
+  },
+
+  // -------------------------------------------------------------
+  // 1. BOOKS CRUD (Direct Cloud Firestore)
+  // -------------------------------------------------------------
   async getBooks(includeDrafts = false) {
     if (this.db) {
       try {
@@ -246,49 +381,28 @@ window.SocialReadersDB = {
         const snapshot = await query.get();
         if (!snapshot.empty) {
           const books = [];
-          snapshot.forEach(doc => {
-            books.push({ id: doc.id, ...doc.data() });
-          });
-          localStorage.setItem('sr_books', JSON.stringify(books));
+          snapshot.forEach(doc => books.push({ id: doc.id, ...doc.data() }));
+          this._cache.books = books;
           return books;
+        } else {
+          // Auto-seed initial books into Firestore
+          await this.seedBooksToFirestore();
+          return this.getBooks(includeDrafts);
         }
       } catch (err) {
-        console.warn("Firestore fetchBooks error, using cached data:", err);
-      }
-    }
-
-    // Fallback to localStorage or seed
-    const saved = localStorage.getItem('sr_books');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        return includeDrafts ? parsed : parsed.filter(b => b.status !== 'draft');
-      } catch (e) {
-        console.error(e);
+        console.warn("Firestore getBooks notice:", err);
       }
     }
     const initial = this.getInitialBooks();
-    localStorage.setItem('sr_books', JSON.stringify(initial));
+    this._cache.books = initial;
     return includeDrafts ? initial : initial.filter(b => b.status !== 'draft');
   },
 
-  // Synchronous getter for legacy UI renderers
   getBooksSync(includeDrafts = false) {
-    const saved = localStorage.getItem('sr_books');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        return includeDrafts ? parsed : parsed.filter(b => b.status !== 'draft');
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    const initial = this.getInitialBooks();
-    localStorage.setItem('sr_books', JSON.stringify(initial));
-    return includeDrafts ? initial : initial.filter(b => b.status !== 'draft');
+    const list = this._cache.books || this.getInitialBooks();
+    return includeDrafts ? list : list.filter(b => b.status !== 'draft');
   },
 
-  // Fetch single book by ID
   async getBookById(id) {
     if (this.db) {
       try {
@@ -297,14 +411,13 @@ window.SocialReadersDB = {
           return { id: doc.id, ...doc.data() };
         }
       } catch (err) {
-        console.warn("Firestore getBookById error, falling back:", err);
+        console.warn("Firestore getBookById notice:", err);
       }
     }
-    const books = this.getBooksSync(true);
+    const books = await this.getBooks(true);
     return books.find(b => b.id === id) || books[0];
   },
 
-  // Save book (create or update in Firestore & local cache)
   async saveBook(bookData) {
     const bookId = bookData.id || `b_${Date.now()}`;
     const cleanData = {
@@ -317,96 +430,278 @@ window.SocialReadersDB = {
       try {
         await this.db.collection('books').doc(bookId).set(cleanData, { merge: true });
       } catch (err) {
-        console.warn("Firestore saveBook error (persisting locally):", err);
+        console.error("Firestore saveBook error:", err);
       }
     }
 
-    // Update local cache
-    const currentBooks = this.getBooksSync(true);
-    const existingIndex = currentBooks.findIndex(b => b.id === bookId);
-    if (existingIndex >= 0) {
-      currentBooks[existingIndex] = cleanData;
-    } else {
-      currentBooks.unshift(cleanData);
-    }
-    localStorage.setItem('sr_books', JSON.stringify(currentBooks));
+    // Refresh memory cache
+    await this.getBooks(true);
     return cleanData;
   },
 
-  // Delete book
   async deleteBook(bookId) {
     if (this.db) {
       try {
         await this.db.collection('books').doc(bookId).delete();
       } catch (err) {
-        console.warn("Firestore deleteBook error:", err);
+        console.error("Firestore deleteBook error:", err);
       }
     }
-    const currentBooks = this.getBooksSync(true).filter(b => b.id !== bookId);
-    localStorage.setItem('sr_books', JSON.stringify(currentBooks));
+    await this.getBooks(true);
     return true;
   },
 
-  // Orders Management
+  async seedBooksToFirestore() {
+    if (!this.db) return;
+    const initial = this.getInitialBooks();
+    const batch = this.db.batch();
+    initial.forEach(b => {
+      const ref = this.db.collection('books').doc(b.id);
+      batch.set(ref, b, { merge: true });
+    });
+    await batch.commit();
+  },
+
+  // -------------------------------------------------------------
+  // 2. CATEGORIES CRUD (Direct Cloud Firestore)
+  // -------------------------------------------------------------
+  async getCategories() {
+    if (this.db) {
+      try {
+        const snapshot = await this.db.collection('categories').get();
+        if (!snapshot.empty) {
+          const cats = [];
+          snapshot.forEach(doc => cats.push({ id: doc.id, ...doc.data() }));
+          this._cache.categories = cats;
+          return cats;
+        } else {
+          await this.seedCategoriesToFirestore();
+          return this.getCategories();
+        }
+      } catch (err) {
+        console.warn("Firestore getCategories notice:", err);
+      }
+    }
+    const initial = this.getInitialCategories();
+    this._cache.categories = initial;
+    return initial;
+  },
+
+  async saveCategory(catData) {
+    const catId = catData.id || catData.slug || `cat_${Date.now()}`;
+    const cleanData = {
+      ...catData,
+      id: catId,
+      updatedAt: new Date().toISOString()
+    };
+
+    if (this.db) {
+      try {
+        await this.db.collection('categories').doc(catId).set(cleanData, { merge: true });
+      } catch (err) {
+        console.error("Firestore saveCategory error:", err);
+      }
+    }
+    await this.getCategories();
+    return cleanData;
+  },
+
+  async deleteCategory(catId) {
+    if (this.db) {
+      try {
+        await this.db.collection('categories').doc(catId).delete();
+      } catch (err) {
+        console.error("Firestore deleteCategory error:", err);
+      }
+    }
+    await this.getCategories();
+    return true;
+  },
+
+  async seedCategoriesToFirestore() {
+    if (!this.db) return;
+    const initial = this.getInitialCategories();
+    const batch = this.db.batch();
+    initial.forEach(c => {
+      const ref = this.db.collection('categories').doc(c.id);
+      batch.set(ref, c, { merge: true });
+    });
+    await batch.commit();
+  },
+
+  // -------------------------------------------------------------
+  // 3. LIGHTNING DEALS CRUD (Direct Cloud Firestore)
+  // -------------------------------------------------------------
+  async getDeals() {
+    if (this.db) {
+      try {
+        const snapshot = await this.db.collection('deals').get();
+        if (!snapshot.empty) {
+          const deals = [];
+          snapshot.forEach(doc => deals.push({ id: doc.id, ...doc.data() }));
+          this._cache.deals = deals;
+          return deals;
+        } else {
+          await this.seedDealsToFirestore();
+          return this.getDeals();
+        }
+      } catch (err) {
+        console.warn("Firestore getDeals notice:", err);
+      }
+    }
+    const initial = this.getInitialDeals();
+    this._cache.deals = initial;
+    return initial;
+  },
+
+  async saveDeal(dealData) {
+    const dealId = dealData.id || `deal_${Date.now()}`;
+    const cleanData = {
+      ...dealData,
+      id: dealId,
+      updatedAt: new Date().toISOString()
+    };
+
+    if (this.db) {
+      try {
+        await this.db.collection('deals').doc(dealId).set(cleanData, { merge: true });
+      } catch (err) {
+        console.error("Firestore saveDeal error:", err);
+      }
+    }
+    await this.getDeals();
+    return cleanData;
+  },
+
+  async deleteDeal(dealId) {
+    if (this.db) {
+      try {
+        await this.db.collection('deals').doc(dealId).delete();
+      } catch (err) {
+        console.error("Firestore deleteDeal error:", err);
+      }
+    }
+    await this.getDeals();
+    return true;
+  },
+
+  async seedDealsToFirestore() {
+    if (!this.db) return;
+    const initial = this.getInitialDeals();
+    const batch = this.db.batch();
+    initial.forEach(d => {
+      const ref = this.db.collection('deals').doc(d.id);
+      batch.set(ref, d, { merge: true });
+    });
+    await batch.commit();
+  },
+
+  // -------------------------------------------------------------
+  // 4. STORIES CRUD (Direct Cloud Firestore)
+  // -------------------------------------------------------------
+  async getStories() {
+    if (this.db) {
+      try {
+        const snapshot = await this.db.collection('stories').get();
+        if (!snapshot.empty) {
+          const stories = [];
+          snapshot.forEach(doc => stories.push({ id: doc.id, ...doc.data() }));
+          this._cache.stories = stories;
+          return stories;
+        } else {
+          await this.seedStoriesToFirestore();
+          return this.getStories();
+        }
+      } catch (err) {
+        console.warn("Firestore getStories notice:", err);
+      }
+    }
+    const initial = this.getInitialStories();
+    this._cache.stories = initial;
+    return initial;
+  },
+
+  async getStoryById(id) {
+    if (this.db) {
+      try {
+        const doc = await this.db.collection('stories').doc(id).get();
+        if (doc.exists) {
+          return { id: doc.id, ...doc.data() };
+        }
+      } catch (err) {
+        console.warn("Firestore getStoryById notice:", err);
+      }
+    }
+    const stories = await this.getStories();
+    return stories.find(s => s.id === id) || stories[0];
+  },
+
+  async saveStory(storyData) {
+    const storyId = storyData.id || `story_${Date.now()}`;
+    const cleanData = {
+      ...storyData,
+      id: storyId,
+      updatedAt: new Date().toISOString()
+    };
+
+    if (this.db) {
+      try {
+        await this.db.collection('stories').doc(storyId).set(cleanData, { merge: true });
+      } catch (err) {
+        console.error("Firestore saveStory error:", err);
+      }
+    }
+    await this.getStories();
+    return cleanData;
+  },
+
+  async deleteStory(storyId) {
+    if (this.db) {
+      try {
+        await this.db.collection('stories').doc(storyId).delete();
+      } catch (err) {
+        console.error("Firestore deleteStory error:", err);
+      }
+    }
+    await this.getStories();
+    return true;
+  },
+
+  async seedStoriesToFirestore() {
+    if (!this.db) return;
+    const initial = this.getInitialStories();
+    const batch = this.db.batch();
+    initial.forEach(s => {
+      const ref = this.db.collection('stories').doc(s.id);
+      batch.set(ref, s, { merge: true });
+    });
+    await batch.commit();
+  },
+
+  // -------------------------------------------------------------
+  // 5. ORDERS CRUD (Direct Cloud Firestore)
+  // -------------------------------------------------------------
   async getOrders() {
     if (this.db) {
       try {
         const snapshot = await this.db.collection('orders').orderBy('createdAt', 'desc').get();
         if (!snapshot.empty) {
           const orders = [];
-          snapshot.forEach(doc => {
-            orders.push({ orderId: doc.id, ...doc.data() });
-          });
-          localStorage.setItem('sr_orders', JSON.stringify(orders));
+          snapshot.forEach(doc => orders.push({ orderId: doc.id, ...doc.data() }));
+          this._cache.orders = orders;
           return orders;
         }
       } catch (err) {
-        console.warn("Firestore getOrders error, using cache:", err);
+        console.warn("Firestore getOrders notice:", err);
       }
     }
-
-    const saved = localStorage.getItem('sr_orders');
-    if (saved) {
-      try { return JSON.parse(saved); } catch (e) {}
-    }
-    return [
-      {
-        orderId: "SR-9932",
-        customerName: "Ananya S.",
-        customerEmail: "ananya.s@gmail.com",
-        bookTitle: "Atomic Habits",
-        format: "E-Book",
-        amount: 149,
-        causeShare: 37.25,
-        status: "Completed",
-        date: "28 Aug 2026",
-        createdAt: new Date().toISOString()
-      },
-      {
-        orderId: "SR-9931",
-        customerName: "Murugan K.",
-        customerEmail: "murugan.k@yahoo.com",
-        bookTitle: "Rich Dad Poor Dad",
-        format: "Audiobook",
-        amount: 199,
-        causeShare: 49.75,
-        status: "Completed",
-        date: "27 Aug 2026",
-        createdAt: new Date().toISOString()
-      }
-    ];
+    return this._cache.orders || [];
   },
 
-  // Synchronous getter for orders
   getOrdersSync() {
-    const saved = localStorage.getItem('sr_orders');
-    if (saved) {
-      try { return JSON.parse(saved); } catch (e) {}
-    }
-    return [];
+    return this._cache.orders || [];
   },
 
-  // Create order
   async createOrder(orderData) {
     const orderId = orderData.orderId || `SR-${Math.floor(1000 + Math.random() * 9000)}`;
     const fullOrder = {
@@ -419,21 +714,22 @@ window.SocialReadersDB = {
       try {
         await this.db.collection('orders').doc(orderId).set(fullOrder);
       } catch (err) {
-        console.warn("Firestore createOrder error:", err);
+        console.error("Firestore createOrder error:", err);
       }
     }
 
-    const orders = this.getOrdersSync();
-    orders.unshift(fullOrder);
-    localStorage.setItem('sr_orders', JSON.stringify(orders));
+    if (!this._cache.orders) this._cache.orders = [];
+    this._cache.orders.unshift(fullOrder);
     return fullOrder;
   },
 
-  // Store Settings (Cloudinary keys, cause percentages)
+  // -------------------------------------------------------------
+  // 6. STORE SETTINGS (Direct Cloud Firestore document settings/store)
+  // -------------------------------------------------------------
   async getSettings() {
     const defaultSettings = {
-      cloudinaryCloudName: localStorage.getItem('sr_cloudinary_cloud_name') || 'socialreaders',
-      cloudinaryUploadPreset: localStorage.getItem('sr_cloudinary_preset') || 'tfy3lcci',
+      cloudinaryCloudName: 'socialreaders',
+      cloudinaryUploadPreset: 'tfy3lcci',
       causePercentage: 25,
       educationSplit: 15,
       sportsSplit: 10,
@@ -444,18 +740,20 @@ window.SocialReadersDB = {
       try {
         const doc = await this.db.collection('settings').doc('store').get();
         if (doc.exists) {
-          return { ...defaultSettings, ...doc.data() };
+          const settings = { ...defaultSettings, ...doc.data() };
+          this._cache.settings = settings;
+          return settings;
+        } else {
+          // Initialize settings doc in Firestore
+          await this.db.collection('settings').doc('store').set(defaultSettings);
+          this._cache.settings = defaultSettings;
+          return defaultSettings;
         }
       } catch (err) {
-        console.warn("Firestore getSettings error:", err);
+        console.warn("Firestore getSettings notice:", err);
       }
     }
-
-    const saved = localStorage.getItem('sr_store_settings');
-    if (saved) {
-      try { return { ...defaultSettings, ...JSON.parse(saved) }; } catch (e) {}
-    }
-    return defaultSettings;
+    return this._cache.settings || defaultSettings;
   },
 
   async saveSettings(newSettings) {
@@ -463,31 +761,45 @@ window.SocialReadersDB = {
       try {
         await this.db.collection('settings').doc('store').set(newSettings, { merge: true });
       } catch (err) {
-        console.warn("Firestore saveSettings error:", err);
+        console.error("Firestore saveSettings error:", err);
       }
     }
-    localStorage.setItem('sr_store_settings', JSON.stringify(newSettings));
-    if (newSettings.cloudinaryCloudName) {
-      localStorage.setItem('sr_cloudinary_cloud_name', newSettings.cloudinaryCloudName);
-    }
-    if (newSettings.cloudinaryUploadPreset) {
-      localStorage.setItem('sr_cloudinary_preset', newSettings.cloudinaryUploadPreset);
-    }
+    this._cache.settings = newSettings;
     return newSettings;
   },
 
-  // One-time Admin Action: Seed Demo Data into Firestore
   async seedDemoData() {
-    const books = this.getInitialBooks();
     if (this.db) {
-      const batch = this.db.batch();
-      books.forEach(b => {
-        const ref = this.db.collection('books').doc(b.id);
-        batch.set(ref, b, { merge: true });
-      });
-      await batch.commit();
+      await Promise.all([
+        this.seedBooksToFirestore(),
+        this.seedCategoriesToFirestore(),
+        this.seedDealsToFirestore(),
+        this.seedStoriesToFirestore()
+      ]);
     }
-    localStorage.setItem('sr_books', JSON.stringify(books));
+    const books = await this.getBooks(true);
     return { success: true, count: books.length };
+  },
+
+  // Master Initializer
+  async init() {
+    try {
+      await Promise.allSettled([
+        this.getBooks(),
+        this.getCategories(),
+        this.getDeals(),
+        this.getStories(),
+        this.getSettings()
+      ]);
+    } catch (e) {
+      console.warn("SocialReadersDB pre-fetch completed.");
+    }
   }
 };
+
+// Initialize pre-fetch on script load
+if (typeof window !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', () => {
+    window.SocialReadersDB.init();
+  });
+}
