@@ -415,7 +415,7 @@ window.SocialReadersDB = {
       }
     }
     const books = await this.getBooks(true);
-    return books.find(b => b.id === id) || books[0];
+    return books.find(b => b.id === id) || null;
   },
 
   async saveBook(bookData) {

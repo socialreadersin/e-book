@@ -460,11 +460,17 @@
 
     async function loadBookDetail() {
       const urlParams = new URLSearchParams(window.location.search);
-      const bookId = urlParams.get('id') || 'b1';
+      const bookId = urlParams.get('id');
+
+      if (!bookId) {
+        showNotFoundState();
+        return;
+      }
 
       currentBook = await window.SocialReadersDB.getBookById(bookId);
       if (!currentBook) {
-        currentBook = (await window.SocialReadersDB.getBooks())[0];
+        showNotFoundState();
+        return;
       }
 
       const isTa = localStorage.getItem('sr_lang') === 'ta';
@@ -572,19 +578,32 @@
       updatePricingDisplay();
     };
 
-    function updatePricingDisplay() {
-      if (!currentBook) return;
-      const price = selectedFormat === 'audiobook' 
-        ? (currentBook.priceAudiobook || currentBook.price || 199) 
-        : (currentBook.priceEbook || currentBook.price || 149);
+    function showNotFoundState() {
+      const main = document.querySelector('main');
+      const stickyBar = document.getElementById('sticky-bottom-bar');
+      if (stickyBar) stickyBar.classList.add('hidden');
 
-      const causeShare = (price * 0.25).toFixed(2);
+      document.getElementById('page-title').textContent = "Book Not Found | Social Readers";
 
-      document.getElementById('detail-current-price').textContent = `₹${price}`;
-      document.getElementById('detail-buy-btn').textContent = `Buy Now (₹${price})`;
-      document.getElementById('sticky-price').textContent = `₹${price}`;
-      document.getElementById('sticky-title').textContent = typeof currentBook.title === 'object' ? currentBook.title.en : currentBook.title;
-      document.getElementById('detail-impact-text').textContent = `₹${causeShare} (25%) from this purchase goes directly to sponsor school textbooks and sports shoes for children in need.`;
+      main.innerHTML = `
+        <div class="max-w-2xl mx-auto py-16 px-4 text-center">
+          <div class="w-20 h-20 mx-auto rounded-3xl bg-orange-50 border border-orange-200 text-brandOrange flex items-center justify-center mb-6 shadow-sm">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-navy mb-2">Book Not Found</h1>
+          <p class="text-sm text-gray-500 max-w-md mx-auto mb-6">
+            The book or audiobook you are looking for does not exist or may have been updated.
+          </p>
+          <a href="books.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-forest hover:bg-green-700 text-white font-bold text-sm shadow-md transition-all active:scale-95">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            <span>Browse All Books</span>
+          </a>
+        </div>
+      `;
     }
 
     document.addEventListener('DOMContentLoaded', loadBookDetail);

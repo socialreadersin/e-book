@@ -6,15 +6,23 @@
 window.SocialReadersCheckout = {
   currentCartItem: null,
 
-  openCheckout(bookId, format = 'ebook') {
-    const book = window.SocialReadersDB.getBookById(bookId);
+  async openCheckout(bookId, format = 'ebook') {
+    let book = null;
+    if (window.SocialReadersDB) {
+      if (window.SocialReadersDB.getBookById) {
+        book = await window.SocialReadersDB.getBookById(bookId);
+      }
+      if (!book && window.SocialReadersDB.getBooksSync) {
+        book = window.SocialReadersDB.getBooksSync(true).find(b => b.id === bookId);
+      }
+    }
     if (!book) return;
 
     this.currentCartItem = {
       bookId: book.id,
-      title: typeof book.title === 'object' ? (window.getLanguage() === 'ta' ? book.title.ta : book.title.en) : book.title,
-      author: typeof book.author === 'object' ? (window.getLanguage() === 'ta' ? book.author.ta : book.author.en) : book.author,
-      price: book.price,
+      title: typeof book.title === 'object' ? (window.getLanguage && window.getLanguage() === 'ta' ? (book.title.ta || book.title.en) : book.title.en) : book.title,
+      author: typeof book.author === 'object' ? (window.getLanguage && window.getLanguage() === 'ta' ? (book.author.ta || book.author.en) : book.author.en) : book.author,
+      price: format === 'audiobook' ? (book.priceAudiobook || book.price || 199) : (book.priceEbook || book.price || 149),
       coverUrl: book.coverUrl,
       format: format === 'audiobook' ? 'Audiobook' : (format === 'both' ? 'E-Book + Audiobook' : 'E-Book')
     };
