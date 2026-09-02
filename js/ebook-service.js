@@ -37,6 +37,11 @@ try {
     if (firebaseApp) {
       if (!firestoreDb) firestoreDb = firebase.firestore();
       if (!firebaseAuth) firebaseAuth = firebase.auth();
+      if (typeof window !== 'undefined') {
+        window.firebaseApp = firebaseApp;
+        window.firebaseDb = firestoreDb;
+        window.firebaseAuth = firebaseAuth;
+      }
     }
   }
 } catch (err) {

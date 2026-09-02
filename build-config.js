@@ -62,7 +62,9 @@ window.FirebaseService = {
       if (this.isConfigured()) {
         try {
           if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
+            window.firebaseApp = firebase.initializeApp(firebaseConfig);
+          } else {
+            window.firebaseApp = firebase.app();
           }
           window.firebaseAuth = firebase.auth();
           window.firebaseDb = firebase.firestore();
@@ -77,8 +79,13 @@ window.FirebaseService = {
   }
 };
 
+// Immediate synchronous initialization so subsequent scripts have active Firebase app
+window.FirebaseService.init();
+
 document.addEventListener('DOMContentLoaded', () => {
-  window.FirebaseService.init();
+  if (!window.firebaseApp && typeof firebase !== 'undefined' && window.FirebaseService.isConfigured()) {
+    window.FirebaseService.init();
+  }
 });
 `;
 

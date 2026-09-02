@@ -3,6 +3,18 @@
  * Supports Firebase Email/Password Auth & Firestore Admins Role Verification
  */
 
+function ensureFirebaseInitialized() {
+  if (typeof firebase !== 'undefined') {
+    if (!firebase.apps.length) {
+      if (window.FirebaseService && window.FirebaseService.init) {
+        window.FirebaseService.init();
+      } else if (window.firebaseConfig && window.firebaseConfig.apiKey) {
+        firebase.initializeApp(window.firebaseConfig);
+      }
+    }
+  }
+}
+
 window.SocialReadersAuth = {
   // Check if admin is currently authenticated
   isAdminAuthenticated() {
@@ -18,8 +30,9 @@ window.SocialReadersAuth = {
 
   // Login Admin using real Firebase Auth with Firestore admins collection verification
   async loginAdmin(email, password) {
+    ensureFirebaseInitialized();
     // 1. Try real Firebase Auth
-    if (typeof firebase !== 'undefined' && firebase.auth) {
+    if (typeof firebase !== 'undefined' && firebase.auth && firebase.apps.length) {
       try {
         const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
         const user = userCredential.user;
@@ -115,10 +128,11 @@ window.SocialReadersAuth = {
   },
 
   async loginUser(email, password) {
+    ensureFirebaseInitialized();
     let name = email.split('@')[0];
     let uid = "user_" + Date.now();
 
-    if (typeof firebase !== 'undefined' && firebase.auth) {
+    if (typeof firebase !== 'undefined' && firebase.auth && firebase.apps.length) {
       try {
         const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
         if (userCredential.user) {
@@ -159,7 +173,8 @@ window.SocialReadersAuth = {
   },
 
   async signupUser(name, email, password) {
-    if (typeof firebase !== 'undefined' && firebase.auth) {
+    ensureFirebaseInitialized();
+    if (typeof firebase !== 'undefined' && firebase.auth && firebase.apps.length) {
       try {
         const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
         if (userCredential.user && name) {
@@ -196,7 +211,8 @@ window.SocialReadersAuth = {
   },
 
   async logoutUser() {
-    if (typeof firebase !== 'undefined' && firebase.auth) {
+    ensureFirebaseInitialized();
+    if (typeof firebase !== 'undefined' && firebase.auth && firebase.apps.length) {
       try {
         await firebase.auth().signOut();
       } catch (e) {}
