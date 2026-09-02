@@ -21,9 +21,9 @@ const activeFirebaseConfig = (typeof window !== 'undefined' && window.firebaseCo
     };
 
 // Initialize Firebase if SDK is loaded
-let firebaseApp = (typeof window !== 'undefined' && window.firebaseApp) || null;
-let firestoreDb = (typeof window !== 'undefined' && window.firebaseDb) || null;
-let firebaseAuth = (typeof window !== 'undefined' && window.firebaseAuth) || null;
+var firebaseApp = (typeof window !== 'undefined' && window.firebaseApp) || null;
+var firestoreDb = (typeof window !== 'undefined' && window.firebaseDb) || null;
+var firebaseAuth = (typeof window !== 'undefined' && window.firebaseAuth) || null;
 
 try {
   if (typeof firebase !== 'undefined') {
