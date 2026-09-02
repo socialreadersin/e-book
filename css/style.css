@@ -282,64 +282,52 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   display: block;
   aspect-ratio: 1200 / 480;
   object-fit: cover;
+  object-position: center;
 }
 
 @media (max-width: 640px) {
   .hero-slide img {
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 2 / 1;
+    min-height: 160px;
+    max-height: 240px;
     object-fit: cover;
+    object-position: center;
   }
 }
 
-/* Hero Slider Navigation Arrows */
+/* Hero Slider Navigation Arrows (Hidden - swiping & dots used for clean mobile & desktop UI) */
 .slider-arrow-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 20;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(8px);
-  color: #0B2C5D;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease;
-  cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-}
-
-.slider-arrow-btn:hover {
-  background: #FFFFFF;
-  color: #E8720C;
-  transform: translateY(-50%) scale(1.08);
-}
-
-.slider-arrow-btn.prev {
-  left: 14px;
-}
-
-.slider-arrow-btn.next {
-  right: 14px;
+  display: none !important;
 }
 
 /* Hero Slider Dot Indicators */
 .slider-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.4);
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.45);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 
+@media (min-width: 640px) {
+  .slider-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+  }
+}
+
 .slider-dot.active {
-  width: 32px;
+  width: 24px;
   background: #E8720C;
   box-shadow: 0 0 10px rgba(232, 114, 12, 0.6);
+}
+
+@media (min-width: 640px) {
+  .slider-dot.active {
+    width: 32px;
+  }
 }
 
 /* 2. Amazon 4-in-1 Quad Feature Cards */

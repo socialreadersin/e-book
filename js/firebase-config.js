@@ -772,6 +772,186 @@ window.SocialReadersDB = {
     return newSettings;
   },
 
+  // -------------------------------------------------------------
+  // 7. HERO SLIDER BANNERS (Cloud Firestore settings/banners)
+  // -------------------------------------------------------------
+  getInitialHeroBanners() {
+    return [
+      {
+        id: "banner-1",
+        title: "Tamil Classics & Self-Help Editions",
+        imageUrl: "assets/hero-banner-tamil.svg",
+        linkUrl: "books.html",
+        alt: "Tamil Bestselling E-Books and Audiobooks",
+        active: true
+      },
+      {
+        id: "banner-2",
+        title: "Grand Mega Book Fair & Bestsellers",
+        imageUrl: "assets/hero-banner-deal.svg",
+        linkUrl: "books.html",
+        alt: "Mega Book Fair - Flat 40% - 60% Off",
+        active: true
+      },
+      {
+        id: "banner-3",
+        title: "25% Direct Youth Education & Sports Impact",
+        imageUrl: "assets/hero-banner-cause.svg",
+        linkUrl: "impact.html",
+        alt: "Read for Change - 25% Social Impact",
+        active: true
+      },
+      {
+        id: "banner-4",
+        title: "Studio Quality Audiobooks",
+        imageUrl: "assets/hero-banner-audio.svg",
+        linkUrl: "audiobooks.html",
+        alt: "Studio Quality Audiobooks with Audio Sample Player",
+        active: true
+      }
+    ];
+  },
+
+  async getHeroBanners() {
+    if (this._cache.banners && this._cache.banners.length) {
+      return this._cache.banners;
+    }
+    const initial = this.getInitialHeroBanners();
+    if (this.db) {
+      try {
+        const doc = await this.db.collection('settings').doc('banners').get();
+        if (doc.exists && doc.data().banners && Array.isArray(doc.data().banners)) {
+          this._cache.banners = doc.data().banners;
+          return this._cache.banners;
+        } else {
+          await this.db.collection('settings').doc('banners').set({ banners: initial, updatedAt: new Date().toISOString() });
+          this._cache.banners = initial;
+          return initial;
+        }
+      } catch (err) {
+        console.warn("Firestore getHeroBanners notice:", err);
+      }
+    }
+    try {
+      const stored = localStorage.getItem('sr_hero_banners');
+      if (stored) {
+        this._cache.banners = JSON.parse(stored);
+        return this._cache.banners;
+      }
+    } catch (e) {}
+    this._cache.banners = initial;
+    return initial;
+  },
+
+  async saveHeroBanners(bannersArray) {
+    if (this.db) {
+      try {
+        await this.db.collection('settings').doc('banners').set({
+          banners: bannersArray,
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+      } catch (err) {
+        console.error("Firestore saveHeroBanners error:", err);
+      }
+    }
+    try {
+      localStorage.setItem('sr_hero_banners', JSON.stringify(bannersArray));
+    } catch (e) {}
+    this._cache.banners = bannersArray;
+    return bannersArray;
+  },
+
+  // -------------------------------------------------------------
+  // 8. HOMEPAGE QUAD FEATURE CARDS (Cloud Firestore settings/quad_sections)
+  // -------------------------------------------------------------
+  getInitialQuadSections() {
+    return {
+      tamil_picks: {
+        titleEn: "Top Picks in Tamil",
+        titleTa: "தமிழில் சிறந்த நூல்கள்",
+        exploreLink: "books.html",
+        items: [
+          { bookId: "b5", title: "அக்னி சிறகுகள்", price: "₹159", coverUrl: "assets/cover-wings-of-fire.svg", linkUrl: "book-detail.html?id=b5" },
+          { bookId: "b1", title: "அட்டாமிக் ஹாபிட்ஸ்", price: "₹149", coverUrl: "assets/cover-atomic-habits.svg", linkUrl: "book-detail.html?id=b1" },
+          { bookId: "b6", title: "இக்கிகாய்", price: "₹169", coverUrl: "assets/cover-ikigai.svg", linkUrl: "book-detail.html?id=b6" },
+          { bookId: "b3", title: "யு கேன் வின்", price: "₹149", coverUrl: "assets/cover-you-can-win.svg", linkUrl: "book-detail.html?id=b3" }
+        ]
+      },
+      trending_audio: {
+        titleEn: "Trending Audiobooks",
+        titleTa: "பிரபலமான ஆடியோபுக்குகள்",
+        exploreLink: "audiobooks.html",
+        items: [
+          { bookId: "b1", title: "Atomic Habits", duration: "5h 35m", price: "₹149", coverUrl: "assets/cover-atomic-habits.svg", linkUrl: "audiobooks.html" },
+          { bookId: "b4", title: "Rich Dad", duration: "6h 45m", price: "₹199", coverUrl: "assets/cover-rich-dad.svg", linkUrl: "audiobooks.html" },
+          { bookId: "b7", title: "Deep Work", duration: "7h 10m", price: "₹189", coverUrl: "assets/cover-deep-work.svg", linkUrl: "audiobooks.html" },
+          { bookId: "b8", title: "Psych of Money", duration: "5h 40m", price: "₹179", coverUrl: "assets/cover-psychology-money.svg", linkUrl: "audiobooks.html" }
+        ]
+      },
+      self_help: {
+        titleEn: "Self-Help & Mindset",
+        titleTa: "சுய முன்னேற்றம் & மனவலிமை",
+        exploreLink: "books.html",
+        items: [
+          { bookId: "b2", title: "Mindset", price: "₹179", coverUrl: "assets/cover-mindset.svg", linkUrl: "book-detail.html?id=b2" },
+          { bookId: "b3", title: "You Can Win", price: "₹149", coverUrl: "assets/cover-you-can-win.svg", linkUrl: "book-detail.html?id=b3" },
+          { bookId: "b1", title: "Atomic Habits", price: "₹149", coverUrl: "assets/cover-atomic-habits.svg", linkUrl: "book-detail.html?id=b1" },
+          { bookId: "b6", title: "Ikigai", price: "₹169", coverUrl: "assets/cover-ikigai.svg", linkUrl: "book-detail.html?id=b6" }
+        ]
+      }
+    };
+  },
+
+  async getQuadSections() {
+    if (this._cache.quadSections) {
+      return this._cache.quadSections;
+    }
+    const initial = this.getInitialQuadSections();
+    if (this.db) {
+      try {
+        const doc = await this.db.collection('settings').doc('quad_sections').get();
+        if (doc.exists && doc.data()) {
+          const loaded = { ...initial, ...doc.data() };
+          this._cache.quadSections = loaded;
+          return loaded;
+        } else {
+          await this.db.collection('settings').doc('quad_sections').set({ ...initial, updatedAt: new Date().toISOString() });
+          this._cache.quadSections = initial;
+          return initial;
+        }
+      } catch (err) {
+        console.warn("Firestore getQuadSections notice:", err);
+      }
+    }
+    try {
+      const stored = localStorage.getItem('sr_quad_sections');
+      if (stored) {
+        this._cache.quadSections = JSON.parse(stored);
+        return this._cache.quadSections;
+      }
+    } catch (e) {}
+    this._cache.quadSections = initial;
+    return initial;
+  },
+
+  async saveQuadSections(quadData) {
+    if (this.db) {
+      try {
+        await this.db.collection('settings').doc('quad_sections').set({
+          ...quadData,
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+      } catch (err) {
+        console.error("Firestore saveQuadSections error:", err);
+      }
+    }
+    try {
+      localStorage.setItem('sr_quad_sections', JSON.stringify(quadData));
+    } catch (e) {}
+    this._cache.quadSections = quadData;
+    return quadData;
+  },
+
   async seedDemoData() {
     if (this.db) {
       await Promise.all([

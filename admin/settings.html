@@ -184,6 +184,38 @@
         </div>
       </div>
 
+      <!-- 2. FIREBASE & CLOUD STORAGE CONFIGURATION -->
+      <div class="bg-white p-5 sm:p-8 rounded-3xl border border-gray-100 shadow-sm space-y-5">
+        <div class="border-b border-gray-100 pb-3 sm:pb-4 flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-bold text-navy font-heading">Firebase Project Credentials</h2>
+            <p class="text-xs text-gray-500">Configure your Google Firebase Web API Key for Firestore &amp; Auth</p>
+          </div>
+          <span id="firebase-status-badge" class="px-2.5 py-0.5 rounded-md bg-emerald-50 text-forest text-[10px] font-bold">Client Sync Active</span>
+        </div>
+
+        <div class="space-y-3 text-xs text-gray-700">
+          <div>
+            <label class="block font-bold text-navy mb-1.5">Firebase Web API Key (Google Cloud Console / Firebase Project Settings)</label>
+            <div class="flex items-center gap-2">
+              <input type="text" id="setting-firebase-api-key" placeholder="AIzaSy..." class="flex-grow px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-navy font-mono text-xs">
+              <button type="button" id="save-firebase-key-btn" class="px-4 py-2.5 rounded-xl bg-navy text-white font-bold text-xs hover:bg-navy/90 transition-all flex-shrink-0">Save Key</button>
+            </div>
+            <p class="text-[11px] text-gray-500 mt-1">If your key changed in Google Cloud Console, update it here. Falls back automatically to offline cache if offline.</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+            <div>
+              <label class="block font-bold text-gray-500 mb-1">Project ID</label>
+              <input type="text" value="e-book-7c31a" disabled class="w-full px-3.5 py-2 rounded-xl border border-gray-200 bg-gray-100 text-gray-500 font-mono text-xs">
+            </div>
+            <div>
+              <label class="block font-bold text-gray-500 mb-1">Auth Domain</label>
+              <input type="text" value="e-book-7c31a.firebaseapp.com" disabled class="w-full px-3.5 py-2 rounded-xl border border-gray-200 bg-gray-100 text-gray-500 font-mono text-xs">
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- 2. CLOUDINARY MEDIA CONFIGURATION -->
       <div class="bg-white p-5 sm:p-8 rounded-3xl border border-gray-100 shadow-sm space-y-5">
         <div class="border-b border-gray-100 pb-3 sm:pb-4 flex items-center justify-between">
@@ -254,6 +286,100 @@
         </div>
       </div>
 
+      <!-- 4. HERO BANNERS & SLIDER MANAGEMENT -->
+      <div class="bg-white p-5 sm:p-8 rounded-3xl border border-gray-100 shadow-sm space-y-5">
+        <div class="border-b border-gray-100 pb-3 sm:pb-4 flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-bold text-navy font-heading">Hero Slider Banners</h2>
+            <p class="text-xs text-gray-500">Upload or change banner images with Cloudinary and set link destinations</p>
+          </div>
+          <button id="save-banners-btn" class="px-4 py-2 rounded-xl bg-navy hover:bg-blue-950 text-white font-bold text-xs shadow-sm transition-all active:scale-95 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            <span>Save Banners</span>
+          </button>
+        </div>
+
+        <div id="banners-editor-list" class="space-y-4">
+          <!-- Populated by JS -->
+          <div class="py-4 text-center text-xs text-gray-400">Loading hero banners...</div>
+        </div>
+      </div>
+
+      <!-- 5. HOMEPAGE FEATURED QUAD SECTIONS (Tamil, Audiobooks, Self-Help) -->
+      <div class="bg-white p-5 sm:p-8 rounded-3xl border border-gray-100 shadow-sm space-y-6">
+        <div class="border-b border-gray-100 pb-3 sm:pb-4 flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-bold text-navy font-heading">Homepage Quad Feature Cards</h2>
+            <p class="text-xs text-gray-500">Customize Top Picks in Tamil, Trending Audiobooks, and Self-Help &amp; Mindset</p>
+          </div>
+          <button id="save-quads-btn" class="px-4 py-2 rounded-xl bg-forest hover:bg-green-700 text-white font-bold text-xs shadow-sm transition-all active:scale-95 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            <span>Save Quad Sections</span>
+          </button>
+        </div>
+
+        <!-- Tab 1: Top Picks in Tamil -->
+        <div class="p-4 sm:p-5 rounded-2xl border border-gray-200 bg-gray-50/70 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black uppercase tracking-wider text-forest bg-green-100 px-2.5 py-0.5 rounded-md">Card 1: Top Picks in Tamil</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="block font-bold text-navy mb-1">Title (English)</label>
+              <input type="text" id="quad-tamil-title-en" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white">
+            </div>
+            <div>
+              <label class="block font-bold text-navy mb-1">Title (Tamil / தமிழ்)</label>
+              <input type="text" id="quad-tamil-title-ta" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white">
+            </div>
+          </div>
+          <div id="quad-tamil-items-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- 4 items populated by JS -->
+          </div>
+        </div>
+
+        <!-- Tab 2: Trending Audiobooks -->
+        <div class="p-4 sm:p-5 rounded-2xl border border-purple-200 bg-purple-50/30 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black uppercase tracking-wider text-purple-700 bg-purple-100 px-2.5 py-0.5 rounded-md">Card 2: Trending Audiobooks</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="block font-bold text-navy mb-1">Title (English)</label>
+              <input type="text" id="quad-audio-title-en" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white">
+            </div>
+            <div>
+              <label class="block font-bold text-navy mb-1">Title (Tamil / தமிழ்)</label>
+              <input type="text" id="quad-audio-title-ta" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white">
+            </div>
+          </div>
+          <div id="quad-audio-items-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- 4 items populated by JS -->
+          </div>
+        </div>
+
+        <!-- Tab 3: Self-Help & Mindset -->
+        <div class="p-4 sm:p-5 rounded-2xl border border-emerald-200 bg-emerald-50/30 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-md">Card 3: Self-Help &amp; Mindset</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="block font-bold text-navy mb-1">Title (English)</label>
+              <input type="text" id="quad-selfhelp-title-en" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white">
+            </div>
+            <div>
+              <label class="block font-bold text-navy mb-1">Title (Tamil / தமிழ்)</label>
+              <input type="text" id="quad-selfhelp-title-ta" class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white">
+            </div>
+          </div>
+          <div id="quad-selfhelp-items-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- 4 items populated by JS -->
+          </div>
+        </div>
+
+      </div>
+
     </main>
   </div>
 
@@ -261,31 +387,329 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-  <script src="/js/firebase-config.js"></script>
   <script src="../js/firebase-config.js"></script>
-  <script src="/js/auth.js"></script>
   <script src="../js/auth.js"></script>
+  <script src="../js/cloudinary.js"></script>
 
   <script>
     if (window.SocialReadersAuth && window.SocialReadersAuth.requireAdmin) {
       window.SocialReadersAuth.requireAdmin();
     }
 
+    let loadedBanners = [];
+    let loadedQuadSections = null;
+
     async function loadSettings() {
       if (!window.SocialReadersDB) {
         setTimeout(loadSettings, 200);
         return;
       }
-      if (window.SocialReadersDB && window.SocialReadersDB.getSettings) {
-        const s = await window.SocialReadersDB.getSettings();
-        if (s.cloudinaryCloudName) document.getElementById('setting-cloudinary-cloud-name').value = s.cloudinaryCloudName;
-        if (s.cloudinaryUploadPreset) document.getElementById('setting-cloudinary-preset').value = s.cloudinaryUploadPreset;
-        if (s.causePercentage) document.getElementById('setting-cause-percent').value = s.causePercentage;
-        if (s.educationSplit) document.getElementById('setting-education-split').value = s.educationSplit;
-        if (s.sportsSplit) document.getElementById('setting-sports-split').value = s.sportsSplit;
-        if (s.supportEmail) document.getElementById('setting-support-email').value = s.supportEmail;
+      try {
+        const storedKey = localStorage.getItem('sr_firebase_api_key') || (window.SocialReadersDB?.config?.apiKey) || '';
+        const keyInput = document.getElementById('setting-firebase-api-key');
+        if (keyInput) keyInput.value = storedKey;
+
+        if (window.SocialReadersDB.getSettings) {
+          const s = await window.SocialReadersDB.getSettings();
+          if (s.cloudinaryCloudName) document.getElementById('setting-cloudinary-cloud-name').value = s.cloudinaryCloudName;
+          if (s.cloudinaryUploadPreset) document.getElementById('setting-cloudinary-preset').value = s.cloudinaryUploadPreset;
+          if (s.causePercentage) document.getElementById('setting-cause-percent').value = s.causePercentage;
+          if (s.educationSplit) document.getElementById('setting-education-split').value = s.educationSplit;
+          if (s.sportsSplit) document.getElementById('setting-sports-split').value = s.sportsSplit;
+          if (s.supportEmail) document.getElementById('setting-support-email').value = s.supportEmail;
+        }
+
+        await loadHeroBannersUI();
+        await loadQuadSectionsUI();
+      } catch (e) {
+        console.error("loadSettings error:", e);
       }
     }
+
+    document.getElementById('save-firebase-key-btn')?.addEventListener('click', () => {
+      const val = document.getElementById('setting-firebase-api-key').value.trim();
+      if (!val) {
+        alert("Please enter a valid Firebase Web API Key.");
+        return;
+      }
+      localStorage.setItem('sr_firebase_api_key', val);
+      const btn = document.getElementById('save-firebase-key-btn');
+      btn.textContent = 'Key Saved ✓';
+      setTimeout(() => {
+        btn.textContent = 'Save Key';
+        alert('Firebase API key saved to localStorage. The page will reload to apply credentials.');
+        window.location.reload();
+      }, 700);
+    });
+
+    function prefixImage(path) {
+      if (!path) return '../assets/cover-atomic-habits.svg';
+      if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('/') || path.startsWith('data:')) {
+        return path;
+      }
+      return '../' + path.replace(/^\.\//, '');
+    }
+
+    async function loadHeroBannersUI() {
+      const container = document.getElementById('banners-editor-list');
+      if (!container) return;
+
+      loadedBanners = await window.SocialReadersDB.getHeroBanners();
+      container.innerHTML = loadedBanners.map((banner, index) => `
+        <div class="p-4 rounded-2xl border border-gray-200 bg-gray-50 flex flex-col md:flex-row items-start md:items-center gap-4" data-banner-index="${index}">
+          <div class="w-32 h-16 sm:w-44 sm:h-20 bg-gray-200 rounded-xl overflow-hidden flex-shrink-0 border border-gray-300">
+            <img src="${prefixImage(banner.imageUrl)}" id="banner-preview-${index}" alt="${banner.title}" class="w-full h-full object-cover">
+          </div>
+          <div class="flex-grow space-y-2 text-xs w-full">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-navy">Slide ${index + 1}: ${banner.title || 'Banner'}</span>
+              <label class="flex items-center gap-1.5 cursor-pointer text-[11px] text-gray-600 font-semibold">
+                <input type="checkbox" id="banner-active-${index}" ${banner.active !== false ? 'checked' : ''} class="rounded text-forest">
+                <span>Active</span>
+              </label>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <input type="text" id="banner-title-${index}" value="${banner.title || ''}" placeholder="Slide Title" class="px-3 py-1.5 rounded-lg border border-gray-200 bg-white">
+              <input type="text" id="banner-link-${index}" value="${banner.linkUrl || 'books.html'}" placeholder="Click Destination (e.g. books.html)" class="px-3 py-1.5 rounded-lg border border-gray-200 bg-white">
+            </div>
+            <div class="flex flex-col sm:flex-row items-center gap-2">
+              <input type="text" id="banner-url-${index}" value="${banner.imageUrl || ''}" oninput="document.getElementById('banner-preview-${index}').src = prefixImage(this.value.trim())" placeholder="Banner Image URL" class="w-full text-[11px] px-3 py-1.5 rounded-lg border border-gray-200 bg-white">
+              <label class="px-3 py-1.5 rounded-lg bg-navy hover:bg-blue-950 text-white font-bold text-[11px] cursor-pointer whitespace-nowrap flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                <span>Upload Image</span>
+                <input type="file" accept="image/*" class="hidden" onchange="handleBannerUpload(event, ${index})">
+              </label>
+            </div>
+            <div id="banner-progress-${index}" class="hidden text-[10px] text-forest font-bold">Uploading to Cloudinary...</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.handleBannerUpload = async function(event, index) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const progressEl = document.getElementById(`banner-progress-${index}`);
+      if (progressEl) {
+        progressEl.classList.remove('hidden');
+        progressEl.textContent = 'Uploading to Cloudinary... 0%';
+      }
+
+      try {
+        if (!window.SocialReadersCloudinary) {
+          alert("Cloudinary upload module not found.");
+          return;
+        }
+        const res = await window.SocialReadersCloudinary.uploadToCloudinary(file, 'image', (pct) => {
+          if (progressEl) progressEl.textContent = `Uploading to Cloudinary... ${pct}%`;
+        });
+        if (res && res.secure_url) {
+          document.getElementById(`banner-url-${index}`).value = res.secure_url;
+          document.getElementById(`banner-preview-${index}`).src = res.secure_url;
+          if (progressEl) progressEl.textContent = 'Upload complete ✓';
+        }
+      } catch (err) {
+        console.error("Banner upload error:", err);
+        alert("Upload error: " + (err.message || err));
+      }
+    };
+
+    async function loadQuadSectionsUI() {
+      loadedQuadSections = await window.SocialReadersDB.getQuadSections();
+      if (!loadedQuadSections) return;
+
+      // 1. Tamil Picks
+      if (loadedQuadSections.tamil_picks) {
+        document.getElementById('quad-tamil-title-en').value = loadedQuadSections.tamil_picks.titleEn || 'Top Picks in Tamil';
+        document.getElementById('quad-tamil-title-ta').value = loadedQuadSections.tamil_picks.titleTa || 'தமிழில் சிறந்த நூல்கள்';
+
+        const cont = document.getElementById('quad-tamil-items-container');
+        cont.innerHTML = (loadedQuadSections.tamil_picks.items || []).map((item, idx) => `
+          <div class="p-3 bg-white rounded-xl border border-gray-200 text-xs space-y-1.5">
+            <div class="flex items-center gap-2">
+              <img src="${prefixImage(item.coverUrl)}" id="tamil-item-preview-${idx}" class="w-10 h-14 object-contain rounded border">
+              <div class="flex-grow space-y-1">
+                <input type="text" id="tamil-item-title-${idx}" value="${item.title}" placeholder="Book Title" class="w-full px-2 py-1 border rounded text-xs font-bold text-navy">
+                <div class="grid grid-cols-2 gap-1">
+                  <input type="text" id="tamil-item-price-${idx}" value="${item.price}" placeholder="Price (₹149)" class="px-2 py-1 border rounded text-[11px]">
+                  <input type="text" id="tamil-item-link-${idx}" value="${item.linkUrl || `book-detail.html?id=${item.bookId}`}" placeholder="Link" class="px-2 py-1 border rounded text-[11px]">
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5 pt-1">
+              <input type="text" id="tamil-item-cover-${idx}" value="${item.coverUrl}" oninput="updateQuadPreview('tamil-item', ${idx})" placeholder="Cover Image URL" class="w-full px-2 py-1 border rounded text-[10px]">
+              <label class="px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 text-navy font-bold text-[10px] cursor-pointer whitespace-nowrap">
+                Upload
+                <input type="file" accept="image/*" class="hidden" onchange="handleQuadImageUpload(event, 'tamil-item', ${idx})">
+              </label>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // 2. Audiobooks
+      if (loadedQuadSections.trending_audio) {
+        document.getElementById('quad-audio-title-en').value = loadedQuadSections.trending_audio.titleEn || 'Trending Audiobooks';
+        document.getElementById('quad-audio-title-ta').value = loadedQuadSections.trending_audio.titleTa || 'பிரபலமான ஆடியோபுக்குகள்';
+
+        const cont = document.getElementById('quad-audio-items-container');
+        cont.innerHTML = (loadedQuadSections.trending_audio.items || []).map((item, idx) => `
+          <div class="p-3 bg-white rounded-xl border border-gray-200 text-xs space-y-1.5">
+            <div class="flex items-center gap-2">
+              <img src="${prefixImage(item.coverUrl)}" id="audio-item-preview-${idx}" class="w-10 h-14 object-contain rounded border">
+              <div class="flex-grow space-y-1">
+                <input type="text" id="audio-item-title-${idx}" value="${item.title}" placeholder="Audiobook Title" class="w-full px-2 py-1 border rounded text-xs font-bold text-navy">
+                <div class="grid grid-cols-2 gap-1">
+                  <input type="text" id="audio-item-price-${idx}" value="${item.price}" placeholder="Price (₹149)" class="px-2 py-1 border rounded text-[11px]">
+                  <input type="text" id="audio-item-duration-${idx}" value="${item.duration || '5h 30m'}" placeholder="Duration" class="px-2 py-1 border rounded text-[11px]">
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5 pt-1">
+              <input type="text" id="audio-item-cover-${idx}" value="${item.coverUrl}" oninput="updateQuadPreview('audio-item', ${idx})" placeholder="Cover Image URL" class="w-full px-2 py-1 border rounded text-[10px]">
+              <label class="px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 text-navy font-bold text-[10px] cursor-pointer whitespace-nowrap">
+                Upload
+                <input type="file" accept="image/*" class="hidden" onchange="handleQuadImageUpload(event, 'audio-item', ${idx})">
+              </label>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // 3. Self-Help
+      if (loadedQuadSections.self_help) {
+        document.getElementById('quad-selfhelp-title-en').value = loadedQuadSections.self_help.titleEn || 'Self-Help & Mindset';
+        document.getElementById('quad-selfhelp-title-ta').value = loadedQuadSections.self_help.titleTa || 'சுய முன்னேற்றம் & மனவலிமை';
+
+        const cont = document.getElementById('quad-selfhelp-items-container');
+        cont.innerHTML = (loadedQuadSections.self_help.items || []).map((item, idx) => `
+          <div class="p-3 bg-white rounded-xl border border-gray-200 text-xs space-y-1.5">
+            <div class="flex items-center gap-2">
+              <img src="${prefixImage(item.coverUrl)}" id="selfhelp-item-preview-${idx}" class="w-10 h-14 object-contain rounded border">
+              <div class="flex-grow space-y-1">
+                <input type="text" id="selfhelp-item-title-${idx}" value="${item.title}" placeholder="Book Title" class="w-full px-2 py-1 border rounded text-xs font-bold text-navy">
+                <div class="grid grid-cols-2 gap-1">
+                  <input type="text" id="selfhelp-item-price-${idx}" value="${item.price}" placeholder="Price (₹149)" class="px-2 py-1 border rounded text-[11px]">
+                  <input type="text" id="selfhelp-item-link-${idx}" value="${item.linkUrl || `book-detail.html?id=${item.bookId}`}" placeholder="Link" class="px-2 py-1 border rounded text-[11px]">
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5 pt-1">
+              <input type="text" id="selfhelp-item-cover-${idx}" value="${item.coverUrl}" oninput="updateQuadPreview('selfhelp-item', ${idx})" placeholder="Cover Image URL" class="w-full px-2 py-1 border rounded text-[10px]">
+              <label class="px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 text-navy font-bold text-[10px] cursor-pointer whitespace-nowrap">
+                Upload
+                <input type="file" accept="image/*" class="hidden" onchange="handleQuadImageUpload(event, 'selfhelp-item', ${idx})">
+              </label>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    window.handleQuadImageUpload = async function(event, prefix, index) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      try {
+        if (!window.SocialReadersCloudinary) return;
+        const res = await window.SocialReadersCloudinary.uploadToCloudinary(file, 'image');
+        if (res && res.secure_url) {
+          document.getElementById(`${prefix}-cover-${index}`).value = res.secure_url;
+          document.getElementById(`${prefix}-preview-${index}`).src = res.secure_url;
+        }
+      } catch (err) {
+        console.error("Quad image upload error:", err);
+        alert("Upload error: " + (err.message || err));
+      }
+    };
+
+    window.updateQuadPreview = function(prefix, index) {
+      const input = document.getElementById(`${prefix}-cover-${index}`);
+      const img = document.getElementById(`${prefix}-preview-${index}`);
+      if (input && img) {
+        img.src = prefixImage(input.value.trim());
+      }
+    };
+
+    // Save Banners Event
+    document.getElementById('save-banners-btn')?.addEventListener('click', async () => {
+      const btn = document.getElementById('save-banners-btn');
+      btn.disabled = true;
+      btn.textContent = 'Saving Banners...';
+
+      const updatedBanners = loadedBanners.map((banner, i) => ({
+        id: banner.id || `banner-${i + 1}`,
+        title: document.getElementById(`banner-title-${i}`)?.value.trim() || banner.title,
+        linkUrl: document.getElementById(`banner-link-${i}`)?.value.trim() || 'books.html',
+        imageUrl: document.getElementById(`banner-url-${i}`)?.value.trim() || banner.imageUrl,
+        active: document.getElementById(`banner-active-${i}`)?.checked ?? true,
+        alt: banner.alt || banner.title
+      }));
+
+      await window.SocialReadersDB.saveHeroBanners(updatedBanners);
+      btn.disabled = false;
+      btn.textContent = 'Banners Saved ✓';
+      setTimeout(() => { btn.textContent = 'Save Banners'; }, 2000);
+    });
+
+    // Save Quad Sections Event
+    document.getElementById('save-quads-btn')?.addEventListener('click', async () => {
+      const btn = document.getElementById('save-quads-btn');
+      btn.disabled = true;
+      btn.textContent = 'Saving Sections...';
+
+      const tamilItems = (loadedQuadSections.tamil_picks?.items || []).map((item, idx) => ({
+        bookId: item.bookId || `b${idx + 1}`,
+        title: document.getElementById(`tamil-item-title-${idx}`)?.value.trim() || item.title,
+        price: document.getElementById(`tamil-item-price-${idx}`)?.value.trim() || item.price,
+        linkUrl: document.getElementById(`tamil-item-link-${idx}`)?.value.trim() || item.linkUrl,
+        coverUrl: document.getElementById(`tamil-item-cover-${idx}`)?.value.trim() || item.coverUrl
+      }));
+
+      const audioItems = (loadedQuadSections.trending_audio?.items || []).map((item, idx) => ({
+        bookId: item.bookId || `b${idx + 1}`,
+        title: document.getElementById(`audio-item-title-${idx}`)?.value.trim() || item.title,
+        price: document.getElementById(`audio-item-price-${idx}`)?.value.trim() || item.price,
+        duration: document.getElementById(`audio-item-duration-${idx}`)?.value.trim() || item.duration,
+        linkUrl: item.linkUrl || 'audiobooks.html',
+        coverUrl: document.getElementById(`audio-item-cover-${idx}`)?.value.trim() || item.coverUrl
+      }));
+
+      const selfhelpItems = (loadedQuadSections.self_help?.items || []).map((item, idx) => ({
+        bookId: item.bookId || `b${idx + 1}`,
+        title: document.getElementById(`selfhelp-item-title-${idx}`)?.value.trim() || item.title,
+        price: document.getElementById(`selfhelp-item-price-${idx}`)?.value.trim() || item.price,
+        linkUrl: document.getElementById(`selfhelp-item-link-${idx}`)?.value.trim() || item.linkUrl,
+        coverUrl: document.getElementById(`selfhelp-item-cover-${idx}`)?.value.trim() || item.coverUrl
+      }));
+
+      const newQuadData = {
+        tamil_picks: {
+          titleEn: document.getElementById('quad-tamil-title-en').value.trim(),
+          titleTa: document.getElementById('quad-tamil-title-ta').value.trim(),
+          exploreLink: loadedQuadSections.tamil_picks?.exploreLink || 'books.html',
+          items: tamilItems
+        },
+        trending_audio: {
+          titleEn: document.getElementById('quad-audio-title-en').value.trim(),
+          titleTa: document.getElementById('quad-audio-title-ta').value.trim(),
+          exploreLink: loadedQuadSections.trending_audio?.exploreLink || 'audiobooks.html',
+          items: audioItems
+        },
+        self_help: {
+          titleEn: document.getElementById('quad-selfhelp-title-en').value.trim(),
+          titleTa: document.getElementById('quad-selfhelp-title-ta').value.trim(),
+          exploreLink: loadedQuadSections.self_help?.exploreLink || 'books.html',
+          items: selfhelpItems
+        }
+      };
+
+      await window.SocialReadersDB.saveQuadSections(newQuadData);
+      btn.disabled = false;
+      btn.textContent = 'Quad Sections Saved ✓';
+      setTimeout(() => { btn.textContent = 'Save Quad Sections'; }, 2000);
+    });
 
     document.getElementById('save-settings-btn').addEventListener('click', async () => {
       const btn = document.getElementById('save-settings-btn');

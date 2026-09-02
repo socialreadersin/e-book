@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize interactive components
   initHeroSlider();
+  initDynamicHomepageContent();
   initLightningDealsTimer();
   initBookCarousels();
   initHeaderSearchBar();
@@ -834,12 +835,129 @@ function initHeaderSearchBar() {
       const params = [];
       if (query) params.push(`q=${encodeURIComponent(query)}`);
       if (cat && cat !== 'all') params.push(`cat=${encodeURIComponent(cat)}`);
-
       if (params.length) {
         targetUrl += '?' + params.join('&');
       }
       window.location.href = targetUrl;
     });
   });
+}
+
+/**
+ * Render Dynamic Hero Banners and Quad Sections from Firestore
+ */
+async function initDynamicHomepageContent() {
+  if (!window.SocialReadersDB) return;
+
+  // 1. Render Dynamic Hero Banners
+  try {
+    const track = document.getElementById('hero-slider-track');
+    const dotsContainer = document.getElementById('hero-slider-dots');
+    if (track && dotsContainer && window.SocialReadersDB.getHeroBanners) {
+      const banners = await window.SocialReadersDB.getHeroBanners();
+      const activeBanners = (banners || []).filter(b => b.active !== false);
+
+      if (activeBanners.length) {
+        track.innerHTML = activeBanners.map((b, i) => `
+          <div class="hero-slide cursor-pointer" onclick="window.location.href='${b.linkUrl || 'books.html'}'">
+            <img src="${b.imageUrl}" alt="${b.alt || b.title || 'Social Readers Banner'}" ${i === 0 ? 'fetchpriority="high" loading="eager"' : 'loading="lazy"'} decoding="async" class="w-full h-full object-cover">
+          </div>
+        `).join('');
+
+        dotsContainer.innerHTML = activeBanners.map((_, i) => `
+          <button type="button" class="slider-dot ${i === 0 ? 'active' : ''}" data-slide-to="${i}" aria-label="Go to slide ${i + 1}"></button>
+        `).join('');
+
+        // Re-bind slider listeners
+        initHeroSlider();
+      }
+    }
+  } catch (err) {
+    console.warn("Could not load dynamic hero banners:", err);
+  }
+
+  // 2. Render Dynamic Quad Sections (Tamil Picks, Trending Audiobooks, Self-Help & Mindset)
+  try {
+    if (window.SocialReadersDB.getQuadSections) {
+      const quadData = await window.SocialReadersDB.getQuadSections();
+      if (!quadData) return;
+
+      const curLang = (typeof currentLanguage !== 'undefined') ? currentLanguage : (localStorage.getItem('sr_lang') || 'en');
+
+      // Top Picks in Tamil
+      if (quadData.tamil_picks) {
+        const titleEl = document.getElementById('quad-title-tamil');
+        const gridEl = document.getElementById('quad-grid-tamil');
+        const linkEl = document.getElementById('quad-link-tamil');
+
+        if (titleEl && (quadData.tamil_picks.titleEn || quadData.tamil_picks.titleTa)) {
+          titleEl.textContent = (curLang === 'ta' && quadData.tamil_picks.titleTa) ? quadData.tamil_picks.titleTa : quadData.tamil_picks.titleEn;
+        }
+        if (linkEl && quadData.tamil_picks.exploreLink) {
+          linkEl.href = quadData.tamil_picks.exploreLink;
+        }
+        if (gridEl && Array.isArray(quadData.tamil_picks.items) && quadData.tamil_picks.items.length) {
+          gridEl.innerHTML = quadData.tamil_picks.items.map(item => `
+            <a href="${item.linkUrl || `book-detail.html?id=${item.bookId || 'b1'}`}" class="amazon-mini-tile bg-gray-50 rounded-xl p-2 border border-gray-100 flex flex-col items-center text-center group">
+              <img src="${item.coverUrl || 'assets/cover-atomic-habits.svg'}" alt="${item.title}" class="w-16 h-20 object-contain rounded-md shadow-xs mb-1">
+              <span class="text-[11px] font-bold text-gray-700 group-hover:text-forest line-clamp-1">${item.title}</span>
+              <span class="text-[10px] font-black text-forest">${item.price || '₹149'}</span>
+            </a>
+          `).join('');
+        }
+      }
+
+      // Trending Audiobooks
+      if (quadData.trending_audio) {
+        const titleEl = document.getElementById('quad-title-audio');
+        const gridEl = document.getElementById('quad-grid-audio');
+        const linkEl = document.getElementById('quad-link-audio');
+
+        if (titleEl && (quadData.trending_audio.titleEn || quadData.trending_audio.titleTa)) {
+          titleEl.textContent = (curLang === 'ta' && quadData.trending_audio.titleTa) ? quadData.trending_audio.titleTa : quadData.trending_audio.titleEn;
+        }
+        if (linkEl && quadData.trending_audio.exploreLink) {
+          linkEl.href = quadData.trending_audio.exploreLink;
+        }
+        if (gridEl && Array.isArray(quadData.trending_audio.items) && quadData.trending_audio.items.length) {
+          gridEl.innerHTML = quadData.trending_audio.items.map(item => `
+            <a href="${item.linkUrl || 'audiobooks.html'}" class="amazon-mini-tile bg-purple-50/50 rounded-xl p-2 border border-purple-100 flex flex-col items-center text-center group">
+              <div class="relative">
+                <img src="${item.coverUrl || 'assets/cover-atomic-habits.svg'}" alt="${item.title}" class="w-16 h-20 object-contain rounded-md shadow-xs mb-1">
+                ${item.duration ? `<span class="absolute bottom-1 right-1 bg-purple-700 text-white text-[8px] font-bold px-1 rounded">${item.duration}</span>` : ''}
+              </div>
+              <span class="text-[11px] font-bold text-gray-700 group-hover:text-navy line-clamp-1">${item.title}</span>
+              <span class="text-[10px] font-black text-purple-700">${item.price || '₹149'}</span>
+            </a>
+          `).join('');
+        }
+      }
+
+      // Self-Help & Mindset
+      if (quadData.self_help) {
+        const titleEl = document.getElementById('quad-title-selfhelp');
+        const gridEl = document.getElementById('quad-grid-selfhelp');
+        const linkEl = document.getElementById('quad-link-selfhelp');
+
+        if (titleEl && (quadData.self_help.titleEn || quadData.self_help.titleTa)) {
+          titleEl.textContent = (curLang === 'ta' && quadData.self_help.titleTa) ? quadData.self_help.titleTa : quadData.self_help.titleEn;
+        }
+        if (linkEl && quadData.self_help.exploreLink) {
+          linkEl.href = quadData.self_help.exploreLink;
+        }
+        if (gridEl && Array.isArray(quadData.self_help.items) && quadData.self_help.items.length) {
+          gridEl.innerHTML = quadData.self_help.items.map(item => `
+            <a href="${item.linkUrl || `book-detail.html?id=${item.bookId || 'b1'}`}" class="amazon-mini-tile bg-green-50/40 rounded-xl p-2 border border-green-100 flex flex-col items-center text-center group">
+              <img src="${item.coverUrl || 'assets/cover-mindset.svg'}" alt="${item.title}" class="w-16 h-20 object-contain rounded-md shadow-xs mb-1">
+              <span class="text-[11px] font-bold text-gray-700 group-hover:text-forest line-clamp-1">${item.title}</span>
+              <span class="text-[10px] font-black text-forest">${item.price || '₹149'}</span>
+            </a>
+          `).join('');
+        }
+      }
+    }
+  } catch (err) {
+    console.warn("Could not load dynamic quad sections:", err);
+  }
 }
 

@@ -202,11 +202,11 @@
   <main class="flex-grow">
     
     <!-- SECTION 1: AMAZON/FLIPKART FULL-WIDTH HERO IMAGE SLIDER -->
-    <section class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 pt-3 sm:pt-6">
+    <section class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 pt-2 sm:pt-6">
       <div id="hero-slider" class="hero-slider-container relative rounded-2xl sm:rounded-3xl overflow-hidden group">
         
         <!-- Slider Track -->
-        <div class="hero-slider-track">
+        <div id="hero-slider-track" class="hero-slider-track">
           
           <!-- SLIDE 1: Tamil Classics & Self-Help Editions (Main / First Image) -->
           <div class="hero-slide cursor-pointer" onclick="window.location.href='books.html'">
@@ -230,22 +230,8 @@
 
         </div>
 
-        <!-- Previous Arrow Button -->
-        <button type="button" class="slider-arrow-btn prev" aria-label="Previous Slide">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
-          </svg>
-        </button>
-
-        <!-- Next Arrow Button -->
-        <button type="button" class="slider-arrow-btn next" aria-label="Next Slide">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
-          </svg>
-        </button>
-
         <!-- Dot Navigation Indicators -->
-        <div class="absolute bottom-3 sm:bottom-5 left-1/2 transform -translate-x-1/2 z-20 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md">
+        <div id="hero-slider-dots" class="absolute bottom-2.5 sm:bottom-5 left-1/2 transform -translate-x-1/2 z-20 flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-black/40 backdrop-blur-md">
           <button type="button" class="slider-dot active" data-slide-to="0" aria-label="Go to slide 1"></button>
           <button type="button" class="slider-dot" data-slide-to="1" aria-label="Go to slide 2"></button>
           <button type="button" class="slider-dot" data-slide-to="2" aria-label="Go to slide 3"></button>
@@ -258,15 +244,15 @@
     <!-- =========================================================================
          SECTION 2: AMAZON-STYLE 4-IN-1 QUAD FEATURE CARDS ROW
          ========================================================================= -->
-    <section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 -mt-2 sm:-mt-6 relative z-20">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <section class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4 sm:py-8 -mt-2 sm:-mt-6 relative z-20">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         
         <!-- Quad Card 1: Top Picks in Tamil -->
-        <div class="amazon-quad-card p-4 sm:p-5">
-          <h3 data-i18n="quad.title1" class="text-base sm:text-lg font-extrabold text-navy mb-3 line-clamp-1">
+        <div class="amazon-quad-card p-3.5 sm:p-5">
+          <h3 id="quad-title-tamil" data-i18n="quad.title1" class="text-base sm:text-lg font-extrabold text-navy mb-2.5 sm:mb-3 line-clamp-1">
             Top Picks in Tamil
           </h3>
-          <div class="grid grid-cols-2 gap-2 flex-grow">
+          <div id="quad-grid-tamil" class="grid grid-cols-2 gap-2 flex-grow">
             <a href="book-detail.html?id=b5" class="amazon-mini-tile bg-gray-50 rounded-xl p-2 border border-gray-100 flex flex-col items-center text-center group">
               <img src="assets/cover-wings-of-fire.svg" alt="Wings of Fire" class="w-16 h-20 object-contain rounded-md shadow-xs mb-1">
               <span class="text-[11px] font-bold text-gray-700 group-hover:text-forest line-clamp-1">அக்னி சிறகுகள்</span>
@@ -288,17 +274,17 @@
               <span class="text-[10px] font-black text-forest">₹149</span>
             </a>
           </div>
-          <a href="books.html" data-i18n="quad.explore" class="text-xs font-bold text-forest hover:text-green-800 mt-3 pt-2 border-t border-gray-100 flex items-center justify-between">
+          <a id="quad-link-tamil" href="books.html" data-i18n="quad.explore" class="text-xs font-bold text-forest hover:text-green-800 mt-3 pt-2 border-t border-gray-100 flex items-center justify-between">
             <span>Explore Collection &rarr;</span>
           </a>
         </div>
 
         <!-- Quad Card 2: Trending Audiobooks -->
-        <div class="amazon-quad-card p-4 sm:p-5">
-          <h3 data-i18n="quad.title2" class="text-base sm:text-lg font-extrabold text-navy mb-3 line-clamp-1">
+        <div class="amazon-quad-card p-3.5 sm:p-5">
+          <h3 id="quad-title-audio" data-i18n="quad.title2" class="text-base sm:text-lg font-extrabold text-navy mb-2.5 sm:mb-3 line-clamp-1">
             Trending Audiobooks
           </h3>
-          <div class="grid grid-cols-2 gap-2 flex-grow">
+          <div id="quad-grid-audio" class="grid grid-cols-2 gap-2 flex-grow">
             <a href="audiobooks.html" class="amazon-mini-tile bg-purple-50/50 rounded-xl p-2 border border-purple-100 flex flex-col items-center text-center group">
               <div class="relative">
                 <img src="assets/cover-atomic-habits.svg" alt="Atomic Habits Audio" class="w-16 h-20 object-contain rounded-md shadow-xs mb-1">
@@ -332,17 +318,17 @@
               <span class="text-[10px] font-black text-purple-700">₹179</span>
             </a>
           </div>
-          <a href="audiobooks.html" data-i18n="quad.explore" class="text-xs font-bold text-purple-700 hover:text-purple-900 mt-3 pt-2 border-t border-gray-100 flex items-center justify-between">
+          <a id="quad-link-audio" href="audiobooks.html" data-i18n="quad.explore" class="text-xs font-bold text-purple-700 hover:text-purple-900 mt-3 pt-2 border-t border-gray-100 flex items-center justify-between">
             <span>Listen Samples &rarr;</span>
           </a>
         </div>
 
         <!-- Quad Card 3: Self-Help & Mindset -->
-        <div class="amazon-quad-card p-4 sm:p-5">
-          <h3 data-i18n="quad.title3" class="text-base sm:text-lg font-extrabold text-navy mb-3 line-clamp-1">
+        <div class="amazon-quad-card p-3.5 sm:p-5">
+          <h3 id="quad-title-selfhelp" data-i18n="quad.title3" class="text-base sm:text-lg font-extrabold text-navy mb-2.5 sm:mb-3 line-clamp-1">
             Self-Help &amp; Mindset
           </h3>
-          <div class="grid grid-cols-2 gap-2 flex-grow">
+          <div id="quad-grid-selfhelp" class="grid grid-cols-2 gap-2 flex-grow">
             <a href="book-detail.html?id=b2" class="amazon-mini-tile bg-green-50/40 rounded-xl p-2 border border-green-100 flex flex-col items-center text-center group">
               <img src="assets/cover-mindset.svg" alt="Mindset" class="w-16 h-20 object-contain rounded-md shadow-xs mb-1">
               <span class="text-[11px] font-bold text-gray-700 group-hover:text-forest line-clamp-1">Mindset</span>
@@ -364,7 +350,7 @@
               <span class="text-[10px] font-black text-forest">₹169</span>
             </a>
           </div>
-          <a href="books.html" data-i18n="quad.explore" class="text-xs font-bold text-forest hover:text-green-800 mt-3 pt-2 border-t border-gray-100 flex items-center justify-between">
+          <a id="quad-link-selfhelp" href="books.html" data-i18n="quad.explore" class="text-xs font-bold text-forest hover:text-green-800 mt-3 pt-2 border-t border-gray-100 flex items-center justify-between">
             <span>Explore All 28+ &rarr;</span>
           </a>
         </div>

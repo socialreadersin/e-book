@@ -309,9 +309,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-  <script src="/js/firebase-config.js"></script>
   <script src="../js/firebase-config.js"></script>
-  <script src="/js/auth.js"></script>
   <script src="../js/auth.js"></script>
 
   <script>
@@ -352,7 +350,10 @@
         const titleTa = typeof story.title === 'object' ? (story.title.ta || '') : '';
         const authorEn = typeof story.author === 'object' ? story.author.en : (story.author || 'Author');
         const genre = story.genre || 'General';
-        const cover = story.coverUrl || 'assets/cover-atomic-habits.svg';
+        let cover = story.coverUrl || 'assets/cover-atomic-habits.svg';
+        if (cover && !cover.startsWith('http://') && !cover.startsWith('https://') && !cover.startsWith('/') && !cover.startsWith('data:') && !cover.startsWith('../')) {
+          cover = '../' + cover;
+        }
         const chaptersCount = story.totalEpisodes || (story.episodes ? story.episodes.length : 12);
         const isPublished = story.status !== 'draft';
 
