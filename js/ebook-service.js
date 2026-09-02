@@ -11,7 +11,7 @@ const _fbKey = (typeof atob !== 'undefined')
 const activeFirebaseConfig = (typeof window !== 'undefined' && window.firebaseConfig) 
   ? window.firebaseConfig 
   : {
-      apiKey: (typeof window !== 'undefined' && window.__FIREBASE_API_KEY__) || (typeof localStorage !== 'undefined' && (localStorage.getItem('ebook_firebase_api_key') || localStorage.getItem('sr_firebase_api_key'))) || '',
+      apiKey: (typeof window !== 'undefined' && window.__FIREBASE_API_KEY__) || (typeof localStorage !== 'undefined' && (localStorage.getItem('ebook_firebase_api_key') || localStorage.getItem('sr_firebase_api_key'))) || _fbKey || '',
       authDomain: "e-book-7c31a.firebaseapp.com",
       projectId: "e-book-7c31a",
       storageBucket: "e-book-7c31a.firebasestorage.app",
@@ -54,13 +54,46 @@ window.SocialReadersDB = {
     return (typeof window !== 'undefined' && window.firebaseConfig) || activeFirebaseConfig;
   },
   get app() {
-    return (typeof window !== 'undefined' && window.firebaseApp) || firebaseApp || (typeof firebase !== 'undefined' && firebase.apps.length ? firebase.app() : null);
+    if (typeof window !== 'undefined' && window.firebaseApp) return window.firebaseApp;
+    if (firebaseApp) return firebaseApp;
+    if (typeof firebase !== 'undefined') {
+      if (firebase.apps.length) return firebase.app();
+      const cfg = this.config;
+      if (cfg && cfg.apiKey && cfg.apiKey.length > 10) {
+        try {
+          const app = firebase.initializeApp(cfg);
+          if (typeof window !== 'undefined') window.firebaseApp = app;
+          return app;
+        } catch (e) {}
+      }
+    }
+    return null;
   },
   get db() {
-    return (typeof window !== 'undefined' && window.firebaseDb) || firestoreDb || (typeof firebase !== 'undefined' && firebase.firestore ? firebase.firestore() : null);
+    if (typeof window !== 'undefined' && window.firebaseDb) return window.firebaseDb;
+    if (firestoreDb) return firestoreDb;
+    const app = this.app;
+    if (app && typeof firebase !== 'undefined' && firebase.firestore) {
+      try {
+        const db = firebase.firestore(app);
+        if (typeof window !== 'undefined') window.firebaseDb = db;
+        return db;
+      } catch (e) {}
+    }
+    return null;
   },
   get auth() {
-    return (typeof window !== 'undefined' && window.firebaseAuth) || firebaseAuth || (typeof firebase !== 'undefined' && firebase.auth ? firebase.auth() : null);
+    if (typeof window !== 'undefined' && window.firebaseAuth) return window.firebaseAuth;
+    if (firebaseAuth) return firebaseAuth;
+    const app = this.app;
+    if (app && typeof firebase !== 'undefined' && firebase.auth) {
+      try {
+        const auth = firebase.auth(app);
+        if (typeof window !== 'undefined') window.firebaseAuth = auth;
+        return auth;
+      } catch (e) {}
+    }
+    return null;
   },
   get isLive() {
     return !!this.db;
