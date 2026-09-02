@@ -1,5 +1,4 @@
-# Cloudflare Pages — URL Redirects & SPA Routing
-#
+# Cloudflare Redirects
 # Format: [from] [to] [status_code]
 # ─────────────────────────────────────────────────────────────────
 
@@ -7,16 +6,9 @@
 /admin         /admin/dashboard.html    301
 /dashboard     /admin/dashboard.html    301
 
-# URL aliases for cleaner navigation
+# URL aliases
 /catalog       /books.html              301
 /listen        /audiobooks.html         301
 /shop          /books.html              301
 /library       /account.html            301
-/account       /account.html            200
 /login         /auth.html               301
-
-# ─── SPA CATCH-ALL ───────────────────────────────────────────────
-# This MUST be the last rule. Serves index.html for any path that
-# doesn't match a static file, enabling client-side routing without 404s.
-# CRITICAL for Cloudflare Pages deployment.
-/*             /index.html              200
