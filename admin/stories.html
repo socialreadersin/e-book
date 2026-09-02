@@ -306,10 +306,15 @@
   </div>
 
   <!-- Scripts -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <!-- 1. Firebase Compat SDKs (Stable 10.12.0) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <!-- 2. Auto-generated Firebase & Cloudinary Config -->
   <script src="../js/firebase-config.js"></script>
+  <script src="../js/cloudinary.config.js"></script>
+  <!-- 3. Your E-Book Application / Database Layer -->
+  <script src="../js/ebook-service.js"></script>
   <script src="../js/auth.js"></script>
 
   <script>
@@ -429,8 +434,13 @@
 
     window.deleteStory = async function(storyId, storyTitle) {
       if (confirm(`Are you sure you want to delete story "${storyTitle}" from Firestore?`)) {
-        await window.SocialReadersDB.deleteStory(storyId);
-        await loadStories();
+        try {
+          await window.SocialReadersDB.deleteStory(storyId);
+          await loadStories();
+        } catch (err) {
+          console.error("Delete story failure:", err);
+          alert(`Delete story failed: ${err.message || err}`);
+        }
       }
     };
 
@@ -462,11 +472,18 @@
         status: document.getElementById('story-status').value
       };
 
-      await window.SocialReadersDB.saveStory(storyData);
-      saveBtn.disabled = false;
-      saveBtn.textContent = 'Save Story';
-      closeStoryModal();
-      await loadStories();
+      try {
+        await window.SocialReadersDB.saveStory(storyData);
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save Story';
+        closeStoryModal();
+        await loadStories();
+      } catch (err) {
+        console.error("Save story failure:", err);
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save Story';
+        alert(`Save story failed: ${err.message || err}`);
+      }
     });
 
     document.addEventListener('DOMContentLoaded', loadStories);

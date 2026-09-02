@@ -266,10 +266,15 @@
   </div>
 
   <!-- Scripts -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <!-- 1. Firebase Compat SDKs (Stable 10.12.0) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <!-- 2. Auto-generated Firebase & Cloudinary Config -->
   <script src="../js/firebase-config.js"></script>
+  <script src="../js/cloudinary.config.js"></script>
+  <!-- 3. Your E-Book Application / Database Layer -->
+  <script src="../js/ebook-service.js"></script>
   <script src="../js/auth.js"></script>
 
   <script>
@@ -405,8 +410,13 @@
 
     window.deleteDeal = async function(dealId, dealTitle) {
       if (confirm(`Are you sure you want to delete lightning deal for "${dealTitle}" from Firestore?`)) {
-        await window.SocialReadersDB.deleteDeal(dealId);
-        await loadDeals();
+        try {
+          await window.SocialReadersDB.deleteDeal(dealId);
+          await loadDeals();
+        } catch (err) {
+          console.error("Delete deal failure:", err);
+          alert(`Delete deal failed: ${err.message || err}`);
+        }
       }
     };
 
@@ -436,11 +446,18 @@
         status: 'active'
       };
 
-      await window.SocialReadersDB.saveDeal(dealData);
-      saveBtn.disabled = false;
-      saveBtn.textContent = 'Schedule Deal';
-      closeDealModalFn();
-      await loadDeals();
+      try {
+        await window.SocialReadersDB.saveDeal(dealData);
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Schedule Deal';
+        closeDealModalFn();
+        await loadDeals();
+      } catch (err) {
+        console.error("Save deal failure:", err);
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Schedule Deal';
+        alert(`Save deal failed: ${err.message || err}`);
+      }
     });
 
     document.addEventListener('DOMContentLoaded', loadDeals);

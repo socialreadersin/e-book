@@ -141,6 +141,42 @@
     <!-- Content Area -->
     <main class="p-4 sm:p-8 space-y-6 sm:space-y-8 flex-grow max-w-5xl">
       
+      <!-- LIVE CONNECTION & AUTH DIAGNOSTIC PANEL -->
+      <div class="bg-white p-5 sm:p-6 rounded-3xl border border-gray-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+          <div class="flex items-center gap-2.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></span>
+            <h2 class="text-sm font-bold text-navy font-heading uppercase tracking-wider">Live System Diagnostics</h2>
+          </div>
+          <button type="button" onclick="runDiagnostics()" class="text-[11px] font-bold text-navy hover:text-forest flex items-center gap-1.5 transition-colors">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            <span>Re-check</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <!-- Firebase Connection Status -->
+          <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100 flex items-start gap-3">
+            <div id="diag-db-icon" class="w-8 h-8 rounded-xl bg-gray-200 text-gray-600 flex items-center justify-center flex-shrink-0 font-bold">...</div>
+            <div class="space-y-0.5 flex-grow">
+              <div class="text-gray-500 text-[11px] font-medium">Firebase Connection</div>
+              <div id="diag-db-status" class="font-bold text-sm text-navy">Checking connection...</div>
+              <div id="diag-db-detail" class="text-[11px] text-gray-500 leading-tight">Verifying Firestore SDK readiness.</div>
+            </div>
+          </div>
+
+          <!-- Admin Authorization Status -->
+          <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100 flex items-start gap-3">
+            <div id="diag-auth-icon" class="w-8 h-8 rounded-xl bg-gray-200 text-gray-600 flex items-center justify-center flex-shrink-0 font-bold">...</div>
+            <div class="space-y-0.5 flex-grow">
+              <div class="text-gray-500 text-[11px] font-medium">Admin Auth &amp; Firestore Permissions</div>
+              <div id="diag-auth-status" class="font-bold text-sm text-navy">Checking auth status...</div>
+              <div id="diag-auth-detail" class="text-[11px] text-gray-500 leading-tight">Checking logged in email &amp; admins collection.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- 0. DEMO SEED ACTION BANNER -->
       <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 sm:p-6 rounded-3xl border border-blue-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
@@ -384,12 +420,16 @@
   </div>
 
   <!-- Scripts -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <!-- 1. Firebase Compat SDKs (Stable 10.12.0) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <!-- 2. Auto-generated Firebase & Cloudinary Config -->
   <script src="../js/firebase-config.js"></script>
+  <script src="../js/cloudinary.config.js"></script>
+  <!-- 3. Your E-Book Application / Database Layer -->
+  <script src="../js/ebook-service.js"></script>
   <script src="../js/auth.js"></script>
-  <script src="../js/cloudinary.js"></script>
 
   <script>
     if (window.SocialReadersAuth && window.SocialReadersAuth.requireAdmin) {
@@ -399,11 +439,96 @@
     let loadedBanners = [];
     let loadedQuadSections = null;
 
+    // Live Connection Diagnostic
+    async function runDiagnostics() {
+      const dbStatusEl = document.getElementById('diag-db-status');
+      const dbDetailEl = document.getElementById('diag-db-detail');
+      const dbIconEl = document.getElementById('diag-db-icon');
+
+      const authStatusEl = document.getElementById('diag-auth-status');
+      const authDetailEl = document.getElementById('diag-auth-detail');
+      const authIconEl = document.getElementById('diag-auth-icon');
+
+      // 1. Check Firebase Connection
+      const isConnected = !!(window.SocialReadersDB && window.SocialReadersDB.isLive && window.SocialReadersDB.db);
+      if (isConnected) {
+        dbStatusEl.textContent = "Connected";
+        dbStatusEl.className = "font-bold text-sm text-emerald-600";
+        dbIconEl.textContent = "✓";
+        dbIconEl.className = "w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 font-bold";
+        dbDetailEl.textContent = `Firestore SDK connected (Project: ${window.SocialReadersDB.config?.projectId || 'e-book-7c31a'}).`;
+      } else {
+        dbStatusEl.textContent = "Not connected";
+        dbStatusEl.className = "font-bold text-sm text-red-600";
+        dbIconEl.textContent = "✗";
+        dbIconEl.className = "w-8 h-8 rounded-xl bg-red-100 text-red-700 flex items-center justify-center flex-shrink-0 font-bold";
+        dbDetailEl.textContent = "Firestore instance unavailable. Running in local cache/offline mode.";
+      }
+
+      // 2. Check Admin Auth and 'admins' collection permissions
+      let adminSession = null;
+      try {
+        const raw = localStorage.getItem('sr_admin_auth');
+        if (raw) adminSession = JSON.parse(raw);
+      } catch (e) {}
+
+      const authUser = (typeof firebase !== 'undefined' && firebase.auth) ? firebase.auth().currentUser : null;
+      const email = authUser?.email || adminSession?.email || "Unknown admin";
+      const uid = authUser?.uid || adminSession?.uid;
+
+      if (!uid) {
+        authStatusEl.textContent = "Not authenticated";
+        authStatusEl.className = "font-bold text-sm text-red-600";
+        authIconEl.textContent = "✗";
+        authIconEl.className = "w-8 h-8 rounded-xl bg-red-100 text-red-700 flex items-center justify-center flex-shrink-0 font-bold";
+        authDetailEl.textContent = "No active admin session found. Please log in again.";
+        return;
+      }
+
+      if (!isConnected) {
+        authStatusEl.textContent = "Offline Session";
+        authStatusEl.className = "font-bold text-sm text-amber-600";
+        authIconEl.textContent = "!";
+        authIconEl.className = "w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0 font-bold";
+        authDetailEl.textContent = `Logged in locally as ${email} (UID: ${uid}). Cannot verify Firestore admins collection while offline.`;
+        return;
+      }
+
+      try {
+        const db = window.SocialReadersDB.db;
+        authStatusEl.textContent = "Verifying permissions...";
+        authStatusEl.className = "font-bold text-sm text-navy";
+
+        const adminDoc = await db.collection('admins').doc(uid).get();
+        if (adminDoc.exists) {
+          authStatusEl.textContent = "Authorized ✓";
+          authStatusEl.className = "font-bold text-sm text-emerald-600";
+          authIconEl.textContent = "✓";
+          authIconEl.className = "w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 font-bold";
+          authDetailEl.textContent = `Logged in as ${email}. UID exists in 'admins' collection — all Firestore write permissions granted.`;
+        } else {
+          authStatusEl.textContent = "NOT in admins collection — writes will fail ✗";
+          authStatusEl.className = "font-bold text-sm text-red-600";
+          authIconEl.textContent = "✗";
+          authIconEl.className = "w-8 h-8 rounded-xl bg-red-100 text-red-700 flex items-center justify-center flex-shrink-0 font-bold";
+          authDetailEl.textContent = `Logged in as ${email} (UID: ${uid}), but this UID is missing from the 'admins' Firestore collection. Rules require exists(/databases/{db}/documents/admins/{uid}).`;
+        }
+      } catch (err) {
+        console.warn("Diagnostic admins check error:", err);
+        authStatusEl.textContent = "NOT in admins collection — writes will fail ✗";
+        authStatusEl.className = "font-bold text-sm text-red-600";
+        authIconEl.textContent = "✗";
+        authIconEl.className = "w-8 h-8 rounded-xl bg-red-100 text-red-700 flex items-center justify-center flex-shrink-0 font-bold";
+        authDetailEl.textContent = `Firestore error checking admins collection: ${err.message || err}. Writes will fail until admin permissions are granted.`;
+      }
+    }
+
     async function loadSettings() {
       if (!window.SocialReadersDB) {
         setTimeout(loadSettings, 200);
         return;
       }
+      runDiagnostics();
       try {
         const storedKey = localStorage.getItem('sr_firebase_api_key') || (window.SocialReadersDB?.config?.apiKey) || '';
         const keyInput = document.getElementById('setting-firebase-api-key');
@@ -647,10 +772,17 @@
         alt: banner.alt || banner.title
       }));
 
-      await window.SocialReadersDB.saveHeroBanners(updatedBanners);
-      btn.disabled = false;
-      btn.textContent = 'Banners Saved ✓';
-      setTimeout(() => { btn.textContent = 'Save Banners'; }, 2000);
+      try {
+        await window.SocialReadersDB.saveHeroBanners(updatedBanners);
+        btn.disabled = false;
+        btn.textContent = 'Banners Saved ✓';
+        setTimeout(() => { btn.textContent = 'Save Banners'; }, 2000);
+      } catch (err) {
+        console.error("Save banners error:", err);
+        btn.disabled = false;
+        btn.textContent = 'Save Banners';
+        alert(`Save banners failed: ${err.message || err}`);
+      }
     });
 
     // Save Quad Sections Event
@@ -705,10 +837,17 @@
         }
       };
 
-      await window.SocialReadersDB.saveQuadSections(newQuadData);
-      btn.disabled = false;
-      btn.textContent = 'Quad Sections Saved ✓';
-      setTimeout(() => { btn.textContent = 'Save Quad Sections'; }, 2000);
+      try {
+        await window.SocialReadersDB.saveQuadSections(newQuadData);
+        btn.disabled = false;
+        btn.textContent = 'Quad Sections Saved ✓';
+        setTimeout(() => { btn.textContent = 'Save Quad Sections'; }, 2000);
+      } catch (err) {
+        console.error("Save quad sections error:", err);
+        btn.disabled = false;
+        btn.textContent = 'Save Quad Sections';
+        alert(`Save quad sections failed: ${err.message || err}`);
+      }
     });
 
     document.getElementById('save-settings-btn').addEventListener('click', async () => {
@@ -725,10 +864,17 @@
         supportEmail: document.getElementById('setting-support-email').value.trim()
       };
 
-      await window.SocialReadersDB.saveSettings(payload);
-      btn.disabled = false;
-      btn.textContent = 'Saved to Firestore ✓';
-      setTimeout(() => { btn.textContent = 'Save Changes'; }, 2000);
+      try {
+        await window.SocialReadersDB.saveSettings(payload);
+        btn.disabled = false;
+        btn.textContent = 'Saved to Firestore ✓';
+        setTimeout(() => { btn.textContent = 'Save Changes'; }, 2000);
+      } catch (err) {
+        console.error("Save settings error:", err);
+        btn.disabled = false;
+        btn.textContent = 'Save Changes';
+        alert(`Save settings failed: ${err.message || err}`);
+      }
     });
 
     document.getElementById('seed-demo-data-btn').addEventListener('click', async () => {

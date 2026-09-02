@@ -8,30 +8,36 @@ const _fbKey = (typeof atob !== 'undefined')
   ? atob('QUl6YVN5RFJ6NDc3UjBYMGxleE5PU3NISlVtTnMzdXQ1VnphV2s=') 
   : [atob('QUl6YVN5'), 'DRz477R0X0lexNOSs', 'HJUmNs3ut5VzaWk'].join('');
 
-const firebaseConfig = {
-  apiKey: (typeof window !== 'undefined' && window.__FIREBASE_API_KEY__) || (typeof localStorage !== 'undefined' && localStorage.getItem('sr_firebase_api_key')) || _fbKey,
-  authDomain: "e-book-7c31a.firebaseapp.com",
-  projectId: "e-book-7c31a",
-  storageBucket: "e-book-7c31a.firebasestorage.app",
-  messagingSenderId: "34774269799",
-  appId: "1:34774269799:web:225f344859794de1a139c2",
-  measurementId: "G-Y5HDMGDDPR"
-};
+const activeFirebaseConfig = (typeof window !== 'undefined' && window.firebaseConfig) 
+  ? window.firebaseConfig 
+  : {
+      apiKey: (typeof window !== 'undefined' && window.__FIREBASE_API_KEY__) || (typeof localStorage !== 'undefined' && (localStorage.getItem('ebook_firebase_api_key') || localStorage.getItem('sr_firebase_api_key'))) || '',
+      authDomain: "e-book-7c31a.firebaseapp.com",
+      projectId: "e-book-7c31a",
+      storageBucket: "e-book-7c31a.firebasestorage.app",
+      messagingSenderId: "34774269799",
+      appId: "1:34774269799:web:225f344859794de1a139c2",
+      measurementId: "G-Y5HDMGDDPR"
+    };
 
 // Initialize Firebase if SDK is loaded
-let firebaseApp = null;
-let firestoreDb = null;
-let firebaseAuth = null;
+let firebaseApp = (typeof window !== 'undefined' && window.firebaseApp) || null;
+let firestoreDb = (typeof window !== 'undefined' && window.firebaseDb) || null;
+let firebaseAuth = (typeof window !== 'undefined' && window.firebaseAuth) || null;
 
 try {
   if (typeof firebase !== 'undefined') {
     if (!firebase.apps.length) {
-      firebaseApp = firebase.initializeApp(firebaseConfig);
+      if (activeFirebaseConfig.apiKey && activeFirebaseConfig.apiKey.length > 10) {
+        firebaseApp = firebase.initializeApp(activeFirebaseConfig);
+      }
     } else {
       firebaseApp = firebase.app();
     }
-    firestoreDb = firebase.firestore();
-    firebaseAuth = firebase.auth();
+    if (firebaseApp) {
+      if (!firestoreDb) firestoreDb = firebase.firestore();
+      if (!firebaseAuth) firebaseAuth = firebase.auth();
+    }
   }
 } catch (err) {
   console.warn("Firebase initialization notice:", err);
@@ -39,11 +45,21 @@ try {
 
 // Global Firebase / Firestore database wrapper
 window.SocialReadersDB = {
-  config: firebaseConfig,
-  app: firebaseApp,
-  db: firestoreDb,
-  auth: firebaseAuth,
-  isLive: !!firestoreDb,
+  get config() {
+    return (typeof window !== 'undefined' && window.firebaseConfig) || activeFirebaseConfig;
+  },
+  get app() {
+    return (typeof window !== 'undefined' && window.firebaseApp) || firebaseApp || (typeof firebase !== 'undefined' && firebase.apps.length ? firebase.app() : null);
+  },
+  get db() {
+    return (typeof window !== 'undefined' && window.firebaseDb) || firestoreDb || (typeof firebase !== 'undefined' && firebase.firestore ? firebase.firestore() : null);
+  },
+  get auth() {
+    return (typeof window !== 'undefined' && window.firebaseAuth) || firebaseAuth || (typeof firebase !== 'undefined' && firebase.auth ? firebase.auth() : null);
+  },
+  get isLive() {
+    return !!this.db;
+  },
 
   // In-memory runtime cache for high-speed synchronous rendering
   _cache: {
@@ -435,6 +451,7 @@ window.SocialReadersDB = {
         await this.db.collection('books').doc(bookId).set(cleanData, { merge: true });
       } catch (err) {
         console.error("Firestore saveBook error:", err);
+        throw err;
       }
     }
 
@@ -449,6 +466,7 @@ window.SocialReadersDB = {
         await this.db.collection('books').doc(bookId).delete();
       } catch (err) {
         console.error("Firestore deleteBook error:", err);
+        throw err;
       }
     }
     await this.getBooks(true);
@@ -504,6 +522,7 @@ window.SocialReadersDB = {
         await this.db.collection('categories').doc(catId).set(cleanData, { merge: true });
       } catch (err) {
         console.error("Firestore saveCategory error:", err);
+        throw err;
       }
     }
     await this.getCategories();
@@ -516,6 +535,7 @@ window.SocialReadersDB = {
         await this.db.collection('categories').doc(catId).delete();
       } catch (err) {
         console.error("Firestore deleteCategory error:", err);
+        throw err;
       }
     }
     await this.getCategories();
@@ -571,6 +591,7 @@ window.SocialReadersDB = {
         await this.db.collection('deals').doc(dealId).set(cleanData, { merge: true });
       } catch (err) {
         console.error("Firestore saveDeal error:", err);
+        throw err;
       }
     }
     await this.getDeals();
@@ -583,6 +604,7 @@ window.SocialReadersDB = {
         await this.db.collection('deals').doc(dealId).delete();
       } catch (err) {
         console.error("Firestore deleteDeal error:", err);
+        throw err;
       }
     }
     await this.getDeals();
@@ -653,6 +675,7 @@ window.SocialReadersDB = {
         await this.db.collection('stories').doc(storyId).set(cleanData, { merge: true });
       } catch (err) {
         console.error("Firestore saveStory error:", err);
+        throw err;
       }
     }
     await this.getStories();
@@ -665,6 +688,7 @@ window.SocialReadersDB = {
         await this.db.collection('stories').doc(storyId).delete();
       } catch (err) {
         console.error("Firestore deleteStory error:", err);
+        throw err;
       }
     }
     await this.getStories();
@@ -719,6 +743,7 @@ window.SocialReadersDB = {
         await this.db.collection('orders').doc(orderId).set(fullOrder);
       } catch (err) {
         console.error("Firestore createOrder error:", err);
+        throw err;
       }
     }
 
@@ -766,6 +791,7 @@ window.SocialReadersDB = {
         await this.db.collection('settings').doc('store').set(newSettings, { merge: true });
       } catch (err) {
         console.error("Firestore saveSettings error:", err);
+        throw err;
       }
     }
     this._cache.settings = newSettings;
@@ -852,6 +878,7 @@ window.SocialReadersDB = {
         }, { merge: true });
       } catch (err) {
         console.error("Firestore saveHeroBanners error:", err);
+        throw err;
       }
     }
     try {
@@ -943,6 +970,7 @@ window.SocialReadersDB = {
         }, { merge: true });
       } catch (err) {
         console.error("Firestore saveQuadSections error:", err);
+        throw err;
       }
     }
     try {

@@ -1,11 +1,13 @@
+.env
+.env.local
 node_modules/
+js/firebase-config.js
+js/cloudinary.config.js
 .DS_Store
 .wrangler/
 *.log
 bun.lock
 bun.lockb
-.env
-.env.local
 .env.*
 *.csv
 *secret*
