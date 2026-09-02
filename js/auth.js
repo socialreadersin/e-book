@@ -17,12 +17,22 @@ function ensureFirebaseInitialized() {
 
 window.SocialReadersAuth = {
   // Check if admin is currently authenticated
+  // Check if admin is currently authenticated
   isAdminAuthenticated() {
     const adminSession = localStorage.getItem('sr_admin_auth');
     if (!adminSession) return false;
     try {
       const data = JSON.parse(adminSession);
-      return data && data.role === 'admin' && data.isLoggedIn === true;
+      if (!data || data.role !== 'admin' || data.isLoggedIn !== true) return false;
+      
+      // If Firebase Auth is initialized and active, ensure currentUser exists
+      if (typeof firebase !== 'undefined' && firebase.auth && firebase.apps && firebase.apps.length) {
+        const currentUser = firebase.auth().currentUser;
+        if (currentUser && currentUser.uid !== data.uid && data.uid !== 'demo_admin_uid') {
+          return false;
+        }
+      }
+      return true;
     } catch (e) {
       return false;
     }
@@ -31,25 +41,30 @@ window.SocialReadersAuth = {
   // Login Admin using real Firebase Auth with Firestore admins collection verification
   async loginAdmin(email, password) {
     ensureFirebaseInitialized();
-    // 1. Try real Firebase Auth
+
+    if (!email || !password) {
+      return { success: false, message: "Please provide both email and password." };
+    }
+
+    // 1. Authenticate against Firebase Auth
     if (typeof firebase !== 'undefined' && firebase.auth && firebase.apps.length) {
       try {
-        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+        const userCredential = await firebase.auth().signInWithEmailAndPassword(email.trim(), password);
         const user = userCredential.user;
 
-        // Verify admin authorization in Firestore `admins` collection
+        // Verify admin authorization in Firestore `admins` collection or primary admin role
         let isAdmin = false;
         if (firebase.firestore) {
           try {
             const adminDoc = await firebase.firestore().collection('admins').doc(user.uid).get();
-            if (adminDoc.exists || email.toLowerCase() === 'admin@socialreaders.org') {
+            if (adminDoc.exists || email.toLowerCase().trim() === 'admin@socialreaders.org') {
               isAdmin = true;
             }
           } catch (docErr) {
-            console.warn("Could not read admins collection, checking primary admin email:", docErr);
-            if (email.toLowerCase() === 'admin@socialreaders.org') isAdmin = true;
+            console.warn("Admins collection lookup notice:", docErr);
+            if (email.toLowerCase().trim() === 'admin@socialreaders.org') isAdmin = true;
           }
-        } else if (email.toLowerCase() === 'admin@socialreaders.org') {
+        } else if (email.toLowerCase().trim() === 'admin@socialreaders.org') {
           isAdmin = true;
         }
 
@@ -69,38 +84,16 @@ window.SocialReadersAuth = {
         localStorage.setItem('sr_admin_auth', JSON.stringify(session));
         return { success: true, session };
       } catch (authErr) {
-        console.warn("Firebase Auth error, checking fallback:", authErr);
-        // Fallback for bootstrap demo credential
-        if (email === 'admin@socialreaders.org' && (password === 'admin123' || password.length >= 6)) {
-          const session = {
-            uid: "demo_admin_uid",
-            email: email,
-            name: "Admin S. Raman",
-            role: "admin",
-            isLoggedIn: true,
-            loginAt: new Date().toISOString()
-          };
-          localStorage.setItem('sr_admin_auth', JSON.stringify(session));
-          return { success: true, session };
+        console.error("Firebase Admin Auth error:", authErr);
+        let msg = authErr.message || "Invalid administrator credentials.";
+        if (authErr.code === 'auth/invalid-credential' || authErr.code === 'auth/wrong-password' || authErr.code === 'auth/user-not-found') {
+          msg = "Invalid email or password. Please verify your credentials.";
         }
-        return { success: false, message: authErr.message || "Invalid credentials." };
+        return { success: false, message: msg };
       }
     }
 
-    // Fallback if Firebase SDK is unavailable
-    if (email === 'admin@socialreaders.org' && (password === 'admin123' || password.length >= 6)) {
-      const session = {
-        uid: "demo_admin_uid",
-        email: email,
-        name: "Admin S. Raman",
-        role: "admin",
-        isLoggedIn: true,
-        loginAt: new Date().toISOString()
-      };
-      localStorage.setItem('sr_admin_auth', JSON.stringify(session));
-      return { success: true, session };
-    }
-    return { success: false, message: "Invalid admin credentials." };
+    return { success: false, message: "Firebase Authentication service is unavailable. Please check your network or configuration." };
   },
 
   // Logout Admin
@@ -129,85 +122,92 @@ window.SocialReadersAuth = {
 
   async loginUser(email, password) {
     ensureFirebaseInitialized();
-    let name = email.split('@')[0];
-    let uid = "user_" + Date.now();
+
+    if (!email || !password) {
+      return { success: false, message: "Please enter both email and password." };
+    }
+
+    const cleanEmail = email.trim();
 
     if (typeof firebase !== 'undefined' && firebase.auth && firebase.apps.length) {
       try {
-        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
-        if (userCredential.user) {
-          uid = userCredential.user.uid;
-          name = userCredential.user.displayName || email.split('@')[0];
+        const userCredential = await firebase.auth().signInWithEmailAndPassword(cleanEmail, password);
+        const user = userCredential.user;
+        const uid = user.uid;
+        const name = user.displayName || cleanEmail.split('@')[0];
+
+        // Query user's real orders using scoped query (never download all platform orders)
+        let userOrders = [];
+        try {
+          if (window.SocialReadersDB && window.SocialReadersDB.getUserOrders) {
+            userOrders = await window.SocialReadersDB.getUserOrders(cleanEmail);
+          }
+        } catch (err) {
+          console.warn("Could not calculate user order stats:", err);
         }
-      } catch (e) {
-        console.warn("Customer auth fallback:", e);
+
+        const libraryCount = userOrders.length;
+        const totalContributed = userOrders.reduce((sum, o) => sum + (Number(o.causeShare) || (Number(o.amount) * 0.25) || 0), 0);
+
+        const customerSession = {
+          uid: uid,
+          name: name,
+          email: cleanEmail,
+          role: 'customer',
+          isLoggedIn: true,
+          memberSince: "2026",
+          libraryCount: libraryCount,
+          totalContributed: Number(totalContributed.toFixed(2))
+        };
+        localStorage.setItem('sr_user_auth', JSON.stringify(customerSession));
+        return { success: true, user: customerSession };
+      } catch (authErr) {
+        console.error("Customer login error:", authErr);
+        let msg = authErr.message || "Invalid email or password.";
+        if (authErr.code === 'auth/invalid-credential' || authErr.code === 'auth/wrong-password' || authErr.code === 'auth/user-not-found') {
+          msg = "Invalid email or password. Please try again.";
+        }
+        return { success: false, message: msg };
       }
     }
 
-    // Query user's real orders to calculate dynamic libraryCount and totalContributed
-    let userOrders = [];
-    try {
-      if (window.SocialReadersDB && window.SocialReadersDB.getOrders) {
-        const allOrders = await window.SocialReadersDB.getOrders();
-        userOrders = allOrders.filter(o => (o.customerEmail || o.buyerEmail || '').toLowerCase() === email.toLowerCase());
-      }
-    } catch (err) {
-      console.warn("Could not calculate user order stats:", err);
-    }
-
-    const libraryCount = userOrders.length;
-    const totalContributed = userOrders.reduce((sum, o) => sum + (Number(o.causeShare) || (Number(o.amount) * 0.25) || 0), 0);
-
-    const user = {
-      uid: uid,
-      name: name,
-      email: email,
-      role: 'customer',
-      isLoggedIn: true,
-      memberSince: "2026",
-      libraryCount: libraryCount,
-      totalContributed: Number(totalContributed.toFixed(2))
-    };
-    localStorage.setItem('sr_user_auth', JSON.stringify(user));
-    return { success: true, user };
+    return { success: false, message: "Authentication service currently unavailable. Please check your connection." };
   },
 
   async signupUser(name, email, password) {
     ensureFirebaseInitialized();
+
+    if (!email || !password) {
+      return { success: false, message: "Please provide an email and password." };
+    }
+
+    const cleanEmail = email.trim();
+
     if (typeof firebase !== 'undefined' && firebase.auth && firebase.apps.length) {
       try {
-        const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+        const userCredential = await firebase.auth().createUserWithEmailAndPassword(cleanEmail, password);
         if (userCredential.user && name) {
-          await userCredential.user.updateProfile({ displayName: name });
+          await userCredential.user.updateProfile({ displayName: name.trim() });
         }
-        const user = {
+        const customerSession = {
           uid: userCredential.user.uid,
-          name: name || email.split('@')[0],
-          email: email,
+          name: name ? name.trim() : cleanEmail.split('@')[0],
+          email: cleanEmail,
           role: 'customer',
           isLoggedIn: true,
           memberSince: "2026",
           libraryCount: 0,
           totalContributed: 0
         };
-        localStorage.setItem('sr_user_auth', JSON.stringify(user));
-        return { success: true, user };
+        localStorage.setItem('sr_user_auth', JSON.stringify(customerSession));
+        return { success: true, user: customerSession };
       } catch (e) {
-        console.warn("Customer signup fallback:", e);
+        console.error("Customer signup error:", e);
+        return { success: false, message: e.message || "Registration failed. Please try again." };
       }
     }
 
-    const user = {
-      name: name || email.split('@')[0],
-      email: email,
-      role: 'customer',
-      isLoggedIn: true,
-      memberSince: "2026",
-      libraryCount: 0,
-      totalContributed: 0
-    };
-    localStorage.setItem('sr_user_auth', JSON.stringify(user));
-    return { success: true, user };
+    return { success: false, message: "Registration service currently unavailable. Please check your connection." };
   },
 
   async logoutUser() {

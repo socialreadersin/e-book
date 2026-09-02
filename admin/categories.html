@@ -252,8 +252,12 @@
         return;
       }
 
+      const esc = (window.SocialReadersUtils && window.SocialReadersUtils.escapeHtml) 
+        ? window.SocialReadersUtils.escapeHtml 
+        : (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
       tbody.innerHTML = allCategories.map(cat => {
-        const nameEn = typeof cat.name === 'object' ? cat.name.en : (cat.name || 'Category');
+        const nameEn = typeof cat.name === 'object' ? (cat.name.en || '') : (cat.name || 'Category');
         const nameTa = typeof cat.name === 'object' ? (cat.name.ta || '') : '';
         const slug = cat.slug || cat.id;
 
@@ -265,10 +269,10 @@
         return `
           <tr class="hover:bg-gray-50/80 transition-colors">
             <td class="py-4 px-6 font-semibold text-navy">
-              <div class="font-bold text-sm">${nameEn}</div>
-              <div class="text-xs text-gray-400 font-tamil">${nameTa}</div>
+              <div class="font-bold text-sm">${esc(nameEn)}</div>
+              <div class="text-xs text-gray-400 font-tamil">${esc(nameTa)}</div>
             </td>
-            <td class="py-4 px-4 font-mono text-xs text-gray-500">${slug}</td>
+            <td class="py-4 px-4 font-mono text-xs text-gray-500">${esc(slug)}</td>
             <td class="py-4 px-4 font-bold text-navy">${bookCount} Books</td>
             <td class="py-4 px-4 font-bold text-purple-700">${audioCount} Audio</td>
             <td class="py-4 px-4">
@@ -279,13 +283,22 @@
             </td>
             <td class="py-4 px-6 text-right">
               <div class="inline-flex items-center gap-2">
-                <button type="button" onclick="editCategory('${cat.id}')" class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
-                <button type="button" onclick="deleteCategory('${cat.id}', '${nameEn}')" class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">Delete</button>
+                <button type="button" data-action="edit" data-id="${esc(cat.id)}" class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
+                <button type="button" data-action="delete" data-id="${esc(cat.id)}" data-name="${esc(nameEn)}" class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">Delete</button>
               </div>
             </td>
           </tr>
         `;
       }).join('');
+
+      tbody.onclick = (e) => {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+        const action = btn.dataset.action;
+        const id = btn.dataset.id;
+        if (action === 'edit') editCategory(id);
+        if (action === 'delete') deleteCategory(id, btn.dataset.name);
+      };
     }
 
     function openCategoryModal(isEdit = false) {

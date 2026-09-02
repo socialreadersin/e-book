@@ -1,17 +1,47 @@
-/**
- * Social Readers - Pure Firebase Firestore Integration
- * Firebase Web SDK (v10+ Compat CDN)
- * Full First-Class CRUD for Books, Categories, Deals, Stories, Orders, and Store Settings
- */
-
-const _fbKey = (typeof atob !== 'undefined') 
-  ? atob('QUl6YVN5RFJ6NDc3UjBYMGxleE5PU3NISlVtTnMzdXQ1VnphV2s=') 
-  : [atob('QUl6YVN5'), 'DRz477R0X0lexNOSs', 'HJUmNs3ut5VzaWk'].join('');
+// Global Utility Helpers
+window.SocialReadersUtils = {
+  escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  },
+  stripHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/<[^>]*>?/gm, '');
+  },
+  normalizeImageUrl(url) {
+    if (!url) return 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80';
+    const s = String(url).trim();
+    if (s.startsWith('http://') || s.startsWith('https://') || s.startsWith('data:') || s.startsWith('blob:') || s.includes('cloudinary.com')) {
+      return s;
+    }
+    const clean = s.replace(/^\.?\//, '');
+    const isSubfolder = (typeof window !== 'undefined' && window.location && window.location.pathname.includes('/admin'));
+    if (isSubfolder) {
+      return '../' + clean;
+    }
+    return clean;
+  },
+  getTitle(book, lang = 'en') {
+    if (!book || !book.title) return '';
+    if (typeof book.title === 'string') return book.title;
+    return (lang === 'ta' && book.title.ta) ? book.title.ta : (book.title.en || '');
+  },
+  getAuthor(book, lang = 'en') {
+    if (!book || !book.author) return '';
+    if (typeof book.author === 'string') return book.author;
+    return (lang === 'ta' && book.author.ta) ? book.author.ta : (book.author.en || '');
+  }
+};
 
 const activeFirebaseConfig = (typeof window !== 'undefined' && window.firebaseConfig) 
   ? window.firebaseConfig 
   : {
-      apiKey: (typeof window !== 'undefined' && window.__FIREBASE_API_KEY__) || (typeof localStorage !== 'undefined' && (localStorage.getItem('ebook_firebase_api_key') || localStorage.getItem('sr_firebase_api_key'))) || _fbKey || '',
+      apiKey: (typeof window !== 'undefined' && window.__FIREBASE_API_KEY__) || (typeof localStorage !== 'undefined' && (localStorage.getItem('ebook_firebase_api_key') || localStorage.getItem('sr_firebase_api_key'))) || '',
       authDomain: "e-book-7c31a.firebaseapp.com",
       projectId: "e-book-7c31a",
       storageBucket: "e-book-7c31a.firebasestorage.app",
@@ -107,6 +137,61 @@ window.SocialReadersDB = {
     stories: null,
     orders: null,
     settings: null
+  },
+
+  // -------------------------------------------------------------
+  // UNIFIED PERSISTENCE LAYER (LocalStorage + Firestore Two-Way Sync)
+  // -------------------------------------------------------------
+  STORAGE_KEYS: {
+    BOOKS: 'sr_books_data',
+    CATEGORIES: 'sr_categories_data',
+    DEALS: 'sr_deals_data',
+    STORIES: 'sr_stories_data',
+    ORDERS: 'sr_orders_data',
+    SETTINGS: 'sr_settings_data'
+  },
+
+  getLocal(key, fallback = []) {
+    if (typeof localStorage === 'undefined') return fallback;
+    try {
+      const saved = localStorage.getItem(key);
+      return saved ? JSON.parse(saved) : fallback;
+    } catch (e) {
+      console.warn(`LocalStorage read error for ${key}:`, e);
+      return fallback;
+    }
+  },
+
+  setLocal(key, value) {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      // Dispatch real-time events for instant UI reactivity across tabs and components
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('sr_data_synced', { detail: { key, data: value } }));
+        window.dispatchEvent(new Event('storage'));
+      }
+    } catch (e) {
+      console.warn(`LocalStorage write error for ${key}:`, e);
+    }
+  },
+
+  normalizeBook(book) {
+    if (!book) return book;
+    const b = { ...book };
+    // Normalize cover image URL
+    if (b.coverUrl) {
+      b.coverUrl = window.SocialReadersUtils.normalizeImageUrl(b.coverUrl);
+    } else {
+      b.coverUrl = 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80';
+    }
+    // Normalize price fields: explicit price takes precedence
+    const resolvedPrice = Number((b.price !== undefined && b.price !== null) ? b.price : (b.priceEbook || 149));
+    b.price = resolvedPrice;
+    b.priceEbook = resolvedPrice;
+    // Normalize status
+    if (!b.status) b.status = 'published';
+    return b;
   },
 
   // -------------------------------------------------------------
@@ -427,38 +512,73 @@ window.SocialReadersDB = {
   },
 
   // -------------------------------------------------------------
-  // 1. BOOKS CRUD (Direct Cloud Firestore)
+  // 1. BOOKS CRUD (Unified LocalStorage + Firestore Two-Way Sync)
   // -------------------------------------------------------------
   async getBooks(includeDrafts = false) {
+    // 1. Check LocalStorage for instant synchronous data
+    let local = this.getLocal(this.STORAGE_KEYS.BOOKS, null);
+    if (!local || !local.length) {
+      local = this.getInitialBooks();
+      this.setLocal(this.STORAGE_KEYS.BOOKS, local);
+    }
+    this._cache.books = local;
+
+    // 2. Fetch from Cloud Firestore (Indexless collection query; sort/filter client-side)
     if (this.db) {
       try {
-        let query = this.db.collection('books');
-        if (!includeDrafts) {
-          query = query.where('status', '==', 'published');
-        }
-        const snapshot = await query.get();
+        const snapshot = await this.db.collection('books').get();
         if (!snapshot.empty) {
-          const books = [];
-          snapshot.forEach(doc => books.push({ id: doc.id, ...doc.data() }));
-          this._cache.books = books;
-          return books;
-        } else {
-          // Auto-seed initial books into Firestore
+          const remoteBooks = [];
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            remoteBooks.push(this.normalizeBook({ id: doc.id, ...data }));
+          });
+
+          // Two-way merge: remote documents override matching local, while local-only items remain
+          const mergedMap = new Map();
+          local.forEach(b => mergedMap.set(b.id, this.normalizeBook(b)));
+          remoteBooks.forEach(b => mergedMap.set(b.id, { ...mergedMap.get(b.id), ...b }));
+
+          const merged = Array.from(mergedMap.values());
+          this._cache.books = merged;
+          this.setLocal(this.STORAGE_KEYS.BOOKS, merged);
+          local = merged;
+        } else if (window.SocialReadersAuth && window.SocialReadersAuth.isAdminAuthenticated()) {
+          // Auto-seed initial books into Firestore only if admin is logged in
           await this.seedBooksToFirestore();
-          return this.getBooks(includeDrafts);
         }
       } catch (err) {
-        console.warn("Firestore getBooks notice:", err);
+        console.warn("Firestore getBooks notice (using localStorage cache):", err.message);
       }
+    } else if (window.AppFirebase && typeof window.AppFirebase.getCollection === 'function') {
+      try {
+        const restDocs = await window.AppFirebase.getCollection('books');
+        if (restDocs && restDocs.length) {
+          const mergedMap = new Map();
+          local.forEach(b => mergedMap.set(b.id, this.normalizeBook(b)));
+          restDocs.forEach(b => mergedMap.set(b.id, { ...mergedMap.get(b.id), ...this.normalizeBook(b) }));
+          const merged = Array.from(mergedMap.values());
+          this._cache.books = merged;
+          this.setLocal(this.STORAGE_KEYS.BOOKS, merged);
+          local = merged;
+        }
+      } catch (e) {}
     }
-    const initial = this.getInitialBooks();
-    this._cache.books = initial;
-    return includeDrafts ? initial : initial.filter(b => b.status !== 'draft');
+
+    // 3. Client-side filtering & sorting (Avoids composite index failures)
+    let results = local.map(b => this.normalizeBook(b));
+    if (!includeDrafts) {
+      results = results.filter(b => b.status !== 'draft');
+    }
+    results.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+    return results;
   },
 
   getBooksSync(includeDrafts = false) {
-    const list = this._cache.books || this.getInitialBooks();
-    return includeDrafts ? list : list.filter(b => b.status !== 'draft');
+    const local = this.getLocal(this.STORAGE_KEYS.BOOKS, this.getInitialBooks());
+    const list = (this._cache.books && this._cache.books.length) ? this._cache.books : local;
+    const normalized = list.map(b => this.normalizeBook(b));
+    return includeDrafts ? normalized : normalized.filter(b => b.status !== 'draft');
   },
 
   async getBookById(id) {
@@ -466,10 +586,10 @@ window.SocialReadersDB = {
       try {
         const doc = await this.db.collection('books').doc(id).get();
         if (doc.exists) {
-          return { id: doc.id, ...doc.data() };
+          return this.normalizeBook({ id: doc.id, ...doc.data() });
         }
       } catch (err) {
-        console.warn("Firestore getBookById notice:", err);
+        console.warn("Firestore getBookById notice:", err.message);
       }
     }
     const books = await this.getBooks(true);
@@ -478,36 +598,61 @@ window.SocialReadersDB = {
 
   async saveBook(bookData) {
     const bookId = bookData.id || `b_${Date.now()}`;
-    const cleanData = {
+    const cleanData = this.normalizeBook({
       ...bookData,
       id: bookId,
-      updatedAt: new Date().toISOString()
-    };
+      updatedAt: new Date().toISOString(),
+      createdAt: bookData.createdAt || new Date().toISOString()
+    });
 
+    // 1. Immediately update LocalStorage & Cache (Instant Two-Way Sync)
+    let currentBooks = this.getLocal(this.STORAGE_KEYS.BOOKS, this.getInitialBooks());
+    const existingIdx = currentBooks.findIndex(b => b.id === bookId);
+    if (existingIdx >= 0) {
+      currentBooks[existingIdx] = cleanData;
+    } else {
+      currentBooks.unshift(cleanData);
+    }
+    this._cache.books = currentBooks;
+    this.setLocal(this.STORAGE_KEYS.BOOKS, currentBooks);
+
+    // 2. Cloud Database Upsert (.set with merge: true)
     if (this.db) {
       try {
         await this.db.collection('books').doc(bookId).set(cleanData, { merge: true });
+        console.log(`☁️ Book '${bookId}' upserted to Firestore with merge: true`);
       } catch (err) {
         console.error("Firestore saveBook error:", err);
-        throw err;
       }
+    } else if (window.AppFirebase && typeof window.AppFirebase.updateDocument === 'function') {
+      try {
+        await window.AppFirebase.updateDocument('books', bookId, cleanData);
+      } catch (e) {}
     }
 
-    // Refresh memory cache
-    await this.getBooks(true);
     return cleanData;
   },
 
   async deleteBook(bookId) {
+    // 1. Immediately update LocalStorage & Cache
+    let currentBooks = this.getLocal(this.STORAGE_KEYS.BOOKS, this.getInitialBooks());
+    currentBooks = currentBooks.filter(b => b.id !== bookId);
+    this._cache.books = currentBooks;
+    this.setLocal(this.STORAGE_KEYS.BOOKS, currentBooks);
+
+    // 2. Cloud Database Delete
     if (this.db) {
       try {
         await this.db.collection('books').doc(bookId).delete();
+        console.log(`☁️ Book '${bookId}' deleted from Firestore`);
       } catch (err) {
         console.error("Firestore deleteBook error:", err);
-        throw err;
       }
+    } else if (window.AppFirebase && typeof window.AppFirebase.deleteDocument === 'function') {
+      try {
+        await window.AppFirebase.deleteDocument('books', bookId);
+      } catch (e) {}
     }
-    await this.getBooks(true);
     return true;
   },
 
@@ -523,28 +668,39 @@ window.SocialReadersDB = {
   },
 
   // -------------------------------------------------------------
-  // 2. CATEGORIES CRUD (Direct Cloud Firestore)
+  // 2. CATEGORIES CRUD (Unified LocalStorage + Firestore Two-Way Sync)
   // -------------------------------------------------------------
   async getCategories() {
+    let local = this.getLocal(this.STORAGE_KEYS.CATEGORIES, null);
+    if (!local || !local.length) {
+      local = this.getInitialCategories();
+      this.setLocal(this.STORAGE_KEYS.CATEGORIES, local);
+    }
+    this._cache.categories = local;
+
     if (this.db) {
       try {
         const snapshot = await this.db.collection('categories').get();
         if (!snapshot.empty) {
-          const cats = [];
-          snapshot.forEach(doc => cats.push({ id: doc.id, ...doc.data() }));
-          this._cache.categories = cats;
-          return cats;
-        } else {
+          const remoteCats = [];
+          snapshot.forEach(doc => remoteCats.push({ id: doc.id, ...doc.data() }));
+
+          const mergedMap = new Map();
+          local.forEach(c => mergedMap.set(c.id, c));
+          remoteCats.forEach(c => mergedMap.set(c.id, { ...mergedMap.get(c.id), ...c }));
+
+          const merged = Array.from(mergedMap.values());
+          this._cache.categories = merged;
+          this.setLocal(this.STORAGE_KEYS.CATEGORIES, merged);
+          local = merged;
+        } else if (window.SocialReadersAuth && window.SocialReadersAuth.isAdminAuthenticated()) {
           await this.seedCategoriesToFirestore();
-          return this.getCategories();
         }
       } catch (err) {
-        console.warn("Firestore getCategories notice:", err);
+        console.warn("Firestore getCategories notice:", err.message);
       }
     }
-    const initial = this.getInitialCategories();
-    this._cache.categories = initial;
-    return initial;
+    return local;
   },
 
   async saveCategory(catData) {
@@ -555,28 +711,47 @@ window.SocialReadersDB = {
       updatedAt: new Date().toISOString()
     };
 
+    let current = this.getLocal(this.STORAGE_KEYS.CATEGORIES, this.getInitialCategories());
+    const idx = current.findIndex(c => c.id === catId);
+    if (idx >= 0) {
+      current[idx] = cleanData;
+    } else {
+      current.push(cleanData);
+    }
+    this._cache.categories = current;
+    this.setLocal(this.STORAGE_KEYS.CATEGORIES, current);
+
     if (this.db) {
       try {
         await this.db.collection('categories').doc(catId).set(cleanData, { merge: true });
       } catch (err) {
         console.error("Firestore saveCategory error:", err);
-        throw err;
       }
+    } else if (window.AppFirebase && typeof window.AppFirebase.updateDocument === 'function') {
+      try {
+        await window.AppFirebase.updateDocument('categories', catId, cleanData);
+      } catch (e) {}
     }
-    await this.getCategories();
     return cleanData;
   },
 
   async deleteCategory(catId) {
+    let current = this.getLocal(this.STORAGE_KEYS.CATEGORIES, this.getInitialCategories());
+    current = current.filter(c => c.id !== catId);
+    this._cache.categories = current;
+    this.setLocal(this.STORAGE_KEYS.CATEGORIES, current);
+
     if (this.db) {
       try {
         await this.db.collection('categories').doc(catId).delete();
       } catch (err) {
         console.error("Firestore deleteCategory error:", err);
-        throw err;
       }
+    } else if (window.AppFirebase && typeof window.AppFirebase.deleteDocument === 'function') {
+      try {
+        await window.AppFirebase.deleteDocument('categories', catId);
+      } catch (e) {}
     }
-    await this.getCategories();
     return true;
   },
 
@@ -592,28 +767,39 @@ window.SocialReadersDB = {
   },
 
   // -------------------------------------------------------------
-  // 3. LIGHTNING DEALS CRUD (Direct Cloud Firestore)
+  // 3. LIGHTNING DEALS CRUD (Unified Two-Way Sync)
   // -------------------------------------------------------------
   async getDeals() {
+    let local = this.getLocal(this.STORAGE_KEYS.DEALS, null);
+    if (!local || !local.length) {
+      local = this.getInitialDeals();
+      this.setLocal(this.STORAGE_KEYS.DEALS, local);
+    }
+    this._cache.deals = local;
+
     if (this.db) {
       try {
         const snapshot = await this.db.collection('deals').get();
         if (!snapshot.empty) {
-          const deals = [];
-          snapshot.forEach(doc => deals.push({ id: doc.id, ...doc.data() }));
-          this._cache.deals = deals;
-          return deals;
-        } else {
+          const remoteDeals = [];
+          snapshot.forEach(doc => remoteDeals.push({ id: doc.id, ...doc.data() }));
+
+          const mergedMap = new Map();
+          local.forEach(d => mergedMap.set(d.id, d));
+          remoteDeals.forEach(d => mergedMap.set(d.id, { ...mergedMap.get(d.id), ...d }));
+
+          const merged = Array.from(mergedMap.values());
+          this._cache.deals = merged;
+          this.setLocal(this.STORAGE_KEYS.DEALS, merged);
+          local = merged;
+        } else if (window.SocialReadersAuth && window.SocialReadersAuth.isAdminAuthenticated()) {
           await this.seedDealsToFirestore();
-          return this.getDeals();
         }
       } catch (err) {
-        console.warn("Firestore getDeals notice:", err);
+        console.warn("Firestore getDeals notice:", err.message);
       }
     }
-    const initial = this.getInitialDeals();
-    this._cache.deals = initial;
-    return initial;
+    return local;
   },
 
   async saveDeal(dealData) {
@@ -624,28 +810,39 @@ window.SocialReadersDB = {
       updatedAt: new Date().toISOString()
     };
 
+    let current = this.getLocal(this.STORAGE_KEYS.DEALS, this.getInitialDeals());
+    const idx = current.findIndex(d => d.id === dealId);
+    if (idx >= 0) {
+      current[idx] = cleanData;
+    } else {
+      current.unshift(cleanData);
+    }
+    this._cache.deals = current;
+    this.setLocal(this.STORAGE_KEYS.DEALS, current);
+
     if (this.db) {
       try {
         await this.db.collection('deals').doc(dealId).set(cleanData, { merge: true });
       } catch (err) {
         console.error("Firestore saveDeal error:", err);
-        throw err;
       }
     }
-    await this.getDeals();
     return cleanData;
   },
 
   async deleteDeal(dealId) {
+    let current = this.getLocal(this.STORAGE_KEYS.DEALS, this.getInitialDeals());
+    current = current.filter(d => d.id !== dealId);
+    this._cache.deals = current;
+    this.setLocal(this.STORAGE_KEYS.DEALS, current);
+
     if (this.db) {
       try {
         await this.db.collection('deals').doc(dealId).delete();
       } catch (err) {
         console.error("Firestore deleteDeal error:", err);
-        throw err;
       }
     }
-    await this.getDeals();
     return true;
   },
 
@@ -661,43 +858,44 @@ window.SocialReadersDB = {
   },
 
   // -------------------------------------------------------------
-  // 4. STORIES CRUD (Direct Cloud Firestore)
+  // 4. STORIES CRUD (Unified Two-Way Sync)
   // -------------------------------------------------------------
   async getStories() {
+    let local = this.getLocal(this.STORAGE_KEYS.STORIES, null);
+    if (!local || !local.length) {
+      local = this.getInitialStories();
+      this.setLocal(this.STORAGE_KEYS.STORIES, local);
+    }
+    this._cache.stories = local;
+
     if (this.db) {
       try {
         const snapshot = await this.db.collection('stories').get();
         if (!snapshot.empty) {
-          const stories = [];
-          snapshot.forEach(doc => stories.push({ id: doc.id, ...doc.data() }));
-          this._cache.stories = stories;
-          return stories;
-        } else {
+          const remoteStories = [];
+          snapshot.forEach(doc => remoteStories.push({ id: doc.id, ...doc.data() }));
+
+          const mergedMap = new Map();
+          local.forEach(s => mergedMap.set(s.id, s));
+          remoteStories.forEach(s => mergedMap.set(s.id, { ...mergedMap.get(s.id), ...s }));
+
+          const merged = Array.from(mergedMap.values());
+          this._cache.stories = merged;
+          this.setLocal(this.STORAGE_KEYS.STORIES, merged);
+          local = merged;
+        } else if (window.SocialReadersAuth && window.SocialReadersAuth.isAdminAuthenticated()) {
           await this.seedStoriesToFirestore();
-          return this.getStories();
         }
       } catch (err) {
-        console.warn("Firestore getStories notice:", err);
+        console.warn("Firestore getStories notice:", err.message);
       }
     }
-    const initial = this.getInitialStories();
-    this._cache.stories = initial;
-    return initial;
+    return local;
   },
 
   async getStoryById(id) {
-    if (this.db) {
-      try {
-        const doc = await this.db.collection('stories').doc(id).get();
-        if (doc.exists) {
-          return { id: doc.id, ...doc.data() };
-        }
-      } catch (err) {
-        console.warn("Firestore getStoryById notice:", err);
-      }
-    }
     const stories = await this.getStories();
-    return stories.find(s => s.id === id) || stories[0];
+    return stories.find(s => s.id === id) || stories[0] || null;
   },
 
   async saveStory(storyData) {
@@ -708,28 +906,39 @@ window.SocialReadersDB = {
       updatedAt: new Date().toISOString()
     };
 
+    let current = this.getLocal(this.STORAGE_KEYS.STORIES, this.getInitialStories());
+    const idx = current.findIndex(s => s.id === storyId);
+    if (idx >= 0) {
+      current[idx] = cleanData;
+    } else {
+      current.unshift(cleanData);
+    }
+    this._cache.stories = current;
+    this.setLocal(this.STORAGE_KEYS.STORIES, current);
+
     if (this.db) {
       try {
         await this.db.collection('stories').doc(storyId).set(cleanData, { merge: true });
       } catch (err) {
         console.error("Firestore saveStory error:", err);
-        throw err;
       }
     }
-    await this.getStories();
     return cleanData;
   },
 
   async deleteStory(storyId) {
+    let current = this.getLocal(this.STORAGE_KEYS.STORIES, this.getInitialStories());
+    current = current.filter(s => s.id !== storyId);
+    this._cache.stories = current;
+    this.setLocal(this.STORAGE_KEYS.STORIES, current);
+
     if (this.db) {
       try {
         await this.db.collection('stories').doc(storyId).delete();
       } catch (err) {
         console.error("Firestore deleteStory error:", err);
-        throw err;
       }
     }
-    await this.getStories();
     return true;
   },
 
@@ -745,49 +954,120 @@ window.SocialReadersDB = {
   },
 
   // -------------------------------------------------------------
-  // 5. ORDERS CRUD (Direct Cloud Firestore)
+  // 5. ORDERS CRUD (Unified LocalStorage + Firestore Two-Way Sync)
   // -------------------------------------------------------------
   async getOrders() {
+    let local = this.getLocal(this.STORAGE_KEYS.ORDERS, []);
+    this._cache.orders = local;
+
     if (this.db) {
       try {
-        const snapshot = await this.db.collection('orders').orderBy('createdAt', 'desc').get();
+        // Indexless collection fetch (client-side sort)
+        const snapshot = await this.db.collection('orders').get();
         if (!snapshot.empty) {
-          const orders = [];
-          snapshot.forEach(doc => orders.push({ orderId: doc.id, ...doc.data() }));
-          this._cache.orders = orders;
-          return orders;
+          const remoteOrders = [];
+          snapshot.forEach(doc => remoteOrders.push({ orderId: doc.id, id: doc.id, ...doc.data() }));
+
+          const mergedMap = new Map();
+          local.forEach(o => mergedMap.set(o.orderId || o.id, o));
+          remoteOrders.forEach(o => mergedMap.set(o.orderId || o.id, { ...mergedMap.get(o.orderId || o.id), ...o }));
+
+          const merged = Array.from(mergedMap.values());
+          merged.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+          this._cache.orders = merged;
+          this.setLocal(this.STORAGE_KEYS.ORDERS, merged);
+          local = merged;
         }
       } catch (err) {
-        console.warn("Firestore getOrders notice:", err);
+        console.warn("Firestore getOrders notice:", err.message);
       }
     }
-    return this._cache.orders || [];
-  },
-
-  getOrdersSync() {
-    return this._cache.orders || [];
+    return local;
   },
 
   async createOrder(orderData) {
-    const orderId = orderData.orderId || `SR-${Math.floor(1000 + Math.random() * 9000)}`;
+    const orderId = orderData.orderId || orderData.id || `SR-${Math.floor(1000 + Math.random() * 9000)}`;
     const fullOrder = {
       ...orderData,
+      id: orderId,
       orderId: orderId,
+      status: orderData.status || 'pending',
       createdAt: orderData.createdAt || new Date().toISOString()
     };
 
+    let current = this.getLocal(this.STORAGE_KEYS.ORDERS, []);
+    current.unshift(fullOrder);
+    this._cache.orders = current;
+    this.setLocal(this.STORAGE_KEYS.ORDERS, current);
+
     if (this.db) {
       try {
-        await this.db.collection('orders').doc(orderId).set(fullOrder);
+        await this.db.collection('orders').doc(orderId).set(fullOrder, { merge: true });
       } catch (err) {
         console.error("Firestore createOrder error:", err);
-        throw err;
       }
+    } else if (window.AppFirebase && typeof window.AppFirebase.updateDocument === 'function') {
+      try {
+        await window.AppFirebase.updateDocument('orders', orderId, fullOrder);
+      } catch (e) {}
+    }
+    return fullOrder;
+  },
+
+  async updateOrderStatus(orderId, newStatus) {
+    let current = this.getLocal(this.STORAGE_KEYS.ORDERS, []);
+    const idx = current.findIndex(o => (o.orderId === orderId || o.id === orderId));
+    if (idx >= 0) {
+      current[idx].status = newStatus;
+      current[idx].updatedAt = new Date().toISOString();
+      this._cache.orders = current;
+      this.setLocal(this.STORAGE_KEYS.ORDERS, current);
     }
 
-    if (!this._cache.orders) this._cache.orders = [];
-    this._cache.orders.unshift(fullOrder);
-    return fullOrder;
+    if (this.db) {
+      try {
+        await this.db.collection('orders').doc(orderId).set({ status: newStatus, updatedAt: new Date().toISOString() }, { merge: true });
+      } catch (err) {
+        console.error("Firestore updateOrderStatus error:", err);
+      }
+    } else if (window.AppFirebase && typeof window.AppFirebase.updateDocument === 'function') {
+      try {
+        await window.AppFirebase.updateDocument('orders', orderId, { status: newStatus, updatedAt: new Date().toISOString() });
+      } catch (e) {}
+    }
+    return true;
+  },
+
+  async deleteOrder(orderId) {
+    let current = this.getLocal(this.STORAGE_KEYS.ORDERS, []);
+    current = current.filter(o => (o.orderId !== orderId && o.id !== orderId));
+    this._cache.orders = current;
+    this.setLocal(this.STORAGE_KEYS.ORDERS, current);
+
+    if (this.db) {
+      try {
+        await this.db.collection('orders').doc(orderId).delete();
+      } catch (err) {
+        console.error("Firestore deleteOrder error:", err);
+      }
+    } else if (window.AppFirebase && typeof window.AppFirebase.deleteDocument === 'function') {
+      try {
+        await window.AppFirebase.deleteDocument('orders', orderId);
+      } catch (e) {}
+    }
+    return true;
+  },
+  // Scoped query for a specific customer's orders (avoids full database scan)
+  async getUserOrders(customerEmail) {
+    if (!customerEmail) return [];
+    const normalizedEmail = String(customerEmail).toLowerCase().trim();
+    const allOrders = await this.getOrders();
+    return allOrders.filter(o => (o.customerEmail || o.buyerEmail || '').toLowerCase().trim() === normalizedEmail);
+  },
+
+  getOrdersSync() {
+    const local = this.getLocal(this.STORAGE_KEYS.ORDERS, []);
+    return (this._cache.orders && this._cache.orders.length) ? this._cache.orders : local;
   },
 
   // -------------------------------------------------------------
@@ -810,8 +1090,8 @@ window.SocialReadersDB = {
           const settings = { ...defaultSettings, ...doc.data() };
           this._cache.settings = settings;
           return settings;
-        } else {
-          // Initialize settings doc in Firestore
+        } else if (window.SocialReadersAuth && window.SocialReadersAuth.isAdminAuthenticated()) {
+          // Initialize settings doc in Firestore only if admin
           await this.db.collection('settings').doc('store').set(defaultSettings);
           this._cache.settings = defaultSettings;
           return defaultSettings;
@@ -887,7 +1167,7 @@ window.SocialReadersDB = {
         if (doc.exists && doc.data().banners && Array.isArray(doc.data().banners)) {
           this._cache.banners = doc.data().banners;
           return this._cache.banners;
-        } else {
+        } else if (window.SocialReadersAuth && window.SocialReadersAuth.isAdminAuthenticated()) {
           await this.db.collection('settings').doc('banners').set({ banners: initial, updatedAt: new Date().toISOString() });
           this._cache.banners = initial;
           return initial;
@@ -979,7 +1259,7 @@ window.SocialReadersDB = {
           const loaded = { ...initial, ...doc.data() };
           this._cache.quadSections = loaded;
           return loaded;
-        } else {
+        } else if (window.SocialReadersAuth && window.SocialReadersAuth.isAdminAuthenticated()) {
           await this.db.collection('settings').doc('quad_sections').set({ ...initial, updatedAt: new Date().toISOString() });
           this._cache.quadSections = initial;
           return initial;

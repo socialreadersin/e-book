@@ -1,13 +1,20 @@
+# Secrets and Local Environment Files
 .env
 .env.local
-node_modules/
-js/firebase-config.js
-js/cloudinary.config.js
-.DS_Store
-.wrangler/
-*.log
-bun.lock
-bun.lockb
 .env.*
+*.env
+
+# Dependencies
+node_modules/
+
+# Cloudflare & Wrangler
+.wrangler/
+.assetsignore
+
+# OS & Logs
+.DS_Store
+Thumbs.db
+*.log
 *.csv
 *secret*
+admin_backup/

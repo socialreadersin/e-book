@@ -2,435 +2,2405 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard | Social Readers</title>
-  
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            navy: '#0B2C5D',
-            forest: '#2E7D32',
-            brandOrange: '#E8720C',
-            cream: '#FAF7F2',
-          },
-          fontFamily: {
-            heading: ['Poppins', 'Noto Sans Tamil', 'sans-serif'],
-            body: ['Inter', 'Noto Sans Tamil', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
-  <link rel="stylesheet" href="../css/style.css">
-</head>
-<body class="bg-[#FAF7F2] text-gray-800 min-h-screen flex flex-col md:flex-row font-body">
-
-  <!-- SIDEBAR (Desktop) -->
-  <aside class="w-64 bg-navy text-white flex-shrink-0 hidden md:flex flex-col justify-between p-6">
-    <div class="space-y-8">
-      
-      <!-- Brand in Sidebar -->
-      <a href="../index.html" class="flex flex-col">
-        <div class="flex items-center gap-1">
-          <span class="text-xl font-extrabold text-white font-heading">SOCIAL</span>
-          <span class="text-xl font-extrabold text-green-400 font-heading">READERS</span>
-        </div>
-        <span class="text-[10px] tracking-widest text-orange-300 font-bold uppercase mt-0.5">Admin Console</span>
-      </a>
-
-      <!-- Navigation Menu Items -->
-      <nav class="space-y-1.5">
-        <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white font-bold text-sm shadow-sm">
-          <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-          <span>Dashboard</span>
-        </a>
-
-        <a href="books.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-          <span>Manage Books</span>
-        </a>
-
-        <a href="stories.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-          <span>Manage Stories</span>
-        </a>
-
-        <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-          <span>Orders &amp; Receipts</span>
-        </a>
-
-        <a href="categories.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
-          <span>Categories</span>
-        </a>
-
-        <a href="deals.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-          <span>Deals</span>
-        </a>
-
-        <a href="settings.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white font-medium text-sm transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-          <span>Settings</span>
-        </a>
-      </nav>
-
-    </div>
-
-    <!-- Bottom Sidebar info -->
-    <div class="pt-6 border-t border-white/10 text-xs text-gray-400 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-full bg-forest text-white font-bold flex items-center justify-center text-xs">SR</div>
-        <div class="flex flex-col">
-          <span class="text-white font-semibold">Administrator</span>
-          <span class="text-[10px] text-gray-400">Super Admin</span>
-        </div>
-      </div>
-      <button onclick="window.SocialReadersAuth.logoutAdmin()" class="text-orange-300 hover:underline">Logout</button>
-    </div>
-  </aside>
-
-  <!-- MAIN DASHBOARD CONTENT -->
-  <div class="flex-grow flex flex-col min-w-0">
-    
-    <!-- Mobile Admin Top Bar -->
-    <div class="md:hidden bg-navy text-white px-3 py-2.5 flex items-center justify-between border-b border-white/10">
-      <a href="../index.html" class="flex items-center gap-1">
-        <span class="text-sm font-extrabold text-white font-heading">SOCIAL</span>
-        <span class="text-sm font-extrabold text-green-400 font-heading">READERS</span>
-        <span class="text-[9px] bg-brandOrange text-white font-bold px-1.5 py-0.5 rounded ml-1">Admin</span>
-      </a>
-      <div class="flex items-center gap-2">
-        <button onclick="window.SocialReadersAuth.logoutAdmin()" class="text-orange-300 text-xs font-semibold hover:underline">Logout</button>
-      </div>
-    </div>
-
-    <!-- Mobile Admin Nav Scrollable Tabs -->
-    <div class="md:hidden bg-white border-b border-gray-200 px-3 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs">
-      <a href="dashboard.html" class="px-3 py-1.5 bg-navy text-white rounded-lg font-bold whitespace-nowrap">Dashboard</a>
-      <a href="books.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Manage Books</a>
-      <a href="stories.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Manage Stories</a>
-      <a href="orders.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Orders</a>
-      <a href="categories.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Categories</a>
-      <a href="deals.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Deals</a>
-      <a href="settings.html" class="px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg whitespace-nowrap font-medium">Settings</a>
-    </div>
-
-    <!-- Header Content -->
-    <header class="bg-white border-b border-gray-200 px-4 sm:px-8 py-4 sm:py-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-      <div>
-        <h1 class="text-xl sm:text-2xl font-bold text-navy font-heading">Overview Dashboard</h1>
-        <p class="text-xs text-gray-500 mt-0.5">Platform metrics, 25% cause contribution audit, and live Firestore activity</p>
-      </div>
-
-      <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
-        <button onclick="seedFirestoreDemoData()" id="btn-seed-firestore" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-          <span>⚡ Seed Firestore Data</span>
-        </button>
-        <a href="books.html" class="px-4 py-2 rounded-xl bg-forest hover:bg-green-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-          <span>Add Book</span>
-        </a>
-        <a href="stories.html" class="px-4 py-2 rounded-xl bg-navy hover:bg-blue-950 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-          <span>Add Story</span>
-        </a>
-      </div>
-    </header>
-
-    <!-- Content Area -->
-    <main class="p-4 sm:p-8 space-y-6 sm:space-y-8 flex-grow">
-      
-      <!-- TOP KPI CARDS (6 Total in responsive grid) -->
-      <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
-        
-        <!-- 1. Total Books -->
-        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Total Books</span>
-            <span class="w-7 h-7 rounded-xl bg-blue-50 text-navy flex items-center justify-center">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-            </span>
-          </div>
-          <div>
-            <div id="kpi-total-books" class="text-xl sm:text-2xl font-black text-navy font-heading">--</div>
-            <div class="text-[10px] text-emerald-600 font-semibold mt-1">Firestore Catalog</div>
-          </div>
-        </div>
-
-        <!-- 2. Total Audiobooks -->
-        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Audiobooks</span>
-            <span class="w-7 h-7 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
-            </span>
-          </div>
-          <div>
-            <div id="kpi-total-audio" class="text-xl sm:text-2xl font-black text-navy font-heading">--</div>
-            <div class="text-[10px] text-purple-600 font-semibold mt-1">Narrated Edition</div>
-          </div>
-        </div>
-
-        <!-- 3. Total Stories -->
-        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Stories</span>
-            <span class="w-7 h-7 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-            </span>
-          </div>
-          <div>
-            <div id="kpi-total-stories" class="text-xl sm:text-2xl font-black text-navy font-heading">16</div>
-            <div class="text-[10px] text-amber-600 font-semibold mt-1">Free Series</div>
-          </div>
-        </div>
-
-        <!-- 4. Total Orders -->
-        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Total Orders</span>
-            <span class="w-7 h-7 rounded-xl bg-emerald-50 text-forest flex items-center justify-center">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-            </span>
-          </div>
-          <div>
-            <div id="kpi-total-orders" class="text-xl sm:text-2xl font-black text-navy font-heading">--</div>
-            <div class="text-[10px] text-emerald-600 font-semibold mt-1">Completed</div>
-          </div>
-        </div>
-
-        <!-- 5. Total Revenue -->
-        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Total Revenue</span>
-            <span class="w-7 h-7 rounded-xl bg-orange-50 text-brandOrange flex items-center justify-center">
-              <span class="font-bold text-xs">₹</span>
-            </span>
-          </div>
-          <div>
-            <div id="kpi-total-revenue" class="text-xl sm:text-2xl font-black text-navy font-heading">--</div>
-            <div class="text-[10px] text-brandOrange font-semibold mt-1">Gross Sales</div>
-          </div>
-        </div>
-
-        <!-- 6. 25% Social Fund Allocated -->
-        <div class="bg-gradient-to-br from-emerald-600 to-forest text-white p-4 sm:p-5 rounded-2xl shadow-md flex flex-col justify-between col-span-2 sm:col-span-1">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-[11px] font-bold text-green-100 uppercase tracking-wider">25% Cause Fund</span>
-            <span class="w-7 h-7 rounded-xl bg-white/20 text-white flex items-center justify-center">
-              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
-            </span>
-          </div>
-          <div>
-            <div id="kpi-cause-fund" class="text-xl sm:text-2xl font-black text-white font-heading">--</div>
-            <div class="text-[10px] text-green-100 font-medium mt-1">Guaranteed Share</div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Cause Allocation Breakdown Bar -->
-      <div class="bg-white p-5 sm:p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div class="space-y-1">
-          <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-forest"></span>
-            <h2 class="text-sm sm:text-base font-bold text-navy font-heading">25% Social Fund Allocation Tracking</h2>
-          </div>
-          <p class="text-xs text-gray-500">Every paid transaction automatically earmarks 25% of purchase revenue directly to designated causes.</p>
-        </div>
-        <div class="flex flex-wrap items-center gap-3 text-xs">
-          <div class="bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-            <span class="font-bold">Education Aid (15%):</span>
-            <span id="stat-edu-fund" class="font-extrabold text-navy">₹0.00</span>
-          </div>
-          <div class="bg-orange-50 text-orange-800 border border-orange-200 px-3 py-1.5 rounded-xl flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-brandOrange"></span>
-            <span class="font-bold">Rural Sports (10%):</span>
-            <span id="stat-sports-fund" class="font-extrabold text-navy">₹0.00</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- RECENT ORDERS TABLE (Live from Firestore) -->
-      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        
-        <!-- Table Header & Controls -->
-        <div class="p-4 sm:p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h2 class="text-base sm:text-lg font-bold text-navy font-heading">Recent Orders</h2>
-            <p class="text-xs text-gray-500">Latest customer purchases with verified 25% social cause contribution</p>
-          </div>
-          <div class="flex items-center gap-3">
-            <a href="orders.html" class="text-xs font-bold text-forest hover:text-green-700 flex items-center gap-1">
-              <span>View All Orders</span>
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-            </a>
-          </div>
-        </div>
-
-        <!-- Table Container -->
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm text-gray-700 min-w-[640px]">
-            <thead class="bg-gray-50 text-navy font-bold text-xs uppercase tracking-wider border-b border-gray-100">
-              <tr>
-                <th class="py-3 px-4 sm:px-6">Book / Title</th>
-                <th class="py-3 px-4">Format</th>
-                <th class="py-3 px-4">Buyer Name</th>
-                <th class="py-3 px-4">Buyer Email</th>
-                <th class="py-3 px-4">Amount</th>
-                <th class="py-3 px-4">Cause Share (25%)</th>
-                <th class="py-3 px-4">Status</th>
-                <th class="py-3 px-4 sm:px-6">Date</th>
-              </tr>
-            </thead>
-            <tbody id="dashboard-orders-tbody" class="divide-y divide-gray-100">
-              <tr>
-                <td colspan="8" class="py-6 text-center text-xs text-gray-500">Loading orders from Firestore...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </main>
-  </div>
-
-  <!-- Scripts -->
-  <!-- 1. Firebase Compat SDKs (Stable 10.12.0) -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  <!-- 2. Auto-generated Firebase & Cloudinary Config -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Dynamic External Configs & Shared Persistence Layer -->
   <script src="../js/firebase-config.js"></script>
   <script src="../js/cloudinary.config.js"></script>
-  <!-- 3. Your E-Book Application / Database Layer -->
+  <script src="../js/cashfree-config.js"></script>
   <script src="../js/ebook-service.js"></script>
-  <script src="../js/auth.js"></script>
-
-  <script>
-    if (window.SocialReadersAuth && window.SocialReadersAuth.requireAdmin) {
-      window.SocialReadersAuth.requireAdmin();
+  
+  <style>
+    :root {
+      --bg-dark: #07090e;
+      --bg-card: rgba(16, 23, 38, 0.75);
+      --bg-card-hover: rgba(24, 34, 56, 0.85);
+      --bg-glass-input: rgba(11, 17, 30, 0.7);
+      --border-glass: rgba(255, 255, 255, 0.08);
+      --border-focus: #3b82f6;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      --primary: #3b82f6;
+      --primary-glow: rgba(59, 130, 246, 0.25);
+      --forest: #10b981;
+      --forest-glow: rgba(16, 185, 129, 0.2);
+      --orange: #f97316;
+      --orange-glow: rgba(249, 115, 22, 0.2);
+      --danger: #ef4444;
+      --danger-glow: rgba(239, 68, 68, 0.2);
+      --sidebar-width: 260px;
+      --radius: 14px;
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    async function initDashboard() {
-      if (!window.SocialReadersDB) {
-        console.warn("Waiting for SocialReadersDB initialization...");
-        setTimeout(initDashboard, 200);
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(249, 115, 22, 0.04) 0%, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    h1, h2, h3, h4, .brand-font {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
+
+    /* Diagnostic Error Banner */
+    #diagnosticBanner {
+      display: none;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(185, 28, 28, 0.95));
+      color: #ffffff;
+      padding: 14px 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 25px var(--danger-glow);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: slideDown 0.3s ease;
+    }
+    #diagnosticBanner .banner-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    #diagnosticBanner ul {
+      margin-left: 20px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-10px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Toast Notifications */
+    #toastContainer {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .toast {
+      pointer-events: auto;
+      min-width: 280px;
+      max-width: 420px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: rgba(17, 24, 39, 0.92);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-glass);
+      color: #fff;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 3.7s forwards;
+    }
+    .toast.success { border-color: rgba(16, 185, 129, 0.5); border-left: 4px solid var(--forest); }
+    .toast.error { border-color: rgba(239, 68, 68, 0.5); border-left: 4px solid var(--danger); }
+    .toast.info { border-color: rgba(59, 130, 246, 0.5); border-left: 4px solid var(--primary); }
+
+    @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes toastOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+
+    /* AUTH / LOGIN SCREEN */
+    #authScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 450px;
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-glass);
+      border-radius: 20px;
+      padding: 40px 36px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 40px var(--primary-glow);
+      position: relative;
+      overflow: hidden;
+    }
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .brand-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .brand-logo-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #1e3a8a, #059669);
+      color: #fff;
+      font-size: 26px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 20px rgba(5, 150, 105, 0.3);
+    }
+    .brand-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .brand-title span:first-child { color: #60a5fa; }
+    .brand-title span:last-child { color: #34d399; }
+    .brand-sub {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-top: 4px;
+    }
+
+    /* Forms */
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 7px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrapper i {
+      position: absolute;
+      left: 14px;
+      color: var(--text-dim);
+      font-size: 15px;
+    }
+    .input-field {
+      width: 100%;
+      background: var(--bg-glass-input);
+      border: 1px solid var(--border-glass);
+      border-radius: 10px;
+      padding: 12px 14px 12px 42px;
+      color: var(--text-main);
+      font-size: 0.925rem;
+      font-family: inherit;
+      outline: none;
+      transition: var(--transition);
+    }
+    .input-field.no-icon {
+      padding-left: 14px;
+    }
+    .input-field:focus {
+      border-color: var(--border-focus);
+      background: rgba(15, 23, 42, 0.9);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+    textarea.input-field {
+      resize: vertical;
+      min-height: 85px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      text-decoration: none;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      box-shadow: 0 8px 20px var(--primary-glow);
+      width: 100%;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+    }
+    .btn-forest {
+      background: linear-gradient(135deg, #059669, #047857);
+      color: #fff;
+      box-shadow: 0 8px 20px var(--forest-glow);
+    }
+    .btn-forest:hover {
+      background: linear-gradient(135deg, #10b981, #059669);
+      transform: translateY(-1px);
+    }
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .btn-danger:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      border: 1px solid var(--border-glass);
+    }
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .btn-sm {
+      padding: 7px 12px;
+      font-size: 0.8rem;
+      border-radius: 8px;
+    }
+
+    /* DASHBOARD LAYOUT */
+    #dashboardLayout {
+      display: none;
+      min-height: 100vh;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: rgba(10, 14, 23, 0.85);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border-right: 1px solid var(--border-glass);
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      transition: var(--transition);
+    }
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 8px 24px 8px;
+      border-bottom: 1px solid var(--border-glass);
+      margin-bottom: 24px;
+    }
+    .sidebar-brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #2563eb, #10b981);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 18px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+    .sidebar-nav {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+    .nav-item-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      font-size: 0.925rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: left;
+      font-family: inherit;
+    }
+    .nav-item-btn i {
+      font-size: 16px;
+      width: 20px;
+      text-align: center;
+    }
+    .nav-item-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .nav-item-btn.active {
+      color: #fff;
+      background: linear-gradient(90deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.05));
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    .nav-item-btn.active i {
+      color: #60a5fa;
+    }
+    .sidebar-footer {
+      padding-top: 16px;
+      border-top: 1px solid var(--border-glass);
+    }
+
+    /* Main Content Area */
+    .main-wrapper {
+      margin-left: var(--sidebar-width);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .top-header {
+      height: 70px;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-glass);
+      background: rgba(10, 14, 23, 0.65);
+      backdrop-filter: blur(20px);
+      position: sticky;
+      top: 0;
+      z-index: 90;
+    }
+    .header-title-area h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .header-user-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-glass);
+      padding: 6px 14px;
+      border-radius: 99px;
+    }
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f97316, #ec4899);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .user-email-text {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Content body */
+    .content-body {
+      padding: 32px;
+      flex: 1;
+    }
+
+    /* Stats Cards Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius);
+      padding: 22px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+    }
+    .stat-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .stat-icon.blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .stat-icon.green { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .stat-icon.orange { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
+    .stat-icon.purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+    .stat-meta .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .stat-meta .stat-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* Section Views */
+    .tab-section {
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+    .tab-section.active {
+      display: block;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Action bar */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .search-filter-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      max-width: 450px;
+    }
+
+    /* Tables */
+    .table-container {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius);
+      overflow-x: auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+    thead th {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 16px 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-glass);
+    }
+    tbody td {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+      vertical-align: middle;
+    }
+    tbody tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Item Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-pending { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
+    .badge-completed { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-cancelled { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge-category { background: rgba(59, 130, 246, 0.15); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.25); }
+    .badge-info { background: rgba(59, 130, 246, 0.15); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.25); }
+    .badge-active { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-draft { background: rgba(107, 114, 128, 0.2); color: #9ca3af; border: 1px solid rgba(107, 114, 128, 0.3); }
+
+    .book-cover-thumb {
+      width: 44px;
+      height: 60px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: #1f2937;
+      border: 1px solid var(--border-glass);
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-backdrop.open {
+      display: flex;
+    }
+    .modal-panel {
+      width: 100%;
+      max-width: 600px;
+      background: #0f172a;
+      border: 1px solid var(--border-glass);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: modalZoom 0.25s ease;
+    }
+    @keyframes modalZoom { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-glass);
+    }
+    .modal-header h3 { font-size: 1.25rem; }
+    .close-modal-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .close-modal-btn:hover { color: #fff; }
+
+    /* Cloudinary Image Upload Box */
+    .upload-zone {
+      border: 2px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      background: rgba(15, 23, 42, 0.5);
+      position: relative;
+    }
+    .upload-zone:hover {
+      border-color: var(--primary);
+      background: rgba(59, 130, 246, 0.05);
+    }
+    .upload-preview-container {
+      display: none;
+      margin-top: 14px;
+      position: relative;
+    }
+    .upload-preview-img {
+      max-height: 140px;
+      border-radius: 8px;
+      border: 1px solid var(--border-glass);
+      object-fit: cover;
+    }
+    .upload-status-bar {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: var(--primary);
+      display: none;
+    }
+
+    /* Fallback Seed Banner */
+    .seed-prompt-banner {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px dashed rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .main-wrapper {
+        margin-left: 0;
+      }
+      .mobile-menu-toggle {
+        display: block !important;
+      }
+    }
+    .mobile-menu-toggle {
+      display: none;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Toast Notifications Area -->
+  <div id="toastContainer"></div>
+
+  <!-- AUTH / LOGIN VIEW -->
+  <section id="authScreen">
+    <div class="login-card">
+      <div class="brand-header">
+        <div class="brand-logo-badge">
+          <i class="fa-solid fa-book-open-reader"></i>
+        </div>
+        <h1 class="brand-title"><span>SOCIAL</span> <span>READERS</span></h1>
+        <p class="brand-sub">Admin Dashboard & Cloud Management</p>
+      </div>
+
+      <!-- Critical Diagnostic Error Banner (Auto-Validations) -->
+      <div id="diagnosticBanner">
+        <div class="banner-title"><i class="fa-solid fa-triangle-exclamation"></i> Configuration Self-Check Error</div>
+        <ul id="diagnosticList"></ul>
+      </div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label class="form-label" for="loginEmail">Admin Email</label>
+          <div class="input-wrapper">
+            <i class="fa-regular fa-envelope"></i>
+            <input type="email" id="loginEmail" class="input-field" placeholder="admin@socialreaders.org" required autocomplete="username">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="loginPassword">Password</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="loginPassword" class="input-field" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+        </div>
+
+        <button type="submit" id="loginSubmitBtn" class="btn btn-primary" style="margin-top: 10px;">
+          <span id="loginBtnSpinner" style="display: none;"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
+          <span id="loginBtnText">Sign In to Dashboard</span>
+        </button>
+      </form>
+
+      <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border-glass); text-align: center; font-size: 0.8rem; color: var(--text-dim);">
+        <i class="fa-solid fa-shield-halved" style="color: var(--forest);"></i> Firebase Auth v11 • Direct Cloudinary Storage
+      </div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD VIEW -->
+  <div id="dashboardLayout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="appSidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-icon">
+          <i class="fa-solid fa-feather"></i>
+        </div>
+        <div>
+          <h3 style="font-size: 1.05rem; font-weight: 700; color: #fff;">Social Readers</h3>
+          <p style="font-size: 0.72rem; color: var(--forest); font-weight: 600;">PORTAL v2.0</p>
+        </div>
+      </div>
+
+      <ul class="sidebar-nav">
+        <li>
+          <button class="nav-item-btn active" data-tab="tab-overview">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Overview Stats</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-item-btn" data-tab="tab-books">
+            <i class="fa-solid fa-book"></i>
+            <span>Manage Books</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-item-btn" data-tab="tab-categories">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>Categories</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-item-btn" data-tab="tab-orders">
+            <i class="fa-solid fa-receipt"></i>
+            <span>Orders & Impact</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-item-btn" data-tab="tab-deals">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Flash Deals</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-item-btn" data-tab="tab-stories">
+            <i class="fa-solid fa-scroll"></i>
+            <span>Stories</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-item-btn" data-tab="tab-users">
+            <i class="fa-solid fa-users"></i>
+            <span>Customers</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-item-btn" data-tab="tab-settings">
+            <i class="fa-solid fa-gear"></i>
+            <span>Settings</span>
+          </button>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <button id="logoutBtn" class="nav-item-btn" style="color: #f87171;">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <button class="mobile-menu-toggle" id="mobileMenuBtn">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="header-title-area">
+            <h2 id="currentTabHeading">Dashboard Overview</h2>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <a href="/" target="_blank" class="btn btn-ghost btn-sm" title="View Public Store">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Store Front
+          </a>
+          <div class="header-user-badge">
+            <div class="user-avatar" id="headerAvatar">A</div>
+            <span class="user-email-text" id="headerUserEmail">admin@socialreaders.org</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Body -->
+      <main class="content-body">
+
+        <!-- OVERVIEW TAB -->
+        <section id="tab-overview" class="tab-section active">
+          <!-- Stats Grid -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon blue">
+                <i class="fa-solid fa-book-bookmark"></i>
+              </div>
+              <div class="stat-meta">
+                <div class="stat-label">Total Books</div>
+                <div class="stat-value" id="statTotalBooks">0</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon green">
+                <i class="fa-solid fa-tags"></i>
+              </div>
+              <div class="stat-meta">
+                <div class="stat-label">Categories</div>
+                <div class="stat-value" id="statTotalCategories">0</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon orange">
+                <i class="fa-solid fa-cart-shopping"></i>
+              </div>
+              <div class="stat-meta">
+                <div class="stat-label">Total Orders</div>
+                <div class="stat-value" id="statTotalOrders">0</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon purple">
+                <i class="fa-solid fa-hand-holding-heart"></i>
+              </div>
+              <div class="stat-meta">
+                <div class="stat-label">25% Social Fund</div>
+                <div class="stat-value" id="statTotalSocialFund">₹0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fallback Seed helper if empty -->
+          <div id="seedHelperBox" class="seed-prompt-banner" style="display: none;">
+            <div>
+              <strong style="color: #60a5fa;"><i class="fa-solid fa-seedling"></i> Initializing Collections:</strong>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+                Your Firestore database is currently clean/empty. We can populate starter books and categories right away.
+              </p>
+            </div>
+            <button id="seedDataBtn" class="btn btn-forest btn-sm">
+              <i class="fa-solid fa-bolt"></i> Load Seed Data
+            </button>
+          </div>
+
+          <!-- Recent Activity Overview Table -->
+          <div class="section-header">
+            <h3>Recent Orders & Inquiries</h3>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Book Title</th>
+                  <th>Amount</th>
+                  <th>25% Cause Share</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="overviewOrdersTableBody">
+                <tr><td colspan="6" style="text-align: center; color: var(--text-dim);">Loading order activity...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 1: MANAGE MAIN ENTITY (BOOKS) -->
+        <section id="tab-books" class="tab-section">
+          <div class="section-header">
+            <div class="search-filter-box">
+              <div class="input-wrapper" style="width: 100%;">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="booksSearchInput" class="input-field" placeholder="Search books by title, author...">
+              </div>
+            </div>
+            <button class="btn btn-forest" id="openAddBookModalBtn">
+              <i class="fa-solid fa-plus"></i> Add New Book
+            </button>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cover</th>
+                  <th>Title & Author</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Format</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="booksTableBody">
+                <tr><td colspan="6" style="text-align: center; color: var(--text-dim);">Fetching books catalog...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 2: MANAGE CATEGORIES -->
+        <section id="tab-categories" class="tab-section">
+          <div class="section-header">
+            <h3>Categories & Genres</h3>
+            <button class="btn btn-forest" id="openAddCategoryModalBtn">
+              <i class="fa-solid fa-plus"></i> Add Category
+            </button>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Category Name</th>
+                  <th>Slug</th>
+                  <th>Description</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="categoriesTableBody">
+                <tr><td colspan="5" style="text-align: center; color: var(--text-dim);">Fetching categories...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 3: MANAGE ORDERS / ENQUIRIES -->
+        <section id="tab-orders" class="tab-section">
+          <div class="section-header">
+            <h3>Orders & Customer Enquiries</h3>
+            <div style="font-size: 0.85rem; color: var(--forest); font-weight: 600;">
+              <i class="fa-solid fa-heart"></i> 25% Earmarked For Education & Sports
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer Email</th>
+                  <th>Item Purchased</th>
+                  <th>Price</th>
+                  <th>25% Cause</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody">
+                <tr><td colspan="7" style="text-align: center; color: var(--text-dim);">Loading orders...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 4: FLASH DEALS -->
+        <section id="tab-deals" class="tab-section">
+          <div class="section-header">
+            <h3>Flash Deals Management</h3>
+            <button class="btn btn-forest" id="openAddDealModalBtn">
+              <i class="fa-solid fa-plus"></i> Add Deal
+            </button>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Book</th>
+                  <th>Original Price</th>
+                  <th>Deal Price</th>
+                  <th>Discount</th>
+                  <th>End Time</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="dealsTableBody">
+                <tr><td colspan="7" style="text-align: center; color: var(--text-dim);">Loading deals...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 5: STORIES -->
+        <section id="tab-stories" class="tab-section">
+          <div class="section-header">
+            <h3>Serial Stories</h3>
+            <button class="btn btn-forest" id="openAddStoryModalBtn">
+              <i class="fa-solid fa-plus"></i> Add Story
+            </button>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cover</th>
+                  <th>Title &amp; Author</th>
+                  <th>Genre</th>
+                  <th>Episodes</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="storiesTableBody">
+                <tr><td colspan="6" style="text-align: center; color: var(--text-dim);">Loading stories...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 6: CUSTOMERS -->
+        <section id="tab-users" class="tab-section">
+          <div class="section-header">
+            <h3>Customer Orders &amp; Users</h3>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">Read-only view of all customer purchase records</div>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Customer Email</th>
+                  <th>Name</th>
+                  <th>Total Orders</th>
+                  <th>Total Spent</th>
+                  <th>Last Purchase</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr><td colspan="5" style="text-align: center; color: var(--text-dim);">Aggregating customer data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 7: SETTINGS -->
+        <section id="tab-settings" class="tab-section">
+          <div class="section-header">
+            <h3>Store Settings &amp; Configuration</h3>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <!-- Firebase Config Card -->
+            <div class="table-container" style="padding: 24px;">
+              <h4 style="color: #60a5fa; margin-bottom: 16px; font-size: 1rem;"><i class="fa-solid fa-database"></i> Firebase Configuration</h4>
+              <div class="form-group">
+                <label class="form-label">Project ID</label>
+                <input type="text" id="settingFirebaseProjectId" class="input-field no-icon" readonly>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Auth Domain</label>
+                <input type="text" id="settingFirebaseAuthDomain" class="input-field no-icon" readonly>
+              </div>
+              <div class="form-group">
+                <label class="form-label">API Key (masked)</label>
+                <input type="text" id="settingFirebaseApiKey" class="input-field no-icon" readonly placeholder="Loaded from firebase-config.js">
+              </div>
+              <div style="font-size: 0.75rem; color: var(--forest); margin-top: 4px;"><i class="fa-solid fa-circle-check"></i> Config loaded from js/firebase-config.js</div>
+            </div>
+            <!-- Cashfree Config Card -->
+            <div class="table-container" style="padding: 24px;">
+              <h4 style="color: #34d399; margin-bottom: 16px; font-size: 1rem;"><i class="fa-solid fa-credit-card"></i> Cashfree Payment Gateway</h4>
+              <div class="form-group">
+                <label class="form-label">Environment</label>
+                <input type="text" id="settingCashfreeEnv" class="input-field no-icon" readonly>
+              </div>
+              <div class="form-group">
+                <label class="form-label">App ID (from cashfree-config.js)</label>
+                <input type="text" id="settingCashfreeAppId" class="input-field no-icon" readonly>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Cloud Function URL</label>
+                <input type="text" id="settingCashfreeFnUrl" class="input-field no-icon" readonly style="font-size: 0.75rem;">
+              </div>
+              <div style="font-size: 0.75rem; color: var(--orange); margin-top: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> Secret Key is stored in Firebase Secret Manager only</div>
+            </div>
+            <!-- Cloudinary Card -->
+            <div class="table-container" style="padding: 24px;">
+              <h4 style="color: #c084fc; margin-bottom: 16px; font-size: 1rem;"><i class="fa-solid fa-cloud"></i> Cloudinary Media Storage</h4>
+              <div class="form-group">
+                <label class="form-label">Cloud Name</label>
+                <input type="text" id="settingCloudinaryName" class="input-field no-icon" readonly>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Upload Preset</label>
+                <input type="text" id="settingCloudinaryPreset" class="input-field no-icon" readonly>
+              </div>
+            </div>
+            <!-- Social Impact Summary -->
+            <div class="table-container" style="padding: 24px;">
+              <h4 style="color: #fb923c; margin-bottom: 16px; font-size: 1rem;"><i class="fa-solid fa-hand-holding-heart"></i> Social Impact Summary</h4>
+              <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.8;">
+                <div><strong style="color:#fff;">25%</strong> of every purchase goes to Youth Education &amp; Sports</div>
+                <div>Total Social Fund: <strong style="color:#fb923c;" id="settingTotalSocialFund">Calculating...</strong></div>
+                <div>Total Orders Fulfilled: <strong style="color:#34d399;" id="settingTotalOrders">—</strong></div>
+              </div>
+              <div style="margin-top: 16px; padding: 12px; background: rgba(249,115,22,0.1); border-radius: 8px; font-size: 0.75rem; color: #fb923c;">
+                <strong>READ → LEARN → CREATE CHANGE</strong><br>
+                Every ebook sold is an act of social change.
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT BOOK -->
+  <div class="modal-backdrop" id="bookModal">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <h3 id="bookModalTitle">Add New Book</h3>
+        <button class="close-modal-btn" data-close="bookModal">&times;</button>
+      </div>
+      <form id="bookForm">
+        <input type="hidden" id="bookEditId">
+        <div class="form-group">
+          <label class="form-label" for="bookTitle">Book Title</label>
+          <input type="text" id="bookTitle" class="input-field no-icon" placeholder="e.g. Wings of Fire" required>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="bookAuthor">Author</label>
+            <input type="text" id="bookAuthor" class="input-field no-icon" placeholder="e.g. Dr. A.P.J. Abdul Kalam" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="bookPrice">Price (₹ INR)</label>
+            <input type="number" id="bookPrice" class="input-field no-icon" placeholder="199" min="0" step="1" required>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="bookCategory">Category</label>
+            <select id="bookCategory" class="input-field no-icon" required>
+              <option value="Self-Help">Self-Help</option>
+              <option value="Fiction">Fiction</option>
+              <option value="Non-Fiction">Non-Fiction</option>
+              <option value="Tamil Literature">Tamil Literature</option>
+              <option value="Biography">Biography</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="bookFormat">Format</label>
+            <select id="bookFormat" class="input-field no-icon">
+              <option value="E-Book">E-Book (PDF/ePub)</option>
+              <option value="Audiobook">Audiobook (MP3)</option>
+              <option value="Combo">Combo (E-Book + Audio)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="bookDescription">Description</label>
+          <textarea id="bookDescription" class="input-field no-icon" placeholder="Enter book summary or synopsis..."></textarea>
+        </div>
+
+        <!-- Cloudinary Cover Upload -->
+        <div class="form-group">
+          <label class="form-label">Cover Image (Cloudinary Direct Upload)</label>
+          <div class="upload-zone" id="bookCoverUploadZone">
+            <input type="file" id="bookCoverFileInput" accept="image/*" style="display: none;">
+            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 28px; color: var(--primary); margin-bottom: 8px;"></i>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Click or drag image file here to upload to Cloudinary</p>
+            <div class="upload-status-bar" id="bookUploadStatus"><i class="fa-solid fa-circle-notch fa-spin"></i> Uploading to Cloudinary...</div>
+          </div>
+          <input type="hidden" id="bookCoverUrl">
+          <div class="upload-preview-container" id="bookCoverPreviewBox">
+            <img src="" id="bookCoverPreview" class="upload-preview-img" alt="Book Cover Preview">
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
+          <button type="button" class="btn btn-ghost" data-close="bookModal">Cancel</button>
+          <button type="submit" class="btn btn-forest" id="saveBookSubmitBtn">Save Book</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT CATEGORY -->
+  <div class="modal-backdrop" id="categoryModal">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <h3 id="categoryModalTitle">Add Category</h3>
+        <button class="close-modal-btn" data-close="categoryModal">&times;</button>
+      </div>
+      <form id="categoryForm">
+        <input type="hidden" id="categoryEditId">
+        <div class="form-group">
+          <label class="form-label" for="categoryName">Category Name</label>
+          <input type="text" id="categoryName" class="input-field no-icon" placeholder="e.g. Tamil Literature" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="categorySlug">Slug</label>
+          <input type="text" id="categorySlug" class="input-field no-icon" placeholder="tamil-literature" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="categoryDescription">Description</label>
+          <textarea id="categoryDescription" class="input-field no-icon" placeholder="Description of books in this genre..."></textarea>
+        </div>
+
+        <!-- Cloudinary Category Image Upload -->
+        <div class="form-group">
+          <label class="form-label">Category Banner / Icon</label>
+          <div class="upload-zone" id="categoryUploadZone">
+            <input type="file" id="categoryFileInput" accept="image/*" style="display: none;">
+            <i class="fa-solid fa-image" style="font-size: 28px; color: var(--forest); margin-bottom: 8px;"></i>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Upload Category graphic to Cloudinary</p>
+            <div class="upload-status-bar" id="categoryUploadStatus"><i class="fa-solid fa-circle-notch fa-spin"></i> Uploading...</div>
+          </div>
+          <input type="hidden" id="categoryImageUrl">
+          <div class="upload-preview-container" id="categoryPreviewBox">
+            <img src="" id="categoryPreview" class="upload-preview-img" alt="Category Preview">
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
+          <button type="button" class="btn btn-ghost" data-close="categoryModal">Cancel</button>
+          <button type="submit" class="btn btn-forest" id="saveCategorySubmitBtn">Save Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- JAVASCRIPT: FIREBASE v11 MODULAR SDK & CLOUDINARY LOGIC -->
+  <!-- ======================================================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+    import { 
+      getAuth, 
+      signInWithEmailAndPassword, 
+      signOut, 
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+    import { 
+      getFirestore, 
+      collection, 
+      addDoc, 
+      getDocs, 
+      doc, 
+      setDoc,
+      updateDoc, 
+      deleteDoc, 
+      serverTimestamp, 
+      query, 
+      orderBy 
+    } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+    // ----------------------------------------------------
+    // 1. CONFIGURATION & CREDENTIALS (Referenced from firebase-config.js)
+    // ----------------------------------------------------
+    const firebaseConfig = (typeof window !== 'undefined' && window.firebaseConfig) ? window.firebaseConfig : {
+      apiKey: "",
+      authDomain: "",
+      projectId: "",
+      storageBucket: "",
+      messagingSenderId: "",
+      appId: ""
+    };
+
+    const CLOUD_NAME = (typeof window !== 'undefined' && window.CLOUDINARY_CONFIG) 
+      ? (window.CLOUDINARY_CONFIG.cloudName || '') 
+      : (window.CloudinaryService?.getCloudName ? window.CloudinaryService.getCloudName() : '');
+    const UPLOAD_PRESET = (typeof window !== 'undefined' && window.CLOUDINARY_CONFIG) 
+      ? (window.CLOUDINARY_CONFIG.uploadPreset || '') 
+      : (window.CloudinaryService?.getUploadPreset ? window.CloudinaryService.getUploadPreset() : '');
+
+    // Global App State
+    let app, auth, db;
+    let currentUser = null;
+    let localBooks = [];
+    let localCategories = [];
+    let localOrders = [];
+
+    // Fallback Mock Seed Data for instant interactive UI
+    const DEFAULT_SEED_BOOKS = [
+      {
+        id: "seed_b1",
+        title: "Wings of Fire (அக்னிச் சிறகுகள்)",
+        author: "Dr. A.P.J. Abdul Kalam",
+        price: 199,
+        category: "Biography",
+        format: "E-Book",
+        description: "An inspiring autobiography of former Indian President Dr. A.P.J. Abdul Kalam.",
+        coverUrl: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80"
+      },
+      {
+        id: "seed_b2",
+        title: "Ponniyin Selvan (பொன்னியின் செல்வன்)",
+        author: "Kalki Krishnamurthy",
+        price: 299,
+        category: "Tamil Literature",
+        format: "Combo",
+        description: "The timeless historical saga of the Chola dynasty.",
+        coverUrl: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&q=80"
+      },
+      {
+        id: "seed_b3",
+        title: "Atomic Habits",
+        author: "James Clear",
+        price: 249,
+        category: "Self-Help",
+        format: "Audiobook",
+        description: "An easy and proven way to build good habits and break bad ones.",
+        coverUrl: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&q=80"
+      }
+    ];
+
+    const DEFAULT_SEED_CATEGORIES = [
+      { id: "seed_c1", name: "Self-Help", slug: "self-help", description: "Personal growth and mindfulness guides." },
+      { id: "seed_c2", name: "Tamil Literature", slug: "tamil-literature", description: "Classic and contemporary Tamil novels." },
+      { id: "seed_c3", name: "Biography", slug: "biography", description: "Life journeys of world changers." },
+      { id: "seed_c4", name: "Fiction", slug: "fiction", description: "Engaging fiction and storytelling." }
+    ];
+
+    const DEFAULT_SEED_ORDERS = [
+      { id: "ORD-9021", buyerEmail: "anand.kumar@example.com", bookTitle: "Wings of Fire", amount: 199, causeShare: 49.75, status: "completed" },
+      { id: "ORD-9022", buyerEmail: "priya.d@example.com", bookTitle: "Ponniyin Selvan", amount: 299, causeShare: 74.75, status: "completed" },
+      { id: "ORD-9023", buyerEmail: "selvam.m@example.com", bookTitle: "Atomic Habits", amount: 249, causeShare: 62.25, status: "pending" }
+    ];
+
+    // ----------------------------------------------------
+    // 2. CRITICAL DIAGNOSTIC ERROR SELF-CHECK
+    // ----------------------------------------------------
+    function runConfigurationSelfCheck() {
+      const issues = [];
+
+      if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes("[YOUR_")) {
+        issues.push("Firebase API Key is unconfigured or using placeholder value.");
+      }
+      if (!firebaseConfig.projectId || firebaseConfig.projectId.includes("[YOUR_")) {
+        issues.push("Firebase Project ID is missing.");
+      }
+      if (!CLOUD_NAME || CLOUD_NAME.includes("[YOUR_")) {
+        issues.push("Cloudinary Cloud Name is missing or using placeholder.");
+      }
+      if (!UPLOAD_PRESET || UPLOAD_PRESET.includes("[YOUR_")) {
+        issues.push("Cloudinary Upload Preset is unconfigured.");
+      }
+
+      const banner = document.getElementById('diagnosticBanner');
+      const list = document.getElementById('diagnosticList');
+
+      if (issues.length > 0) {
+        list.innerHTML = issues.map(i => `<li>${i}</li>`).join('');
+        banner.style.display = 'block';
+        return false;
+      } else {
+        banner.style.display = 'none';
+        return true;
+      }
+    }
+
+    // ----------------------------------------------------
+    // 3. TOAST NOTIFICATIONS HELPER
+    // ----------------------------------------------------
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      
+      let icon = 'fa-info-circle';
+      if (type === 'success') icon = 'fa-circle-check';
+      if (type === 'error') icon = 'fa-circle-exclamation';
+
+      toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 4000);
+    }
+
+    // ----------------------------------------------------
+    // 4. CLOUDINARY DIRECT UPLOAD IMPLEMENTATION
+    // ----------------------------------------------------
+    async function uploadToCloudinary(file, statusElement, previewElement, previewBox, hiddenUrlInput) {
+      if (!file) return null;
+
+      try {
+        statusElement.style.display = 'block';
+        statusElement.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Uploading ${file.name} to Cloudinary...`;
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', UPLOAD_PRESET);
+        formData.append('folder', 'socialreaders');
+
+        const endpoint = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error?.message || `Upload failed with status ${res.status}`);
+        }
+
+        const data = await res.json();
+        const secureUrl = data.secure_url;
+
+        // Display preview
+        previewElement.src = secureUrl;
+        previewBox.style.display = 'block';
+        hiddenUrlInput.value = secureUrl;
+
+        statusElement.style.display = 'block';
+        statusElement.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--forest);"></i> Image uploaded successfully!`;
+        showToast('Image uploaded to Cloudinary!', 'success');
+        return secureUrl;
+      } catch (err) {
+        console.error("Cloudinary upload error:", err);
+        statusElement.style.display = 'block';
+        statusElement.innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color: var(--danger);"></i> Upload failed: ${err.message}`;
+        showToast(`Cloudinary upload failed: ${err.message}`, 'error');
+        return null;
+      }
+    }
+
+    // ----------------------------------------------------
+    // 5. FIREBASE INITIALIZATION & AUTHENTICATION
+    // ----------------------------------------------------
+    function initFirebase() {
+      try {
+        runConfigurationSelfCheck();
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+
+        // Listen to Auth State
+        onAuthStateChanged(auth, (user) => {
+          if (user) {
+            currentUser = user;
+            showDashboardView(user.email || 'Admin');
+            loadAllData();
+          } else {
+            currentUser = null;
+            showAuthView();
+          }
+        });
+      } catch (err) {
+        console.error("Firebase init failed:", err);
+        const banner = document.getElementById('diagnosticBanner');
+        const list = document.getElementById('diagnosticList');
+        banner.style.display = 'block';
+        list.innerHTML += `<li>Firebase Init Exception: ${err.message}</li>`;
+        showToast(`Firebase Init Error: ${err.message}`, 'error');
+      }
+    }
+
+    // View Switching
+    function showAuthView() {
+      document.getElementById('authScreen').style.display = 'flex';
+      document.getElementById('dashboardLayout').style.display = 'none';
+    }
+
+    function showDashboardView(email) {
+      document.getElementById('authScreen').style.display = 'none';
+      document.getElementById('dashboardLayout').style.display = 'block';
+      document.getElementById('headerUserEmail').textContent = email;
+      document.getElementById('headerAvatar').textContent = email.charAt(0).toUpperCase();
+    }
+
+    // Login Form Submit
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+      const btn = document.getElementById('loginSubmitBtn');
+      const spinner = document.getElementById('loginBtnSpinner');
+      const text = document.getElementById('loginBtnText');
+
+      try {
+        btn.disabled = true;
+        spinner.style.display = 'inline-block';
+        text.textContent = 'Authenticating...';
+
+        if (auth) {
+          await signInWithEmailAndPassword(auth, email, password);
+          showToast('Welcome back, Admin!', 'success');
+        } else {
+          throw new Error('Firebase Auth is not available.');
+        }
+      } catch (err) {
+        console.warn("Auth check failed:", err.message);
+        // If demo fallback or invalid credentials
+        if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+          showToast('Invalid admin email or password.', 'error');
+        } else {
+          showToast(`Login notice: ${err.message}`, 'error');
+        }
+      } finally {
+        btn.disabled = false;
+        spinner.style.display = 'none';
+        text.textContent = 'Sign In to Dashboard';
+      }
+    });
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      try {
+        if (auth) await signOut(auth);
+        showToast('Logged out successfully.', 'info');
+      } catch (err) {
+        showToast(`Logout error: ${err.message}`, 'error');
+      }
+    });
+
+    // ----------------------------------------------------
+    // 6. FIRESTORE CRUD OPERATIONS
+    // ----------------------------------------------------
+
+    // Fetch all collections
+    async function loadAllData() {
+      await Promise.allSettled([
+        loadBooks(),
+        loadCategories(),
+        loadOrders()
+      ]);
+      updateStats();
+    }
+
+    // --- BOOKS CRUD ---
+    async function loadBooks() {
+      try {
+        if (db) {
+          const snap = await getDocs(collection(db, 'books'));
+          if (!snap.empty) {
+            localBooks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            localStorage.setItem('sr_books_data', JSON.stringify(localBooks));
+          } else if (window.SocialReadersDB) {
+            localBooks = await window.SocialReadersDB.getBooks(true);
+          } else {
+            localBooks = [...DEFAULT_SEED_BOOKS];
+          }
+        } else if (window.SocialReadersDB) {
+          localBooks = await window.SocialReadersDB.getBooks(true);
+        } else {
+          localBooks = [...DEFAULT_SEED_BOOKS];
+        }
+        document.getElementById('seedHelperBox').style.display = (localBooks.length === 0) ? 'flex' : 'none';
+      } catch (err) {
+        console.warn("loadBooks notice:", err.message);
+        localBooks = window.SocialReadersDB ? window.SocialReadersDB.getBooksSync(true) : [...DEFAULT_SEED_BOOKS];
+      }
+      renderBooksTable(localBooks);
+    }
+
+    function renderBooksTable(books) {
+      const tbody = document.getElementById('booksTableBody');
+      if (!books || books.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-dim); padding: 30px;">No books found in catalog. Click 'Add New Book' to add one!</td></tr>`;
         return;
       }
 
+      tbody.innerHTML = books.map(book => {
+        const titleStr = window.SocialReadersUtils ? window.SocialReadersUtils.getTitle(book) : (typeof book.title === 'string' ? book.title : (book.title?.en || 'Untitled'));
+        const authorStr = window.SocialReadersUtils ? window.SocialReadersUtils.getAuthor(book) : (typeof book.author === 'string' ? book.author : (book.author?.en || 'Unknown'));
+        const cover = window.SocialReadersUtils ? window.SocialReadersUtils.normalizeImageUrl(book.coverUrl) : (book.coverUrl || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&q=80');
+        const price = Number(book.priceEbook || book.price || 149);
+        const formatBadge = book.format || (book.type === 'audiobook' ? 'Audiobook' : (book.type === 'both' ? 'Combo' : 'E-Book'));
+
+        return `
+          <tr>
+            <td><img src="${cover}" class="book-cover-thumb" alt="Cover" onerror="this.src='https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&q=80'"></td>
+            <td>
+              <div style="font-weight: 600; color: #fff;">${escapeHtml(titleStr)}</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">${escapeHtml(authorStr)}</div>
+            </td>
+            <td><span class="badge badge-info">${escapeHtml(book.category || 'General')}</span></td>
+            <td><strong style="color: #60a5fa;">₹${price.toFixed(2)}</strong></td>
+            <td><span class="badge badge-pending">${escapeHtml(formatBadge)}</span></td>
+            <td>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-ghost btn-sm edit-book-btn" data-id="${book.id}" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-danger btn-sm delete-book-btn" data-id="${book.id}" title="Delete"><i class="fa-solid fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Wire Edit & Delete buttons
+      tbody.querySelectorAll('.edit-book-btn').forEach(b => b.addEventListener('click', () => openEditBookModal(b.dataset.id)));
+      tbody.querySelectorAll('.delete-book-btn').forEach(b => b.addEventListener('click', () => deleteBook(b.dataset.id)));
+    }
+
+    // Save (Add or Update) Book
+    document.getElementById('bookForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('bookEditId').value;
+      const title = document.getElementById('bookTitle').value.trim();
+      const author = document.getElementById('bookAuthor').value.trim();
+      const price = parseFloat(document.getElementById('bookPrice').value) || 0;
+      const category = document.getElementById('bookCategory').value;
+      const format = document.getElementById('bookFormat').value;
+      const description = document.getElementById('bookDescription').value.trim();
+      const coverUrl = document.getElementById('bookCoverUrl').value.trim() || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80';
+
+      const payload = {
+        id: id || undefined,
+        title: { en: title, ta: title },
+        author: { en: author, ta: author },
+        price: price,
+        priceEbook: price,
+        category: category,
+        format: format,
+        type: format === 'Audiobook' ? 'audiobook' : (format === 'Combo' ? 'both' : 'ebook'),
+        description: { en: description, ta: description },
+        coverUrl: coverUrl,
+        status: 'published'
+      };
+
       try {
-        const books = await window.SocialReadersDB.getBooks(true);
-        const orders = await window.SocialReadersDB.getOrders();
-
-        const totalBooks = books.length;
-        const totalAudio = books.filter(b => b.type === 'audiobook' || b.type === 'both' || b.audioUrl || b.priceAudiobook).length;
-        const totalOrdersCount = orders.length;
-
-        let totalRevenue = 0;
-        orders.forEach(o => {
-          totalRevenue += Number(o.amount || 0);
-        });
-        const totalCause = totalRevenue * 0.25;
-
-        const elTotalBooks = document.getElementById('kpi-total-books');
-        const elTotalAudio = document.getElementById('kpi-total-audio');
-        const elTotalOrders = document.getElementById('kpi-total-orders');
-        const elTotalRevenue = document.getElementById('kpi-total-revenue');
-        const elCauseFund = document.getElementById('kpi-cause-fund');
-        const elEduFund = document.getElementById('stat-edu-fund');
-        const elSportsFund = document.getElementById('stat-sports-fund');
-
-        if (elTotalBooks) elTotalBooks.textContent = totalBooks;
-        if (elTotalAudio) elTotalAudio.textContent = totalAudio;
-        if (elTotalOrders) elTotalOrders.textContent = totalOrdersCount;
-        if (elTotalRevenue) elTotalRevenue.textContent = `₹${totalRevenue.toLocaleString('en-IN')}`;
-        if (elCauseFund) elCauseFund.textContent = `₹${totalCause.toLocaleString('en-IN')}`;
-        if (elEduFund) elEduFund.textContent = `₹${(totalRevenue * 0.15).toFixed(2)}`;
-        if (elSportsFund) elSportsFund.textContent = `₹${(totalRevenue * 0.10).toFixed(2)}`;
-
-        // Render Recent Orders
-        const tbody = document.getElementById('dashboard-orders-tbody');
-        if (tbody) {
-          if (!orders.length) {
-            tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-xs text-gray-500">No orders recorded yet.</td></tr>`;
+        // Ensure we always have a valid document ID
+        if (!payload.id) {
+          payload.id = 'book_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+        }
+        if (db) {
+          await setDoc(doc(db, 'books', payload.id), payload, { merge: true });
+        }
+        if (window.SocialReadersDB) {
+          await window.SocialReadersDB.saveBook(payload);
+        } else {
+          if (id) {
+            const idx = localBooks.findIndex(b => b.id === id);
+            if (idx !== -1) localBooks[idx] = { ...localBooks[idx], ...payload };
           } else {
-            tbody.innerHTML = orders.slice(0, 6).map(order => {
-              const title = order.bookTitle || 'Book Purchase';
-              const format = order.format || 'E-Book';
-              const name = order.customerName || 'Reader';
-              const email = order.customerEmail || '—';
-              const amt = Number(order.amount || 0);
-              const cause = Number(order.causeShare || amt * 0.25);
-              const date = order.date || (order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'Recent');
-
-              return `
-                <tr class="hover:bg-gray-50/80 transition-colors">
-                  <td class="py-3 px-4 sm:px-6 font-semibold text-navy text-xs sm:text-sm">${title}</td>
-                  <td class="py-3 px-4">
-                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold ${format.toLowerCase().includes('audio') ? 'bg-purple-50 text-purple-700' : 'bg-blue-50 text-blue-700'}">
-                      ${format}
-                    </span>
-                  </td>
-                  <td class="py-3 px-4 font-medium text-gray-900 text-xs">${name}</td>
-                  <td class="py-3 px-4 text-xs text-gray-500">${email}</td>
-                  <td class="py-3 px-4 font-bold text-navy text-xs">₹${amt}</td>
-                  <td class="py-3 px-4 font-bold text-forest text-xs">₹${cause.toFixed(2)}</td>
-                  <td class="py-3 px-4">
-                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
-                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                      ${order.status || 'Completed'}
-                    </span>
-                  </td>
-                  <td class="py-3 px-4 sm:px-6 text-xs text-gray-500">${date}</td>
-                </tr>
-              `;
-            }).join('');
+            localBooks.unshift(payload);
           }
+          localStorage.setItem('sr_books_data', JSON.stringify(localBooks));
+        }
+        showToast('Book saved and synchronized!', 'success');
+        closeModal('bookModal');
+        await loadBooks();
+        updateStats();
+      } catch (err) {
+        console.error("Save book error:", err);
+        showToast(`Save error: ${err.message}`, 'error');
+      }
+    });
+
+    async function deleteBook(id) {
+      if (!confirm('Are you sure you want to delete this book?')) return;
+      try {
+        if (db) {
+          await deleteDoc(doc(db, 'books', id));
+        }
+        if (window.SocialReadersDB) {
+          await window.SocialReadersDB.deleteBook(id);
+        } else {
+          localBooks = localBooks.filter(b => b.id !== id);
+          localStorage.setItem('sr_books_data', JSON.stringify(localBooks));
+        }
+        showToast('Book removed from catalog.', 'info');
+        await loadBooks();
+        updateStats();
+      } catch (err) {
+        showToast(`Delete failed: ${err.message}`, 'error');
+      }
+    }
+
+    function openEditBookModal(id) {
+      const book = localBooks.find(b => b.id === id);
+      if (!book) return;
+
+      const titleStr = window.SocialReadersUtils ? window.SocialReadersUtils.getTitle(book) : (typeof book.title === 'string' ? book.title : (book.title?.en || ''));
+      const authorStr = window.SocialReadersUtils ? window.SocialReadersUtils.getAuthor(book) : (typeof book.author === 'string' ? book.author : (book.author?.en || ''));
+      const descStr = typeof book.description === 'string' ? book.description : (book.description?.en || '');
+
+      document.getElementById('bookModalTitle').textContent = 'Edit Book';
+      document.getElementById('bookEditId').value = book.id;
+      document.getElementById('bookTitle').value = titleStr;
+      document.getElementById('bookAuthor').value = authorStr;
+      document.getElementById('bookPrice').value = book.price || book.priceEbook || 0;
+      document.getElementById('bookCategory').value = book.category || 'General';
+      document.getElementById('bookFormat').value = book.format || (book.type === 'audiobook' ? 'Audiobook' : (book.type === 'both' ? 'Combo' : 'E-Book'));
+      document.getElementById('bookDescription').value = descStr;
+      document.getElementById('bookCoverUrl').value = book.coverUrl || '';
+
+      const previewBox = document.getElementById('bookCoverPreviewBox');
+      const previewImg = document.getElementById('bookCoverPreview');
+      if (book.coverUrl) {
+        previewImg.src = window.SocialReadersUtils ? window.SocialReadersUtils.normalizeImageUrl(book.coverUrl) : book.coverUrl;
+        previewBox.style.display = 'block';
+      } else {
+        previewBox.style.display = 'none';
+      }
+
+      openModal('bookModal');
+    }
+
+    // --- CATEGORIES CRUD ---
+    async function loadCategories() {
+      try {
+        if (db) {
+          const snap = await getDocs(collection(db, 'categories'));
+          if (!snap.empty) {
+            localCategories = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            localStorage.setItem('sr_categories_data', JSON.stringify(localCategories));
+          } else if (window.SocialReadersDB) {
+            localCategories = await window.SocialReadersDB.getCategories();
+          } else {
+            localCategories = [...DEFAULT_SEED_CATEGORIES];
+          }
+        } else if (window.SocialReadersDB) {
+          localCategories = await window.SocialReadersDB.getCategories();
+        } else {
+          localCategories = [...DEFAULT_SEED_CATEGORIES];
         }
       } catch (err) {
-        console.error("initDashboard error:", err);
+        console.warn("loadCategories notice:", err.message);
+        localCategories = window.SocialReadersDB ? window.SocialReadersDB.getLocal('sr_categories_data', DEFAULT_SEED_CATEGORIES) : [...DEFAULT_SEED_CATEGORIES];
       }
+      renderCategoriesTable(localCategories);
     }
 
-    async function seedFirestoreDemoData() {
-      const btn = document.getElementById('btn-seed-firestore');
-      if (btn) {
-        btn.disabled = true;
-        btn.innerHTML = `<span>⏳ Seeding Firestore...</span>`;
+    function renderCategoriesTable(cats) {
+      const tbody = document.getElementById('categoriesTableBody');
+      if (!cats || cats.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-dim); padding: 30px;">No categories found.</td></tr>`;
+        return;
       }
+
+      tbody.innerHTML = cats.map(cat => `
+        <tr>
+          <td><i class="fa-solid fa-folder-open" style="color: #60a5fa; font-size: 20px;"></i></td>
+          <td><strong style="color: #fff;">${escapeHtml(cat.name || 'Untitled')}</strong></td>
+          <td><code style="background: rgba(255,255,255,0.05); padding: 3px 8px; border-radius: 6px; font-size: 0.75rem;">${escapeHtml(cat.slug || '-')}</code></td>
+          <td style="color: var(--text-muted); font-size: 0.85rem;">${escapeHtml(cat.description || '-')}</td>
+          <td>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-ghost btn-sm edit-cat-btn" data-id="${cat.id}"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-danger btn-sm delete-cat-btn" data-id="${cat.id}"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+
+      tbody.querySelectorAll('.edit-cat-btn').forEach(b => b.addEventListener('click', () => openEditCategoryModal(b.dataset.id)));
+      tbody.querySelectorAll('.delete-cat-btn').forEach(b => b.addEventListener('click', () => deleteCategory(b.dataset.id)));
+    }
+
+    document.getElementById('categoryForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('categoryEditId').value;
+      const name = document.getElementById('categoryName').value.trim();
+      const slug = document.getElementById('categorySlug').value.trim();
+      const description = document.getElementById('categoryDescription').value.trim();
+      const imageUrl = document.getElementById('categoryImageUrl').value.trim();
+
+      const payload = {
+        id: id || undefined,
+        name,
+        slug,
+        description,
+        imageUrl,
+        updatedAt: new Date().toISOString()
+      };
+
       try {
-        if (window.SocialReadersDB && window.SocialReadersDB.seedDemoData) {
-          await window.SocialReadersDB.seedDemoData();
-          alert("✅ Success: All books, categories, deals, stories, and store settings have been populated directly into Cloud Firestore!");
-          await initDashboard();
+        const catId = id || ('cat_' + (slug ? slug.toLowerCase().replace(/[^a-z0-9]/g, '_') : Date.now()));
+        payload.id = catId;
+        if (db) {
+          await setDoc(doc(db, 'categories', catId), payload, { merge: true });
+        }
+        if (window.SocialReadersDB) {
+          await window.SocialReadersDB.saveCategory(payload);
         } else {
-          alert("⚠️ Firebase database connection not ready yet. Please check your network connection.");
+          const cIdx = localCategories.findIndex(c => c.id === catId);
+          if (cIdx !== -1) localCategories[cIdx] = { ...localCategories[cIdx], ...payload };
+          else localCategories.unshift(payload);
+          localStorage.setItem('sr_categories_data', JSON.stringify(localCategories));
         }
-      } catch (e) {
-        console.error("Seed error:", e);
-        alert("Firestore seeding error: " + (e.message || e));
-      } finally {
-        if (btn) {
-          btn.disabled = false;
-          btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg><span>⚡ Seed Firestore Data</span>`;
+        showToast('Category saved and synced!', 'success');
+        closeModal('categoryModal');
+        await loadCategories();
+        updateStats();
+      } catch (err) {
+        showToast(`Save error: ${err.message}`, 'error');
+      }
+    });
+
+    async function deleteCategory(id) {
+      if (!confirm('Delete this category?')) return;
+      try {
+        if (db) {
+          await deleteDoc(doc(db, 'categories', id));
         }
+        if (window.SocialReadersDB) {
+          await window.SocialReadersDB.deleteCategory(id);
+        } else {
+          localCategories = localCategories.filter(c => c.id !== id);
+          localStorage.setItem('sr_categories_data', JSON.stringify(localCategories));
+        }
+        showToast('Category removed.', 'info');
+        await loadCategories();
+        updateStats();
+      } catch (err) {
+        showToast(`Error deleting: ${err.message}`, 'error');
       }
     }
 
-    document.addEventListener('DOMContentLoaded', initDashboard);
-  </script>
+    function openEditCategoryModal(id) {
+      const cat = localCategories.find(c => c.id === id);
+      if (!cat) return;
+      document.getElementById('categoryModalTitle').textContent = 'Edit Category';
+      document.getElementById('categoryEditId').value = cat.id;
+      document.getElementById('categoryName').value = cat.name || '';
+      document.getElementById('categorySlug').value = cat.slug || '';
+      document.getElementById('categoryDescription').value = cat.description || '';
+      openModal('categoryModal');
+    }
 
+    // --- ORDERS & ENQUIRIES CRUD ---
+    async function loadOrders() {
+      try {
+        if (db) {
+          const snap = await getDocs(collection(db, 'orders'));
+          if (!snap.empty) {
+            localOrders = snap.docs.map(d => {
+              const data = d.data();
+              return {
+                id: d.id,
+                orderId: data.orderId || d.id,
+                ...data
+              };
+            });
+            localStorage.setItem('sr_orders_data', JSON.stringify(localOrders));
+          } else if (window.SocialReadersDB) {
+            localOrders = await window.SocialReadersDB.getOrders();
+          } else {
+            localOrders = [...DEFAULT_SEED_ORDERS];
+          }
+        } else if (window.SocialReadersDB) {
+          localOrders = await window.SocialReadersDB.getOrders();
+        } else {
+          localOrders = [...DEFAULT_SEED_ORDERS];
+        }
+      } catch (err) {
+        console.warn("loadOrders notice:", err.message);
+        localOrders = window.SocialReadersDB ? window.SocialReadersDB.getOrdersSync() : [...DEFAULT_SEED_ORDERS];
+      }
+      renderOrdersTable(localOrders);
+    }
+
+    function renderOrdersTable(orders) {
+      const tbody = document.getElementById('ordersTableBody');
+      const overviewTbody = document.getElementById('overviewOrdersTableBody');
+
+      if (!orders || orders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-dim); padding: 30px;">No customer orders recorded yet.</td></tr>`;
+        overviewTbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-dim);">No recent activity.</td></tr>`;
+        return;
+      }
+
+      const rows = orders.map(ord => {
+        const orderIdentifier = ord.orderId || ord.id || 'SR-0000';
+        const badgeClass = ord.status === 'completed' ? 'badge-completed' : (ord.status === 'cancelled' ? 'badge-cancelled' : 'badge-pending');
+        const cause = ord.causeShare || (ord.amount ? ord.amount * 0.25 : 0);
+        return `
+          <tr>
+            <td><code>${escapeHtml(orderIdentifier)}</code></td>
+            <td><span style="color: #fff; font-weight: 500;">${escapeHtml(ord.customerEmail || ord.buyerEmail || 'Guest')}</span></td>
+            <td>${escapeHtml(ord.bookTitle || (ord.items && ord.items[0]?.title?.en) || 'Book Purchase')}</td>
+            <td><strong style="color: #60a5fa;">₹${Number(ord.amount || 0).toFixed(2)}</strong></td>
+            <td><strong style="color: #34d399;">₹${Number(cause).toFixed(2)}</strong></td>
+            <td>
+              <select class="order-status-select badge ${badgeClass}" data-id="${orderIdentifier}" style="background: transparent; cursor: pointer; outline: none; border: 1px solid currentColor;">
+                <option value="pending" ${ord.status === 'pending' ? 'selected' : ''} style="background: #111827; color: #fb923c;">Pending</option>
+                <option value="completed" ${ord.status === 'completed' ? 'selected' : ''} style="background: #111827; color: #34d399;">Completed</option>
+                <option value="cancelled" ${ord.status === 'cancelled' ? 'selected' : ''} style="background: #111827; color: #f87171;">Cancelled</option>
+              </select>
+            </td>
+            <td>
+              <button class="btn btn-danger btn-sm delete-order-btn" data-id="${orderIdentifier}"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      tbody.innerHTML = rows;
+
+      overviewTbody.innerHTML = orders.slice(0, 5).map(ord => {
+        const orderIdentifier = ord.orderId || ord.id || 'SR-0000';
+        const badgeClass = ord.status === 'completed' ? 'badge-completed' : (ord.status === 'cancelled' ? 'badge-cancelled' : 'badge-pending');
+        const cause = ord.causeShare || (ord.amount ? ord.amount * 0.25 : 0);
+        return `
+          <tr>
+            <td><code>${escapeHtml(orderIdentifier)}</code></td>
+            <td>${escapeHtml(ord.customerEmail || ord.buyerEmail || 'Guest')}</td>
+            <td>${escapeHtml(ord.bookTitle || (ord.items && ord.items[0]?.title?.en) || 'Book Purchase')}</td>
+            <td>₹${Number(ord.amount || 0).toFixed(2)}</td>
+            <td><strong style="color: #34d399;">₹${Number(cause).toFixed(2)}</strong></td>
+            <td><span class="badge ${badgeClass}">${escapeHtml(ord.status || 'pending')}</span></td>
+          </tr>
+        `;
+      }).join('');
+
+      tbody.querySelectorAll('.order-status-select').forEach(sel => {
+        sel.addEventListener('change', (e) => updateOrderStatus(e.target.dataset.id, e.target.value));
+      });
+      tbody.querySelectorAll('.delete-order-btn').forEach(btn => {
+        btn.addEventListener('click', () => deleteOrder(btn.dataset.id));
+      });
+    }
+
+    async function updateOrderStatus(id, newStatus) {
+      try {
+        if (db) {
+          await updateDoc(doc(db, 'orders', id), {
+            status: newStatus,
+            updatedAt: new Date().toISOString()
+          });
+        }
+        if (window.SocialReadersDB) {
+          await window.SocialReadersDB.updateOrderStatus(id, newStatus);
+        } else {
+          const ord = localOrders.find(o => (o.orderId === id || o.id === id));
+          if (ord) ord.status = newStatus;
+          localStorage.setItem('sr_orders_data', JSON.stringify(localOrders));
+        }
+        showToast(`Order marked as ${newStatus}!`, 'success');
+        await loadOrders();
+        updateStats();
+      } catch (err) {
+        showToast(`Failed to update status: ${err.message}`, 'error');
+      }
+    }
+
+    async function deleteOrder(id) {
+      if (!confirm('Are you sure you want to delete this order record?')) return;
+      try {
+        if (db) {
+          await deleteDoc(doc(db, 'orders', id));
+        }
+        if (window.SocialReadersDB) {
+          await window.SocialReadersDB.deleteOrder(id);
+        } else {
+          localOrders = localOrders.filter(o => (o.orderId !== id && o.id !== id));
+          localStorage.setItem('sr_orders_data', JSON.stringify(localOrders));
+        }
+        showToast('Order removed.', 'info');
+        await loadOrders();
+        updateStats();
+      } catch (err) {
+        showToast(`Failed to delete order: ${err.message}`, 'error');
+      }
+    }
+
+    // Seed Firestore Action
+    document.getElementById('seedDataBtn').addEventListener('click', async () => {
+      try {
+        showToast('Writing starter books & categories to Firestore & Local Storage...', 'info');
+        if (window.SocialReadersDB) {
+          await window.SocialReadersDB.seedDemoData();
+        }
+        showToast('Seed data successfully committed and synced!', 'success');
+        document.getElementById('seedHelperBox').style.display = 'none';
+        await loadAllData();
+      } catch (err) {
+        showToast(`Seeding notice: ${err.message}`, 'error');
+      }
+    });
+
+    // Update Overview Stats
+    function updateStats() {
+      document.getElementById('statTotalBooks').textContent = localBooks.length;
+      document.getElementById('statTotalCategories').textContent = localCategories.length;
+      document.getElementById('statTotalOrders').textContent = localOrders.length;
+
+      const totalSocial = localOrders.reduce((sum, ord) => {
+        const share = ord.causeShare || (ord.amount ? ord.amount * 0.25 : 0);
+        return sum + Number(share);
+      }, 0);
+
+      document.getElementById('statTotalSocialFund').textContent = `₹${totalSocial.toFixed(0)}`;
+    }
+
+    // --- DEALS LOADING & RENDERING ---
+    let localDeals = [];
+    async function loadDeals() {
+      try {
+        if (db) {
+          const snap = await getDocs(collection(db, 'deals'));
+          if (!snap.empty) {
+            localDeals = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          } else if (window.SocialReadersDB) {
+            localDeals = await window.SocialReadersDB.getDeals();
+          }
+        } else if (window.SocialReadersDB) {
+          localDeals = await window.SocialReadersDB.getDeals();
+        }
+      } catch (err) {
+        localDeals = window.SocialReadersDB ? (window.SocialReadersDB._cache.deals || []) : [];
+      }
+      renderDealsTable(localDeals);
+    }
+
+    function renderDealsTable(deals) {
+      const tbody = document.getElementById('dealsTableBody');
+      if (!tbody) return;
+      if (!deals || deals.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-dim);padding:30px;">No flash deals configured. Click 'Add Deal' to create one.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = deals.map(d => {
+        const bookTitle = d.title || d.bookId || 'Unknown Book';
+        const statusBadge = d.status === 'active' ? 'badge-active' : 'badge-draft';
+        const endDate = d.endTime ? new Date(d.endTime).toLocaleDateString('en-GB') : '-';
+        return `<tr>
+          <td><strong style="color:#fff;">${escapeHtml(bookTitle)}</strong></td>
+          <td style="color:#9ca3af;">₹${d.originalPrice || '-'}</td>
+          <td><strong style="color:#34d399;">₹${d.dealPrice || '-'}</strong></td>
+          <td><span class="badge badge-pending">${d.discountPercent || 0}% OFF</span></td>
+          <td style="color:#9ca3af;font-size:0.8rem;">${endDate}</td>
+          <td><span class="badge ${statusBadge}">${d.status || 'active'}</span></td>
+          <td>
+            <button class="btn btn-danger btn-sm" onclick="deleteDeal('${d.id}')"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    window.deleteDeal = async function(id) {
+      if (!confirm('Delete this deal?')) return;
+      try {
+        if (db) await deleteDoc(doc(db, 'deals', id));
+        if (window.SocialReadersDB) await window.SocialReadersDB.deleteDeal(id);
+        showToast('Deal removed.', 'info');
+        await loadDeals();
+      } catch (err) {
+        showToast('Delete failed: ' + err.message, 'error');
+      }
+    };
+
+    // --- STORIES LOADING & RENDERING ---
+    let localStories = [];
+    async function loadStories() {
+      try {
+        if (db) {
+          const snap = await getDocs(collection(db, 'stories'));
+          if (!snap.empty) {
+            localStories = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          } else if (window.SocialReadersDB) {
+            localStories = await window.SocialReadersDB.getStories();
+          }
+        } else if (window.SocialReadersDB) {
+          localStories = await window.SocialReadersDB.getStories();
+        }
+      } catch (err) {
+        localStories = window.SocialReadersDB ? (window.SocialReadersDB._cache.stories || []) : [];
+      }
+      renderStoriesTable(localStories);
+    }
+
+    function renderStoriesTable(stories) {
+      const tbody = document.getElementById('storiesTableBody');
+      if (!tbody) return;
+      if (!stories || stories.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text-dim);padding:30px;">No stories found. Click 'Add Story' to create one.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = stories.map(s => {
+        const titleStr = window.SocialReadersUtils ? window.SocialReadersUtils.getTitle(s) : (typeof s.title === 'string' ? s.title : (s.title?.en || 'Untitled'));
+        const authorStr = window.SocialReadersUtils ? window.SocialReadersUtils.getAuthor(s) : (typeof s.author === 'string' ? s.author : (s.author?.en || 'Unknown'));
+        const cover = s.coverUrl || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&q=80';
+        const statusBadge = s.status === 'ongoing' ? 'badge-active' : (s.status === 'completed' ? 'badge-completed' : 'badge-draft');
+        return `<tr>
+          <td><img src="${escapeHtml(cover)}" class="book-cover-thumb" alt="Cover" onerror="this.src='https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&q=80'"></td>
+          <td>
+            <div style="font-weight:600;color:#fff;">${escapeHtml(titleStr)}</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);">${escapeHtml(authorStr)}</div>
+          </td>
+          <td><span class="badge badge-info">${escapeHtml(s.genre || 'Fiction')}</span></td>
+          <td style="color:#9ca3af;">${s.currentEpisode || 0} / ${s.totalEpisodes || '?'}</td>
+          <td><span class="badge ${statusBadge}">${s.status || 'ongoing'}</span></td>
+          <td>
+            <button class="btn btn-danger btn-sm" onclick="deleteStory('${s.id}')"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    window.deleteStory = async function(id) {
+      if (!confirm('Delete this story?')) return;
+      try {
+        if (db) await deleteDoc(doc(db, 'stories', id));
+        if (window.SocialReadersDB) await window.SocialReadersDB.deleteStory(id);
+        showToast('Story removed.', 'info');
+        await loadStories();
+      } catch (err) {
+        showToast('Delete failed: ' + err.message, 'error');
+      }
+    };
+
+    // --- USERS/CUSTOMERS TAB ---
+    function renderUsersTable() {
+      const tbody = document.getElementById('usersTableBody');
+      if (!tbody) return;
+      if (!localOrders || localOrders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:30px;">No customer orders recorded yet.</td></tr>`;
+        return;
+      }
+      // Aggregate orders by customer email
+      const customerMap = new Map();
+      localOrders.forEach(ord => {
+        const email = ord.customerEmail || ord.buyerEmail || 'unknown';
+        if (!customerMap.has(email)) {
+          customerMap.set(email, { email, name: ord.customerName || ord.buyerName || '-', count: 0, total: 0, lastDate: null });
+        }
+        const c = customerMap.get(email);
+        c.count++;
+        c.total += Number(ord.amount || 0);
+        const d = new Date(ord.createdAt || 0);
+        if (!c.lastDate || d > c.lastDate) c.lastDate = d;
+      });
+      const customers = Array.from(customerMap.values()).sort((a, b) => b.total - a.total);
+      tbody.innerHTML = customers.map(c => `<tr>
+        <td><strong style="color:#fff;">${escapeHtml(c.email)}</strong></td>
+        <td style="color:var(--text-muted);">${escapeHtml(c.name)}</td>
+        <td><span class="badge badge-info">${c.count}</span></td>
+        <td><strong style="color:#60a5fa;">₹${c.total.toFixed(2)}</strong></td>
+        <td style="color:var(--text-muted);font-size:0.8rem;">${c.lastDate ? c.lastDate.toLocaleDateString('en-GB') : '-'}</td>
+      </tr>`).join('');
+    }
+
+    // --- SETTINGS TAB POPULATION ---
+    function populateSettings() {
+      // Firebase config
+      const cfg = window.firebaseConfig || {};
+      const pid = document.getElementById('settingFirebaseProjectId');
+      const ad = document.getElementById('settingFirebaseAuthDomain');
+      const ak = document.getElementById('settingFirebaseApiKey');
+      if (pid) pid.value = cfg.projectId || 'Not configured';
+      if (ad) ad.value = cfg.authDomain || 'Not configured';
+      if (ak) ak.value = cfg.apiKey ? ('****' + cfg.apiKey.slice(-6)) : 'Not configured';
+
+      // Cashfree config
+      const cfEnv = document.getElementById('settingCashfreeEnv');
+      const cfId = document.getElementById('settingCashfreeAppId');
+      const cfFn = document.getElementById('settingCashfreeFnUrl');
+      if (window.CashfreeService) {
+        if (cfEnv) cfEnv.value = window.CashfreeService.getEnvironment();
+        if (cfId) cfId.value = window.CashfreeService.getAppId() || 'Not configured';
+        if (cfFn) cfFn.value = window.CashfreeService.getCreateOrderUrl() || 'Not configured';
+      }
+
+      // Cloudinary config
+      const cnName = document.getElementById('settingCloudinaryName');
+      const cnPreset = document.getElementById('settingCloudinaryPreset');
+      if (window.CloudinaryService) {
+        if (cnName) cnName.value = window.CloudinaryService.getCloudName() || 'Not configured';
+        if (cnPreset) cnPreset.value = window.CloudinaryService.getUploadPreset() || 'Not configured';
+      }
+
+      // Social fund
+      const totalSocial = localOrders.reduce((s, o) => s + Number(o.causeShare || (o.amount ? o.amount * 0.25 : 0)), 0);
+      const sf = document.getElementById('settingTotalSocialFund');
+      const to = document.getElementById('settingTotalOrders');
+      if (sf) sf.textContent = `₹${totalSocial.toFixed(0)}`;
+      if (to) to.textContent = localOrders.length;
+    }
+
+    // ----------------------------------------------------
+    // 7. UI EVENTS, NAVIGATION & MODAL CONTROLLERS
+    // ----------------------------------------------------
+
+    // Navigation Tabs
+    document.querySelectorAll('.nav-item-btn[data-tab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item-btn[data-tab]').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+
+        btn.classList.add('active');
+        const targetTab = document.getElementById(btn.dataset.tab);
+        if (targetTab) targetTab.classList.add('active');
+
+        // Update heading
+        const tabNames = {
+          'tab-overview': 'Dashboard Overview',
+          'tab-books': 'Manage Books Catalog',
+          'tab-categories': 'Manage Book Categories',
+          'tab-orders': 'Orders & Social Impact',
+          'tab-deals': 'Flash Deals Management',
+          'tab-stories': 'Serial Stories',
+          'tab-users': 'Customer Accounts',
+          'tab-settings': 'Store Settings & Configuration'
+        };
+        document.getElementById('currentTabHeading').textContent = tabNames[btn.dataset.tab] || 'Admin Dashboard';
+
+        // Lazy-load data when switching to specific tabs
+        if (btn.dataset.tab === 'tab-deals') loadDeals();
+        if (btn.dataset.tab === 'tab-stories') loadStories();
+        if (btn.dataset.tab === 'tab-users') renderUsersTable();
+        if (btn.dataset.tab === 'tab-settings') populateSettings();
+
+        // Close mobile sidebar if open
+        document.getElementById('appSidebar').classList.remove('open');
+      });
+    });
+
+    // Mobile Sidebar Toggle
+    document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+      document.getElementById('appSidebar').classList.toggle('open');
+    });
+
+    // Search Filter in Books Table (handles both string and { en, ta } object titles)
+    document.getElementById('booksSearchInput').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      const getTitleStr = (b) => {
+        if (!b.title) return '';
+        if (typeof b.title === 'string') return b.title.toLowerCase();
+        return ((b.title.en || '') + ' ' + (b.title.ta || '')).toLowerCase();
+      };
+      const getAuthorStr = (b) => {
+        if (!b.author) return '';
+        if (typeof b.author === 'string') return b.author.toLowerCase();
+        return ((b.author.en || '') + ' ' + (b.author.ta || '')).toLowerCase();
+      };
+      const filtered = localBooks.filter(b =>
+        getTitleStr(b).includes(q) ||
+        getAuthorStr(b).includes(q) ||
+        (b.category && b.category.toLowerCase().includes(q))
+      );
+      renderBooksTable(filtered);
+    });
+
+    // Modal Helpers
+    function openModal(id) {
+      document.getElementById(id).classList.add('open');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    document.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', () => closeModal(btn.dataset.close));
+    });
+
+    document.getElementById('openAddBookModalBtn').addEventListener('click', () => {
+      document.getElementById('bookModalTitle').textContent = 'Add New Book';
+      document.getElementById('bookForm').reset();
+      document.getElementById('bookEditId').value = '';
+      document.getElementById('bookCoverUrl').value = '';
+      document.getElementById('bookCoverPreviewBox').style.display = 'none';
+      document.getElementById('bookUploadStatus').style.display = 'none';
+      openModal('bookModal');
+    });
+
+    document.getElementById('openAddCategoryModalBtn').addEventListener('click', () => {
+      document.getElementById('categoryModalTitle').textContent = 'Add Category';
+      document.getElementById('categoryForm').reset();
+      document.getElementById('categoryEditId').value = '';
+      document.getElementById('categoryImageUrl').value = '';
+      document.getElementById('categoryPreviewBox').style.display = 'none';
+      document.getElementById('categoryUploadStatus').style.display = 'none';
+      openModal('categoryModal');
+    });
+
+    // Add Deal button — shows a simple toast guide for now
+    document.getElementById('openAddDealModalBtn')?.addEventListener('click', () => {
+      showToast('To add a deal, use the ebook-service.js saveDeal() method or Firestore console to create a deal document in the \'deals\' collection.', 'info');
+    });
+
+    // Add Story button — shows guide
+    document.getElementById('openAddStoryModalBtn')?.addEventListener('click', () => {
+      showToast('To add a story, use ebook-service.js saveStory() or add a document to the \'stories\' Firestore collection.', 'info');
+    });
+
+    // Cloudinary File Upload Handlers (Book Cover)
+    const bookCoverZone = document.getElementById('bookCoverUploadZone');
+    const bookFileInput = document.getElementById('bookCoverFileInput');
+    bookCoverZone.addEventListener('click', () => bookFileInput.click());
+    bookFileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files[0]) {
+        uploadToCloudinary(
+          e.target.files[0],
+          document.getElementById('bookUploadStatus'),
+          document.getElementById('bookCoverPreview'),
+          document.getElementById('bookCoverPreviewBox'),
+          document.getElementById('bookCoverUrl')
+        );
+      }
+    });
+
+    // Cloudinary File Upload Handlers (Category Banner)
+    const catZone = document.getElementById('categoryUploadZone');
+    const catFileInput = document.getElementById('categoryFileInput');
+    catZone.addEventListener('click', () => catFileInput.click());
+    catFileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files[0]) {
+        uploadToCloudinary(
+          e.target.files[0],
+          document.getElementById('categoryUploadStatus'),
+          document.getElementById('categoryPreview'),
+          document.getElementById('categoryPreviewBox'),
+          document.getElementById('categoryImageUrl')
+        );
+      }
+    });
+
+    // Utility: XSS Escaping
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[m]));
+    }
+
+    // ----------------------------------------------------
+    // 8. BOOTSTRAP INITIALIZATION & REAL-TIME SYNC
+    // ----------------------------------------------------
+    window.addEventListener('DOMContentLoaded', () => {
+      initFirebase();
+    });
+
+    // Real-time synchronization across browser tabs and customer pages
+    window.addEventListener('sr_data_synced', () => {
+      loadAllData();
+    });
+    window.addEventListener('storage', () => {
+      loadAllData();
+    });
+  </script>
 </body>
 </html>

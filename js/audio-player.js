@@ -168,20 +168,25 @@ class AudiobookPlayer {
     const playerContainer = document.getElementById('global-audio-player');
     playerContainer.classList.remove('hidden');
   }
+
+  bindSampleTriggers(root = document) {
+    root.querySelectorAll('[data-listen-sample]').forEach(btn => {
+      if (btn._audioBound) return;
+      btn._audioBound = true;
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const title = btn.getAttribute('data-book-title') || "Audio Sample";
+        const author = btn.getAttribute('data-book-author') || "";
+        const url = btn.getAttribute('data-audio-url') || "";
+        const cover = btn.getAttribute('data-cover-url') || "";
+        this.playTrack(title, author, url, cover);
+      });
+    });
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   window.SocialReadersAudioPlayer = new AudiobookPlayer();
-
-  // Attach sample listen listeners on all listen buttons
-  document.querySelectorAll('[data-listen-sample]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const title = btn.getAttribute('data-book-title') || "Audio Sample";
-      const author = btn.getAttribute('data-book-author') || "";
-      const url = btn.getAttribute('data-audio-url') || "";
-      const cover = btn.getAttribute('data-cover-url') || "";
-      window.SocialReadersAudioPlayer.playTrack(title, author, url, cover);
-    });
-  });
+  window.SocialReadersAudioPlayer.bindSampleTriggers();
 });
+

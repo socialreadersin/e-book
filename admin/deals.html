@@ -320,13 +320,17 @@
         return;
       }
 
+      const esc = (window.SocialReadersUtils && window.SocialReadersUtils.escapeHtml) 
+        ? window.SocialReadersUtils.escapeHtml 
+        : (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
       tbody.innerHTML = allDeals.map(deal => {
         const matchingBook = allBooks.find(b => b.id === deal.bookId) || {
           title: deal.title || 'Book',
           price: deal.originalPrice || 299,
           coverUrl: deal.coverUrl || 'assets/cover-atomic-habits.svg'
         };
-        const title = typeof matchingBook.title === 'object' ? matchingBook.title.en : matchingBook.title;
+        const title = typeof matchingBook.title === 'object' ? (matchingBook.title.en || '') : (matchingBook.title || '');
         const origPrice = Number(deal.originalPrice || matchingBook.price || 299);
         const discount = Number(deal.discountPercent || 40);
         const dealPrice = Number(deal.dealPrice || Math.round(origPrice * (1 - discount / 100)));
@@ -340,10 +344,10 @@
           <tr class="hover:bg-gray-50/80 transition-colors">
             <td class="py-4 px-6 font-semibold text-navy">
               <div class="flex items-center gap-3">
-                <img src="${cover}" alt="${title}" class="w-10 h-14 object-contain rounded-lg border border-gray-200 bg-gray-50 p-0.5 shadow-sm">
+                <img src="${esc(cover)}" alt="${esc(title)}" class="w-10 h-14 object-contain rounded-lg border border-gray-200 bg-gray-50 p-0.5 shadow-sm">
                 <div>
-                  <div class="font-bold text-navy text-sm">${title}</div>
-                  <div class="text-xs text-gray-400">${deal.title || 'Flash Promo'}</div>
+                  <div class="font-bold text-navy text-sm">${esc(title)}</div>
+                  <div class="text-xs text-gray-400">${esc(deal.title || 'Flash Promo')}</div>
                 </div>
               </div>
             </td>
@@ -368,13 +372,22 @@
             </td>
             <td class="py-4 px-6 text-right">
               <div class="inline-flex items-center gap-2">
-                <button type="button" onclick="editDeal('${deal.id}')" class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
-                <button type="button" onclick="deleteDeal('${deal.id}', '${title}')" class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">Delete</button>
+                <button type="button" data-action="edit" data-id="${esc(deal.id)}" class="px-2.5 py-1 text-xs font-bold rounded-lg border border-gray-200 hover:border-navy hover:text-navy text-gray-600 transition-colors">Edit</button>
+                <button type="button" data-action="delete" data-id="${esc(deal.id)}" data-title="${esc(title)}" class="px-2.5 py-1 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-50 text-red-600 transition-colors">Delete</button>
               </div>
             </td>
           </tr>
         `;
       }).join('');
+
+      tbody.onclick = (e) => {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+        const action = btn.dataset.action;
+        const id = btn.dataset.id;
+        if (action === 'edit') editDeal(id);
+        if (action === 'delete') deleteDeal(id, btn.dataset.title);
+      };
     }
 
     function openDealModal(isEdit = false) {

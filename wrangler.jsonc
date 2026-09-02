@@ -1,10 +1,15 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "e-book",
-  "compatibility_date": "2026-08-20",
+  "compatibility_date": "2026-08-28",
   "assets": {
     "directory": ".",
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page"
+  },
+  "vars": {
+    "ENVIRONMENT": "production",
+    "CAUSE_SHARE_PERCENT": "25",
+    "BRAND_NAME": "Social Readers"
   }
 }

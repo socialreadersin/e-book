@@ -1,7 +1,8 @@
 /**
  * Social Readers - Firebase Configuration Template (EXAMPLE ONLY)
- * Copy this file to `js/firebase-config.js` and add your real keys.
- * `js/firebase-config.js` is gitignored to protect sensitive credentials.
+ * 
+ * Copy this file to `js/firebase-config.js` and add your real keys, or run `npm run build`.
+ * `js/firebase-config.js` is strictly gitignored to protect sensitive credentials.
  */
 
 const firebaseConfig = {
@@ -14,13 +15,11 @@ const firebaseConfig = {
   measurementId: "YOUR_MEASUREMENT_ID"
 };
 
-// Global Firebase instance wrapper with fallback data
-window.SocialReadersDB = {
-  config: firebaseConfig,
-  isLive: false,
-  getBooks() { return []; },
-  saveBooks(b) {},
-  getBookById(id) { return null; },
-  getOrders() { return []; },
-  createOrder(o) { return o; }
-};
+// Global config assignment
+if (typeof window !== 'undefined') {
+  window.firebaseConfig = firebaseConfig;
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = firebaseConfig;
+}

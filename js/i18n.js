@@ -51,7 +51,7 @@ const translations = {
     "trust.cause": "25% Direct Cause Fund",
     "trust.cause_sub": "100% verified allocation to youth",
     "trust.secure": "100% Secure Checkout",
-    "trust.secure_sub": "Razorpay, UPI, Cards, NetBanking",
+    "trust.secure_sub": "Cashfree Payments · UPI, Cards, NetBanking",
 
     // Home - Hero
     "hero.badge": "25% Contributed to Youth Education & Sports",

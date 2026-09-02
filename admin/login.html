@@ -75,11 +75,11 @@
           <div class="relative">
             <input 
               type="email" 
-              id="admin-email"
-              name="email"
+              id="admin-email" 
+              name="email" 
               required 
-              value="admin@socialreaders.org" 
-              class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-navy focus:bg-white transition-colors"
+              autocomplete="email"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-navy focus:bg-white transition-colors" 
               placeholder="name@socialreaders.org"
             >
           </div>
@@ -91,11 +91,11 @@
           </div>
           <input 
             type="password" 
-            id="admin-password"
-            name="password"
+            id="admin-password" 
+            name="password" 
             required 
-            value="admin123" 
-            class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-navy focus:bg-white transition-colors"
+            autocomplete="current-password"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-navy focus:bg-white transition-colors" 
             placeholder="Enter password"
           >
         </div>
@@ -105,13 +105,12 @@
             <input type="checkbox" checked class="w-4 h-4 rounded text-forest focus:ring-forest border-gray-300">
             <span>Remember session</span>
           </label>
-          <a href="#" class="text-navy font-semibold hover:underline">Forgot password?</a>
         </div>
 
         <div class="pt-2">
           <button 
             type="submit" 
-            id="login-submit-btn"
+            id="login-submit-btn" 
             class="w-full py-3.5 rounded-xl bg-navy text-white font-bold text-sm hover:bg-blue-950 transition-all shadow-md flex items-center justify-center gap-2 group"
           >
             <span>Sign In to Console</span>
@@ -120,10 +119,10 @@
         </div>
       </form>
 
-      <!-- Credentials Note -->
+      <!-- Security Notice -->
       <div class="p-3.5 rounded-xl bg-blue-50/70 border border-blue-100 text-center text-xs text-navy/80 space-y-1">
         <p class="font-medium">Firebase Auth &amp; Firestore Admins Guard Active</p>
-        <p class="text-[11px] text-gray-500">Default: <code class="font-mono bg-blue-100/60 px-1 py-0.5 rounded">admin@socialreaders.org</code></p>
+        <p class="text-[11px] text-gray-500">Only authorized administrators in the Firestore <code class="font-mono bg-blue-100/60 px-1 py-0.5 rounded">admins</code> collection may sign in.</p>
       </div>
 
     </div>

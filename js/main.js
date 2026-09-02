@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize interactive components
   initHeroSlider();
   initDynamicHomepageContent();
+  initStorefrontDynamicCatalog();
   initLightningDealsTimer();
   initBookCarousels();
   initHeaderSearchBar();
@@ -408,20 +409,28 @@ async function renderDynamicAccountData() {
 
   if (welcomeTitle) welcomeTitle.textContent = `Welcome back, ${userName}!`;
   if (userEmailEl) userEmailEl.textContent = currentUser.email;
+  const esc = (window.SocialReadersUtils && window.SocialReadersUtils.escapeHtml) 
+    ? window.SocialReadersUtils.escapeHtml 
+    : (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
   if (avatarEl) avatarEl.textContent = userName.substring(0, 2).toUpperCase();
 
-  let allOrders = [];
+  // Scoped retrieval of current user's orders (avoids downloading all platform orders)
+  let userOrders = [];
   try {
-    allOrders = await window.SocialReadersDB.getOrders();
+    if (window.SocialReadersDB.getUserOrders) {
+      userOrders = await window.SocialReadersDB.getUserOrders(userEmail);
+    } else {
+      const allOrders = await window.SocialReadersDB.getOrders();
+      userOrders = (allOrders || []).filter(ord => {
+        const buyer = (ord.customerEmail || ord.buyerEmail || '').toLowerCase().trim();
+        return buyer === userEmail;
+      });
+    }
   } catch (e) {
-    allOrders = window.SocialReadersDB.getOrdersSync ? window.SocialReadersDB.getOrdersSync() : [];
+    console.warn("Could not load user orders:", e);
+    userOrders = [];
   }
-
-  // Filter orders strictly for this customer
-  const userOrders = (allOrders || []).filter(ord => {
-    const buyer = (ord.customerEmail || ord.buyerEmail || '').toLowerCase().trim();
-    return buyer === userEmail;
-  });
 
   // Calculate totals for logged in user
   let totalFund = 0;
@@ -483,20 +492,20 @@ async function renderDynamicAccountData() {
           <div class="bg-white rounded-2xl p-2.5 sm:p-4 border border-gray-100 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
             <div>
               <div class="w-full h-36 sm:h-52 bg-gray-50 rounded-xl flex items-center justify-center p-2 overflow-hidden">
-                <img src="${matchingBook.coverUrl || 'assets/cover-atomic-habits.svg'}" alt="${titleText}" class="max-h-full max-w-full object-contain rounded-lg">
+                <img src="${esc(matchingBook.coverUrl || 'assets/cover-atomic-habits.svg')}" alt="${esc(titleText)}" class="max-h-full max-w-full object-contain rounded-lg">
               </div>
-              <h3 class="font-bold text-navy text-xs sm:text-sm mt-2 line-clamp-2 min-h-[2rem] flex items-center">${titleText}</h3>
-              <p class="text-[10px] sm:text-xs text-gray-500 truncate">${authorText}</p>
+              <h3 class="font-bold text-navy text-xs sm:text-sm mt-2 line-clamp-2 min-h-[2rem] flex items-center">${esc(titleText)}</h3>
+              <p class="text-[10px] sm:text-xs text-gray-500 truncate">${esc(authorText)}</p>
             </div>
             <div class="mt-2.5 pt-2 border-t border-gray-100 space-y-1.5">
-              <button type="button" data-read-sample="true" data-book-id="${matchingBook.id}" class="w-full py-1.5 sm:py-2 rounded-lg bg-navy text-white text-[10px] sm:text-xs font-bold hover:bg-blue-900 active:scale-95 transition-all shadow-xs flex items-center justify-center gap-1">
+              <button type="button" data-read-sample="true" data-book-id="${esc(matchingBook.id)}" class="w-full py-1.5 sm:py-2 rounded-lg bg-navy text-white text-[10px] sm:text-xs font-bold hover:bg-blue-900 active:scale-95 transition-all shadow-xs flex items-center justify-center gap-1">
                 <span>Read Online</span>
               </button>
               <div class="grid grid-cols-2 gap-1">
-                <button type="button" data-download-book="${titleText}" class="py-1 rounded-md border border-gray-200 text-navy text-[10px] font-semibold hover:bg-gray-50 active:scale-95 transition-all text-center">
+                <button type="button" data-download-book="${esc(titleText)}" class="py-1 rounded-md border border-gray-200 text-navy text-[10px] font-semibold hover:bg-gray-50 active:scale-95 transition-all text-center">
                   PDF
                 </button>
-                <button type="button" onclick="window.SocialReadersAudioPlayer.playTrack('${titleText}', '${authorText}', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', '${matchingBook.coverUrl || 'assets/cover-atomic-habits.svg'}')" class="py-1 rounded-md bg-orange-50 text-brandOrange text-[10px] font-semibold hover:bg-orange-100 active:scale-95 transition-all text-center">
+                <button type="button" data-listen-title="${esc(titleText)}" data-listen-author="${esc(authorText)}" data-listen-cover="${esc(matchingBook.coverUrl || 'assets/cover-atomic-habits.svg')}" class="listen-btn-trigger py-1 rounded-md bg-orange-50 text-brandOrange text-[10px] font-semibold hover:bg-orange-100 active:scale-95 transition-all text-center">
                   Listen
                 </button>
               </div>
@@ -507,6 +516,18 @@ async function renderDynamicAccountData() {
 
       libraryPane.innerHTML = `<div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">${libraryHtml}</div>`;
       initSampleReaderTriggers();
+
+      // Bind Listen button clicks safely without inline onclick execution
+      libraryPane.querySelectorAll('.listen-btn-trigger').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const t = btn.getAttribute('data-listen-title');
+          const a = btn.getAttribute('data-listen-author');
+          const c = btn.getAttribute('data-listen-cover');
+          if (window.SocialReadersAudioPlayer) {
+            window.SocialReadersAudioPlayer.playTrack(t, a, 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', c);
+          }
+        });
+      });
     }
   }
 
@@ -523,21 +544,27 @@ async function renderDynamicAccountData() {
     } else {
       ordersTbody.innerHTML = userOrders.map(ord => `
         <tr class="hover:bg-gray-50/75 transition-colors">
-          <td class="p-3 sm:p-4 font-mono font-bold text-navy">${ord.orderId || '#SR-9800'}</td>
+          <td class="p-3 sm:p-4 font-mono font-bold text-navy">${esc(ord.orderId || '#SR-9800')}</td>
           <td class="p-3 sm:p-4">
-            <div class="font-semibold text-gray-800">${ord.bookTitle}</div>
-            <div class="text-[11px] text-forest font-medium">${ord.format || 'E-Book'}</div>
+            <div class="font-semibold text-gray-800">${esc(ord.bookTitle || 'Book')}</div>
+            <div class="text-[11px] text-forest font-medium">${esc(ord.format || 'E-Book')}</div>
           </td>
-          <td class="p-3 sm:p-4 text-xs text-gray-500 whitespace-nowrap">${ord.date || 'Today'}</td>
-          <td class="p-3 sm:p-4 font-bold text-navy whitespace-nowrap">₹${ord.amount}.00</td>
-          <td class="p-3 sm:p-4 font-bold text-brandOrange whitespace-nowrap">₹${Number(ord.causeShare || ord.amount * 0.25).toFixed(2)}</td>
+          <td class="p-3 sm:p-4 text-xs text-gray-500 whitespace-nowrap">${esc(ord.date || 'Today')}</td>
+          <td class="p-3 sm:p-4 font-bold text-navy whitespace-nowrap">₹${Number(ord.amount || 0)}.00</td>
+          <td class="p-3 sm:p-4 font-bold text-brandOrange whitespace-nowrap">₹${Number(ord.causeShare || (ord.amount || 0) * 0.25).toFixed(2)}</td>
           <td class="p-3 sm:p-4">
-            <button type="button" onclick="showToast('Downloading invoice ${ord.orderId} PDF...')" class="inline-flex items-center gap-1 text-navy hover:text-forest font-bold text-xs underline">
+            <button type="button" data-receipt-id="${esc(ord.orderId)}" class="download-receipt-btn inline-flex items-center gap-1 text-navy hover:text-forest font-bold text-xs underline">
               <span>Receipt</span>
             </button>
           </td>
         </tr>
       `).join('');
+
+      ordersTbody.querySelectorAll('.download-receipt-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          showToast(`Downloading invoice ${btn.getAttribute('data-receipt-id')} PDF...`);
+        });
+      });
     }
   }
 
@@ -553,29 +580,35 @@ async function renderDynamicAccountData() {
       ordersMobileContainer.innerHTML = userOrders.map(ord => `
         <div class="p-3.5 bg-white rounded-2xl border border-gray-100 shadow-xs flex flex-col gap-2.5">
           <div class="flex items-center justify-between">
-            <span class="font-mono text-xs font-bold text-navy px-2 py-0.5 bg-gray-100 rounded-md">${ord.orderId || '#SR-9800'}</span>
-            <span class="text-[11px] text-gray-400 font-medium">${ord.date || 'Recent'}</span>
+            <span class="font-mono text-xs font-bold text-navy px-2 py-0.5 bg-gray-100 rounded-md">${esc(ord.orderId || '#SR-9800')}</span>
+            <span class="text-[11px] text-gray-400 font-medium">${esc(ord.date || 'Recent')}</span>
           </div>
           <div class="flex items-start justify-between gap-2">
             <div>
-              <h4 class="font-bold text-navy text-sm leading-tight">${ord.bookTitle}</h4>
-              <span class="text-[10px] text-forest font-bold uppercase tracking-wider">${ord.format || 'E-Book'}</span>
+              <h4 class="font-bold text-navy text-sm leading-tight">${esc(ord.bookTitle || 'Book')}</h4>
+              <span class="text-[10px] text-forest font-bold uppercase tracking-wider">${esc(ord.format || 'E-Book')}</span>
             </div>
             <div class="text-right flex-shrink-0">
-              <span class="text-sm font-black text-navy">₹${ord.amount}.00</span>
-              <span class="text-[10px] font-bold text-brandOrange block">₹${Number(ord.causeShare || ord.amount * 0.25).toFixed(2)} cause</span>
+              <span class="text-sm font-black text-navy">₹${Number(ord.amount || 0)}.00</span>
+              <span class="text-[10px] font-bold text-brandOrange block">₹${Number(ord.causeShare || (ord.amount || 0) * 0.25).toFixed(2)} cause</span>
             </div>
           </div>
           <div class="pt-2 border-t border-gray-50 flex items-center justify-between">
             <span class="inline-flex items-center gap-1 text-[10px] font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded-full">
               ● Completed
             </span>
-            <button type="button" onclick="showToast('Downloading invoice ${ord.orderId} PDF...')" class="px-2.5 py-1 rounded-lg bg-gray-100 text-navy font-bold text-xs hover:bg-navy hover:text-white transition-all active:scale-95">
+            <button type="button" data-receipt-id="${esc(ord.orderId)}" class="download-receipt-btn px-2.5 py-1 rounded-lg bg-gray-100 text-navy font-bold text-xs hover:bg-navy hover:text-white transition-all active:scale-95">
               Download Receipt
             </button>
           </div>
         </div>
       `).join('');
+
+      ordersMobileContainer.querySelectorAll('.download-receipt-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          showToast(`Downloading invoice ${btn.getAttribute('data-receipt-id')} PDF...`);
+        });
+      });
     }
   }
 }
@@ -661,6 +694,12 @@ function initHeroSlider() {
 
   if (!track || !slides.length) return;
 
+  // Clean up any existing timer from previous initialization
+  if (slider._srAutoplayTimer) {
+    clearInterval(slider._srAutoplayTimer);
+    slider._srAutoplayTimer = null;
+  }
+
   let currentSlide = 0;
   const totalSlides = slides.length;
   let autoplayTimer = null;
@@ -692,12 +731,14 @@ function initHeroSlider() {
     autoplayTimer = setInterval(() => {
       updateSlider(currentSlide + 1);
     }, autoplayDelay);
+    slider._srAutoplayTimer = autoplayTimer;
   }
 
   function stopAutoplay() {
     if (autoplayTimer) {
       clearInterval(autoplayTimer);
       autoplayTimer = null;
+      slider._srAutoplayTimer = null;
     }
   }
 
@@ -961,3 +1002,175 @@ async function initDynamicHomepageContent() {
   }
 }
 
+/**
+ * Render Books and Audiobooks Catalogs Dynamically from Firestore / SocialReadersDB
+ * Ensures books added or updated in the Admin Console immediately appear on storefront
+ */
+async function initStorefrontDynamicCatalog() {
+  if (!window.SocialReadersDB) return;
+
+  const esc = (window.SocialReadersUtils && window.SocialReadersUtils.escapeHtml) 
+    ? window.SocialReadersUtils.escapeHtml 
+    : (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  // 1. Books Catalog (books.html)
+  const booksGrid = document.getElementById('books-catalog-grid');
+  if (booksGrid && window.SocialReadersDB.getBooks) {
+    try {
+      const books = await window.SocialReadersDB.getBooks(false);
+      if (books && books.length) {
+        const savedWishlist = JSON.parse(localStorage.getItem('sr_wishlist') || '[]');
+        const curLang = (typeof currentLanguage !== 'undefined') ? currentLanguage : (localStorage.getItem('sr_lang') || 'en');
+
+        booksGrid.innerHTML = books.map(book => {
+          const title = typeof book.title === 'object' ? (curLang === 'ta' && book.title.ta ? book.title.ta : (book.title.en || '')) : (book.title || '');
+          const author = typeof book.author === 'object' ? (curLang === 'ta' && book.author.ta ? book.author.ta : (book.author.en || '')) : (book.author || '');
+          const isLiked = savedWishlist.includes(book.id);
+          const price = Number(book.priceEbook || book.price || 149);
+          const category = book.category || 'selfdev';
+          const type = book.type || (book.priceAudiobook ? 'both' : 'ebook');
+
+          return `
+            <div class="catalog-book-card book-card bg-white rounded-2xl overflow-hidden border border-gray-100 p-2.5 sm:p-4 flex flex-col justify-between shadow-xs hover:shadow-md transition-all h-full" data-category="${esc(category)}" data-type="${esc(type)}">
+              <div class="relative w-full h-36 sm:h-48 md:h-52 rounded-xl bg-gray-50 flex items-center justify-center p-2 overflow-hidden">
+                <a href="book-detail.html?id=${esc(book.id)}" class="w-full h-full flex items-center justify-center">
+                  <img src="${esc(book.coverUrl || 'assets/cover-atomic-habits.svg')}" alt="${esc(title)}" class="max-h-full max-w-full object-contain rounded-lg transition-transform duration-300 hover:scale-105">
+                </a>
+                <button type="button" class="wishlist-btn absolute top-2 right-2 p-1.5 sm:p-2 bg-white/90 rounded-full shadow-md hover:bg-white text-brandOrange transition-transform active:scale-90" data-book-id="${esc(book.id)}" data-liked="${isLiked}" aria-label="Wishlist">
+                  <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="${isLiked ? '#E8720C' : 'none'}" stroke="#E8720C" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                </button>
+                ${book.isBestseller ? '<span class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-forest text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs">Bestseller</span>' : ''}
+              </div>
+              <div class="mt-3 flex-grow flex flex-col justify-between">
+                <div>
+                  <a href="book-detail.html?id=${esc(book.id)}">
+                    <h3 class="book-title font-bold text-navy text-xs sm:text-sm md:text-base hover:text-forest transition-colors line-clamp-2 min-h-[2.5rem] flex items-center">${esc(title)}</h3>
+                  </a>
+                  <p class="book-author text-[10px] sm:text-xs text-gray-500 mt-0.5 truncate">${esc(author)}</p>
+                </div>
+                <div class="mt-2.5 flex items-center justify-between gap-1">
+                  <span class="text-sm sm:text-base md:text-lg font-bold text-forest">₹${price}</span>
+                  <span class="text-[9px] sm:text-[10px] font-semibold text-brandOrange bg-orange-50 border border-orange-200/60 px-1.5 sm:px-2 py-0.5 rounded">25% Cause</span>
+                </div>
+              </div>
+              <div class="mt-3 pt-2.5 border-t border-gray-100 space-y-1.5">
+                <button type="button" onclick="window.SocialReadersCheckout.openCheckout('${esc(book.id)}', 'ebook')" class="block w-full py-2 sm:py-2.5 rounded-full bg-forest text-white text-center text-xs font-bold hover:bg-green-800 transition-colors shadow-xs active:scale-95">
+                  Buy Now (₹${price})
+                </button>
+                <button type="button" data-read-sample="true" data-book-id="${esc(book.id)}" class="w-full py-1.5 rounded-full border border-navy text-navy text-[11px] font-semibold hover:bg-navy hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1">
+                  <span>Read Sample</span>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        initWishlistButtons();
+        initSampleReaderTriggers();
+        applyBookFilters();
+      }
+    } catch (err) {
+      console.warn("Dynamic books catalog sync notice:", err);
+    }
+  }
+
+  // 2. Audiobooks Catalog (audiobooks.html)
+  const audioGrid = document.getElementById('audiobooks-catalog-grid');
+  if (audioGrid && window.SocialReadersDB.getBooks) {
+    try {
+      const allBooks = await window.SocialReadersDB.getBooks(false);
+      const audiobooks = (allBooks || []).filter(b => b.type === 'audiobook' || b.type === 'both' || b.priceAudiobook || b.audioUrl);
+      if (audiobooks && audiobooks.length) {
+        const curLang = (typeof currentLanguage !== 'undefined') ? currentLanguage : (localStorage.getItem('sr_lang') || 'en');
+
+        audioGrid.innerHTML = audiobooks.map(book => {
+          const title = typeof book.title === 'object' ? (curLang === 'ta' && book.title.ta ? book.title.ta : (book.title.en || '')) : (book.title || '');
+          const author = typeof book.author === 'object' ? (curLang === 'ta' && book.author.ta ? book.author.ta : (book.author.en || '')) : (book.author || '');
+          const price = Number(book.priceAudiobook || book.price || 199);
+          const cause = (price * 0.25).toFixed(2);
+          const audioUrl = book.audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+          const cover = book.coverUrl || "assets/cover-atomic-habits.svg";
+          const duration = book.duration || "6 hrs 15 mins";
+
+          return `
+            <div class="bg-white rounded-3xl p-4 sm:p-6 border border-gray-100 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+              <div>
+                <div class="relative bg-gray-50 rounded-2xl p-4 aspect-[4/3] flex items-center justify-center mb-4 sm:mb-5 shadow-inner">
+                  <img src="${esc(cover)}" alt="${esc(title)} Audiobook" class="h-full object-contain drop-shadow-md">
+                  <span class="absolute top-3 left-3 bg-brandOrange text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                    <span>🎧 ${esc(duration)}</span>
+                  </span>
+                </div>
+                
+                <h3 class="font-extrabold text-navy text-base sm:text-lg hover:text-forest transition-colors">${esc(title)}</h3>
+                <p class="text-xs text-gray-500 mt-1">Author: <strong>${esc(author)}</strong></p>
+                <div class="flex items-center gap-2 sm:gap-3 mt-2 sm:mt-3 text-xs">
+                  <span class="text-amber-500 font-bold">★ 4.9 (820+)</span>
+                  <span class="text-gray-400">•</span>
+                  <span class="text-forest font-semibold">Tamil &amp; English</span>
+                </div>
+              </div>
+
+              <div class="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-gray-100 flex items-center justify-between gap-2 sm:gap-3">
+                <div>
+                  <span class="text-lg sm:text-xl font-extrabold text-forest">₹${price}</span>
+                  <span class="text-[10px] sm:text-[11px] text-brandOrange block font-bold">₹${cause} for Youth</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button 
+                    type="button" 
+                    data-listen-sample="true"
+                    data-book-title="${esc(title)} (Audio Sample)"
+                    data-book-author="${esc(author)}"
+                    data-audio-url="${esc(audioUrl)}"
+                    data-cover-url="${esc(cover)}"
+                    class="px-3 py-2 rounded-full bg-blue-50 text-navy font-bold text-xs hover:bg-navy hover:text-white transition-colors flex items-center gap-1 active:scale-95"
+                  >
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <span>Play</span>
+                  </button>
+                  <button 
+                    type="button" 
+                    data-read-sample="true" 
+                    data-book-id="${esc(book.id)}" 
+                    class="px-3 py-2 rounded-full border border-navy text-navy font-bold text-xs hover:bg-navy hover:text-white transition-colors active:scale-95"
+                  >
+                    Read
+                  </button>
+                  <button 
+                    type="button" 
+                    onclick="window.SocialReadersCheckout.openCheckout('${esc(book.id)}', 'audiobook')" 
+                    class="px-4 py-2 rounded-full bg-forest text-white font-bold text-xs hover:bg-green-800 transition-colors shadow-sm active:scale-95"
+                  >
+                    Buy
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        initSampleReaderTriggers();
+        if (window.SocialReadersAudioPlayer && window.SocialReadersAudioPlayer.bindSampleTriggers) {
+          window.SocialReadersAudioPlayer.bindSampleTriggers(audioGrid);
+        }
+      }
+    } catch (err) {
+      console.warn("Dynamic audiobooks catalog sync notice:", err);
+    }
+  }
+}
+
+// Real-time synchronization: Re-render catalog when admin modifies books
+if (typeof window !== 'undefined') {
+  window.addEventListener('sr_data_synced', (e) => {
+    if (!e.detail || e.detail.key === 'sr_books_data') {
+      initStorefrontDynamicCatalog();
+    }
+  });
+  window.addEventListener('storage', (e) => {
+    if (!e.key || e.key === 'sr_books_data') {
+      initStorefrontDynamicCatalog();
+    }
+  });
+}

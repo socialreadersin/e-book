@@ -417,10 +417,14 @@
         return;
       }
 
+      const esc = (window.SocialReadersUtils && window.SocialReadersUtils.escapeHtml) 
+        ? window.SocialReadersUtils.escapeHtml 
+        : (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
       tbody.innerHTML = books.map(book => {
-        const titleEn = typeof book.title === 'object' ? book.title.en : book.title;
-        const titleTa = typeof book.title === 'object' ? book.title.ta : '';
-        const authorEn = typeof book.author === 'object' ? book.author.en : book.author;
+        const titleEn = typeof book.title === 'object' ? (book.title.en || '') : (book.title || '');
+        const titleTa = typeof book.title === 'object' ? (book.title.ta || '') : '';
+        const authorEn = typeof book.author === 'object' ? (book.author.en || '') : (book.author || '');
         const ebookPrice = book.priceEbook ? `₹${book.priceEbook}` : '—';
         const audioPrice = book.priceAudiobook ? `₹${book.priceAudiobook}` : '—';
         const isDraft = book.status === 'draft';
@@ -432,30 +436,40 @@
         return `
           <tr class="hover:bg-gray-50/80 transition-colors">
             <td class="py-3 px-4 sm:px-6">
-              <img src="${cover}" alt="${titleEn}" class="w-10 h-14 object-contain rounded-lg border border-gray-200 bg-white p-0.5 shadow-sm">
+              <img src="${esc(cover)}" alt="${esc(titleEn)}" class="w-10 h-14 object-contain rounded-lg border border-gray-200 bg-white p-0.5 shadow-sm">
             </td>
             <td class="py-3 px-4">
-              <div class="font-bold text-navy text-xs sm:text-sm">${titleEn}</div>
-              <div class="text-[11px] text-gray-400">${titleTa ? titleTa + ' &bull; ' : ''}${authorEn}</div>
+              <div class="font-bold text-navy text-xs sm:text-sm">${esc(titleEn)}</div>
+              <div class="text-[11px] text-gray-400">${titleTa ? esc(titleTa) + ' &bull; ' : ''}${esc(authorEn)}</div>
               ${book.isBestseller ? '<span class="inline-block mt-0.5 text-[9px] font-extrabold px-1.5 py-0.2 rounded bg-orange-100 text-brandOrange">Bestseller</span>' : ''}
             </td>
             <td class="py-3 px-4">
-              <span class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-100 capitalize">${book.category || 'General'}</span>
+              <span class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-100 capitalize">${esc(book.category || 'General')}</span>
             </td>
-            <td class="py-3 px-4 font-bold text-navy text-xs">${ebookPrice}</td>
-            <td class="py-3 px-4 font-bold text-forest text-xs">${audioPrice}</td>
+            <td class="py-3 px-4 font-bold text-navy text-xs">${esc(ebookPrice)}</td>
+            <td class="py-3 px-4 font-bold text-forest text-xs">${esc(audioPrice)}</td>
             <td class="py-3 px-4">
               <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${isDraft ? 'bg-amber-100 text-amber-800' : 'bg-green-100 text-green-800'}">
                 ${isDraft ? 'Draft' : 'Published'}
               </span>
             </td>
             <td class="py-3 px-4 sm:px-6 text-right space-x-2">
-              <button onclick="editBook('${book.id}')" class="text-xs font-bold text-navy hover:text-forest transition-colors">Edit</button>
-              <button onclick="deleteBook('${book.id}', '${titleEn}')" class="text-xs font-bold text-red-500 hover:text-red-700 transition-colors">Delete</button>
+              <button type="button" data-action="edit" data-id="${esc(book.id)}" class="text-xs font-bold text-navy hover:text-forest transition-colors">Edit</button>
+              <button type="button" data-action="delete" data-id="${esc(book.id)}" data-title="${esc(titleEn)}" class="text-xs font-bold text-red-500 hover:text-red-700 transition-colors">Delete</button>
             </td>
           </tr>
         `;
       }).join('');
+
+      // Event delegation for Edit and Delete
+      tbody.onclick = (e) => {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+        const action = btn.dataset.action;
+        const id = btn.dataset.id;
+        if (action === 'edit') editBook(id);
+        if (action === 'delete') deleteBook(id, btn.dataset.title);
+      };
     }
 
     // Filter functionality

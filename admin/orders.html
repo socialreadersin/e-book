@@ -229,6 +229,10 @@
         return;
       }
 
+      const esc = (window.SocialReadersUtils && window.SocialReadersUtils.escapeHtml) 
+        ? window.SocialReadersUtils.escapeHtml 
+        : (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
       tbody.innerHTML = orders.map(order => {
         const id = order.orderId || 'SR-0000';
         const title = order.bookTitle || 'Book Purchase';
@@ -242,24 +246,24 @@
 
         return `
           <tr class="hover:bg-gray-50/80 transition-colors">
-            <td class="py-3 px-4 sm:px-6 font-mono text-xs font-bold text-navy">#${id}</td>
+            <td class="py-3 px-4 sm:px-6 font-mono text-xs font-bold text-navy">#${esc(id)}</td>
             <td class="py-3 px-4">
-              <div class="font-bold text-navy text-xs sm:text-sm">${title}</div>
-              <span class="inline-block mt-0.5 px-2 py-0.2 rounded-full text-[10px] font-bold ${format.toLowerCase().includes('audio') ? 'bg-purple-50 text-purple-700' : 'bg-blue-50 text-blue-700'}">${format}</span>
+              <div class="font-bold text-navy text-xs sm:text-sm">${esc(title)}</div>
+              <span class="inline-block mt-0.5 px-2 py-0.2 rounded-full text-[10px] font-bold ${format.toLowerCase().includes('audio') ? 'bg-purple-50 text-purple-700' : 'bg-blue-50 text-blue-700'}">${esc(format)}</span>
             </td>
             <td class="py-3 px-4">
-              <div class="font-medium text-gray-900 text-xs">${name}</div>
-              <div class="text-[11px] text-gray-400">${email}</div>
+              <div class="font-medium text-gray-900 text-xs">${esc(name)}</div>
+              <div class="text-[11px] text-gray-400">${esc(email)}</div>
             </td>
             <td class="py-3 px-4 font-bold text-navy text-xs">₹${amt}</td>
             <td class="py-3 px-4 font-bold text-forest text-xs">₹${cause.toFixed(2)}</td>
             <td class="py-3 px-4">
               <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                ${status}
+                ${esc(status)}
               </span>
             </td>
-            <td class="py-3 px-4 sm:px-6 text-xs text-gray-500 text-right">${date}</td>
+            <td class="py-3 px-4 sm:px-6 text-xs text-gray-500 text-right">${esc(date)}</td>
           </tr>
         `;
       }).join('');

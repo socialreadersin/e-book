@@ -1,0 +1,25 @@
+{
+  "name": "social-readers-functions",
+  "version": "1.0.0",
+  "description": "Firebase Cloud Functions for Social Readers — Cashfree Payment Integration",
+  "engines": {
+    "node": "20"
+  },
+  "main": "index.js",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "cashfree-pg": "^3.0.0",
+    "cors": "^2.8.5",
+    "firebase-admin": "^12.3.0",
+    "firebase-functions": "^6.0.0"
+  },
+  "devDependencies": {},
+  "private": true
+}
