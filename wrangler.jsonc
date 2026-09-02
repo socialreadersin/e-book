@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "ebook-app",
+  "name": "e-book",
   "compatibility_date": "2026-08-20",
   "assets": {
     "directory": ".",

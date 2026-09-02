@@ -1,8 +1,6 @@
 .env
 .env.local
 node_modules/
-js/firebase-config.js
-js/cloudinary.config.js
 .DS_Store
 .wrangler/
 *.log
