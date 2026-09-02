@@ -17,19 +17,17 @@
     environment: 'sandbox',
 
     // ─── APP ID (Client-Safe Public Identifier) ───────────────────────────────
-    // Replace with your actual Cashfree App ID from the Cashfree Dashboard
-    // Sandbox App ID (safe to expose in frontend):
-    appId: localStorage.getItem('sr_cashfree_app_id') || 'TEST_ID_PLACEHOLDER',
+    appId: localStorage.getItem('sr_cashfree_app_id') || 'CF_SANDBOX_DEMO',
+
+    // ─── DEMO / SANDBOX FALLBACK CREDENTIALS (from Cashfree DevStudio) ────────
+    demoSessionId: localStorage.getItem('sr_cashfree_session_id') || 'session_OTLh5zhLOSyLwO90GzwSgTpbnjm6FBy-kU9O7wjif-LbCxr5NjtJer-PM26IiizjbOfEKsSqlly8xnh1HbPnGhus9wfpnq_B4NNSYY4y8sL13sQ1cwlCeiM-Qcspayment',
+    demoOrderId: localStorage.getItem('sr_cashfree_order_id') || 'devstudio_7500965240050705402',
 
     // ─── SDK CDN URL ───────────────────────────────────────────────────────────
     sdkUrl: 'https://sdk.cashfree.com/js/v3/cashfree.js',
 
     // ─── FIREBASE CLOUD FUNCTION ENDPOINT ─────────────────────────────────────
-    // This function creates a Cashfree order and returns a paymentSessionId
-    // It is the ONLY place where the Cashfree Secret Key is used (server-side)
-    // Replace with your actual Firebase project's Cloud Function URL after deploy:
     createOrderFunctionUrl: (() => {
-      // Auto-detect project from firebase config
       const projectId = (window.firebaseConfig && window.firebaseConfig.projectId) || 'e-book-7c31a';
       const region = 'us-central1';
       return `https://${region}-${projectId}.cloudfunctions.net/createCashfreeOrder`;
@@ -57,6 +55,12 @@
     },
     getAppId() {
       return CASHFREE_CONFIG.appId;
+    },
+    getDemoSessionId() {
+      return CASHFREE_CONFIG.demoSessionId;
+    },
+    getDemoOrderId() {
+      return CASHFREE_CONFIG.demoOrderId;
     },
     getCreateOrderUrl() {
       return CASHFREE_CONFIG.createOrderFunctionUrl;

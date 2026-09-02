@@ -260,20 +260,26 @@ window.SocialReadersCheckout = {
           cashfreeOrderId = orderResult.orderId;
           finalAmount = orderResult.amount || item.price;
         } catch (cloudFnErr) {
-          console.warn('[Checkout] Cloud Function not available, using test flow:', cloudFnErr.message);
-          // Graceful degradation: if Cloud Function not deployed yet, proceed with a test order record
-          paymentSessionId = null;
+          console.warn('[Checkout] Cloud Function not reachable, checking sandbox demo session:', cloudFnErr.message);
+          // Sandbox fallback: use the Cashfree DevStudio demo session to launch the real popup modal
+          if (window.CashfreeService.getEnvironment() === 'sandbox') {
+            paymentSessionId = window.CashfreeService.getDemoSessionId();
+            cashfreeOrderId = window.CashfreeService.getDemoOrderId();
+            console.info('[Checkout] Loaded Cashfree DevStudio Sandbox Session:', paymentSessionId);
+          } else {
+            paymentSessionId = null;
+          }
         }
 
         if (paymentSessionId) {
-          // ─── STEP 2: Load Cashfree SDK & Open Payment Drop-in ────────────────
-          payBtn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg><span>Opening Payment...</span>`;
+          // ─── STEP 2: Load Cashfree SDK & Open Payment Drop-in Popup ─────────
+          payBtn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg><span>Opening Cashfree Modal...</span>`;
 
           await window.CashfreeService.loadSDK();
 
-          const cashfree = await window.Cashfree({
-            mode: window.CashfreeService.getEnvironment() === 'production' ? 'production' : 'sandbox'
-          });
+          const cashfree = typeof window.Cashfree === 'function'
+            ? window.Cashfree({ mode: window.CashfreeService.getEnvironment() === 'production' ? 'production' : 'sandbox' })
+            : window.Cashfree;
 
           const checkoutOptions = {
             paymentSessionId: paymentSessionId,
@@ -282,33 +288,42 @@ window.SocialReadersCheckout = {
 
           const result = await cashfree.checkout(checkoutOptions);
 
-          if (result.error) {
-            throw new Error(result.error.message || 'Payment was declined or cancelled.');
+          if (result) {
+            if (result.error) {
+              const errMsg = result.error.message || '';
+              if (errMsg.toLowerCase().includes('drop') || errMsg.toLowerCase().includes('close') || result.error.code === 'USER_DROPPED') {
+                this._showCheckoutError('Payment window was closed.');
+                return;
+              }
+              throw new Error(errMsg || 'Payment was declined or cancelled.');
+            }
+
+            if (result.redirect) {
+              return;
+            }
+
+            if (result.paymentDetails || result.payment_status === 'SUCCESS') {
+              await this._handlePaymentSuccess({
+                cashfreeOrderId: cashfreeOrderId,
+                paymentDetails: result.paymentDetails || { status: 'SUCCESS' },
+                buyerName: name,
+                buyerEmail: email,
+                item: item,
+                finalAmount: finalAmount
+              });
+              return;
+            }
           }
 
-          if (result.redirect) {
-            // Redirect flow — payment session was created but redirect is happening
-            return;
-          }
-
-          if (result.paymentDetails) {
-            // Payment successful via drop-in
-            await this._handlePaymentSuccess({
-              cashfreeOrderId: cashfreeOrderId,
-              paymentDetails: result.paymentDetails,
-              buyerName: name,
-              buyerEmail: email,
-              item: item,
-              finalAmount: finalAmount
-            });
+          // In sandbox mode with DevStudio session, if popup was completed or dismissed without error
+          if (window.CashfreeService.getEnvironment() === 'sandbox') {
+            await this._handleTestModeCheckout({ name, email, item });
             return;
           }
         }
       }
 
-      // ─── FALLBACK: Test/Demo mode (Cloud Function not yet deployed) ─────────
-      // Shows the UI and records the order as "pending" without real payment
-      console.warn('[Checkout] Cashfree Cloud Function not deployed. Recording test order. Deploy functions/ to enable live payments.');
+      // ─── FALLBACK: Test/Demo mode ──────────────────────────────────────────
       await this._handleTestModeCheckout({ name, email, item });
 
     } catch (err) {
