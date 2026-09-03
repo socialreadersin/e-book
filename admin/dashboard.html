@@ -1248,7 +1248,37 @@
           </div>
           <div style="margin-top: 10px;">
             <label class="form-label" style="font-size: 0.72rem; color: var(--text-dim);">Or Paste Image URL directly:</label>
-            <input type="url" id="bookCoverUrl" class="input-field no-icon" placeholder="https://images.unsplash.com/... or any image link">
+            <input type="url" id="bookCoverUrl" class="input-field no-icon" placeholder="assets/cover-atomic-habits.svg or https://...">
+          </div>
+        </div>
+
+        <!-- PDF E-Book Upload -->
+        <div class="form-group">
+          <label class="form-label">PDF E-Book Document (Cloudinary Direct Upload)</label>
+          <div class="upload-zone" id="bookPdfUploadZone">
+            <input type="file" id="bookPdfFileInput" accept="application/pdf" style="display: none;">
+            <i class="fa-solid fa-file-pdf" style="font-size: 28px; color: #ef4444; margin-bottom: 8px;"></i>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Click to upload full PDF E-Book file</p>
+            <div class="upload-status-bar" id="bookPdfUploadStatus"><i class="fa-solid fa-circle-notch fa-spin"></i> Uploading PDF...</div>
+          </div>
+          <div style="margin-top: 10px;">
+            <label class="form-label" style="font-size: 0.72rem; color: var(--text-dim);">PDF File URL / Secure Link:</label>
+            <input type="url" id="bookPdfUrl" class="input-field no-icon" placeholder="https://res.cloudinary.com/.../raw/upload/...">
+          </div>
+        </div>
+
+        <!-- MP3 Audiobook Upload -->
+        <div class="form-group">
+          <label class="form-label">Audiobook MP3 File (Cloudinary Direct Upload)</label>
+          <div class="upload-zone" id="bookAudioUploadZone">
+            <input type="file" id="bookAudioFileInput" accept="audio/*" style="display: none;">
+            <i class="fa-solid fa-headphones" style="font-size: 28px; color: #8b5cf6; margin-bottom: 8px;"></i>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Click to upload MP3 Audio narration</p>
+            <div class="upload-status-bar" id="bookAudioUploadStatus"><i class="fa-solid fa-circle-notch fa-spin"></i> Uploading MP3 Audio...</div>
+          </div>
+          <div style="margin-top: 10px;">
+            <label class="form-label" style="font-size: 0.72rem; color: var(--text-dim);">Audio File URL / MP3 Link:</label>
+            <input type="url" id="bookAudioUrl" class="input-field no-icon" placeholder="https://res.cloudinary.com/.../video/upload/...mp3">
           </div>
         </div>
 
@@ -1469,45 +1499,68 @@
     // ----------------------------------------------------
     // 4. CLOUDINARY DIRECT UPLOAD IMPLEMENTATION
     // ----------------------------------------------------
-    async function uploadToCloudinary(file, statusElement, previewElement, previewBox, hiddenUrlInput) {
+    async function uploadToCloudinary(file, statusElement, previewElement, previewBox, hiddenUrlInput, resourceType = 'image') {
       if (!file) return null;
 
       try {
-        statusElement.style.display = 'block';
-        statusElement.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Uploading ${file.name} to Cloudinary...`;
-
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', UPLOAD_PRESET);
-        formData.append('folder', 'ebooks');
-
-        const endpoint = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
-        const res = await fetch(endpoint, {
-          method: 'POST',
-          body: formData
-        });
-
-        if (!res.ok) {
-          const errData = await res.json().catch(() => ({}));
-          throw new Error(errData.error?.message || `Upload failed with status ${res.status}`);
+        if (statusElement) {
+          statusElement.style.display = 'block';
+          statusElement.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Uploading ${file.name} to Cloudinary... 0%`;
         }
 
-        const data = await res.json();
-        const secureUrl = data.secure_url;
+        let result;
+        if (window.CloudinaryService && typeof window.CloudinaryService.uploadFile === 'function') {
+          result = await window.CloudinaryService.uploadFile(file, resourceType, (pct) => {
+            if (statusElement) {
+              statusElement.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Uploading ${file.name}... ${pct}%`;
+            }
+          });
+        } else {
+          // Direct fallback
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('upload_preset', UPLOAD_PRESET || 'tfy3lcci');
+          formData.append('folder', 'ebooks');
 
-        // Display preview
-        previewElement.src = secureUrl;
-        previewBox.style.display = 'block';
-        hiddenUrlInput.value = secureUrl;
+          let endpointType = resourceType || 'auto';
+          if (file.type) {
+            if (file.type.startsWith('audio/')) endpointType = 'video';
+            else if (file.type === 'application/pdf') endpointType = 'raw';
+            else if (file.type.startsWith('image/')) endpointType = 'image';
+          }
 
-        statusElement.style.display = 'block';
-        statusElement.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--forest);"></i> Image uploaded successfully!`;
-        showToast('Image uploaded to Cloudinary!', 'success');
+          const endpoint = `https://api.cloudinary.com/v1_1/${CLOUD_NAME || 'tfy3lcci'}/${endpointType}/upload`;
+          const res = await fetch(endpoint, { method: 'POST', body: formData });
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.error?.message || `Upload failed with status ${res.status}`);
+          }
+          result = await res.json();
+        }
+
+        const secureUrl = result.secure_url || result;
+
+        // Display preview if element provided
+        if (previewElement && previewBox) {
+          previewElement.src = secureUrl;
+          previewBox.style.display = 'block';
+        }
+        if (hiddenUrlInput) {
+          hiddenUrlInput.value = secureUrl;
+        }
+
+        if (statusElement) {
+          statusElement.style.display = 'block';
+          statusElement.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--forest);"></i> ${file.name} uploaded successfully!`;
+        }
+        showToast(`Asset uploaded to Cloudinary: ${file.name}`, 'success');
         return secureUrl;
       } catch (err) {
         console.error("Cloudinary upload error:", err);
-        statusElement.style.display = 'block';
-        statusElement.innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color: var(--danger);"></i> Upload failed: ${err.message}`;
+        if (statusElement) {
+          statusElement.style.display = 'block';
+          statusElement.innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color: var(--danger);"></i> Upload failed: ${err.message}`;
+        }
         showToast(`Cloudinary upload failed: ${err.message}`, 'error');
         return null;
       }
@@ -1691,19 +1744,32 @@
       const category = document.getElementById('bookCategory').value;
       const format = document.getElementById('bookFormat').value;
       const description = document.getElementById('bookDescription').value.trim();
-      const coverUrl = document.getElementById('bookCoverUrl').value.trim() || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80';
+      const coverUrl = document.getElementById('bookCoverUrl').value.trim() || 'assets/cover-atomic-habits.svg';
+      const pdfUrl = document.getElementById('bookPdfUrl')?.value.trim() || null;
+      const audioUrl = document.getElementById('bookAudioUrl')?.value.trim() || null;
+
+      const existingBook = id ? localBooks.find(b => b.id === id) : null;
+      const titleEn = title;
+      const titleTa = (existingBook && typeof existingBook.title === 'object' && existingBook.title.ta) ? existingBook.title.ta : title;
+      const authorEn = author;
+      const authorTa = (existingBook && typeof existingBook.author === 'object' && existingBook.author.ta) ? existingBook.author.ta : author;
+      const descEn = description;
+      const descTa = (existingBook && typeof existingBook.description === 'object' && existingBook.description.ta) ? existingBook.description.ta : description;
 
       const payload = {
         id: id || undefined,
-        title: { en: title, ta: title },
-        author: { en: author, ta: author },
+        title: { en: titleEn, ta: titleTa },
+        author: { en: authorEn, ta: authorTa },
         price: price,
-        priceEbook: price,
+        priceEbook: format !== 'Audiobook' ? price : null,
+        priceAudiobook: format !== 'E-Book' ? (existingBook?.priceAudiobook || price || 199) : null,
         category: category,
         format: format,
         type: format === 'Audiobook' ? 'audiobook' : (format === 'Combo' ? 'both' : 'ebook'),
-        description: { en: description, ta: description },
+        description: { en: descEn, ta: descTa },
         coverUrl: coverUrl,
+        pdfUrl: pdfUrl,
+        audioUrl: audioUrl,
         status: 'published'
       };
 
@@ -1726,7 +1792,7 @@
           }
           localStorage.setItem('sr_books_data', JSON.stringify(localBooks));
         }
-        showToast('Book saved and synchronized!', 'success');
+        showToast('Book saved and synchronized with Storefront!', 'success');
         closeModal('bookModal');
         await loadBooks();
         updateStats();
@@ -1773,6 +1839,8 @@
       document.getElementById('bookFormat').value = book.format || (book.type === 'audiobook' ? 'Audiobook' : (book.type === 'both' ? 'Combo' : 'E-Book'));
       document.getElementById('bookDescription').value = descStr;
       document.getElementById('bookCoverUrl').value = book.coverUrl || '';
+      if (document.getElementById('bookPdfUrl')) document.getElementById('bookPdfUrl').value = book.pdfUrl || '';
+      if (document.getElementById('bookAudioUrl')) document.getElementById('bookAudioUrl').value = book.audioUrl || '';
 
       const previewBox = document.getElementById('bookCoverPreviewBox');
       const previewImg = document.getElementById('bookCoverPreview');
@@ -2345,8 +2413,12 @@
       document.getElementById('bookForm').reset();
       document.getElementById('bookEditId').value = '';
       document.getElementById('bookCoverUrl').value = '';
+      if (document.getElementById('bookPdfUrl')) document.getElementById('bookPdfUrl').value = '';
+      if (document.getElementById('bookAudioUrl')) document.getElementById('bookAudioUrl').value = '';
       document.getElementById('bookCoverPreviewBox').style.display = 'none';
       document.getElementById('bookUploadStatus').style.display = 'none';
+      if (document.getElementById('bookPdfUploadStatus')) document.getElementById('bookPdfUploadStatus').style.display = 'none';
+      if (document.getElementById('bookAudioUploadStatus')) document.getElementById('bookAudioUploadStatus').style.display = 'none';
       openModal('bookModal');
     });
 
@@ -2373,34 +2445,78 @@
     // Cloudinary File Upload Handlers (Book Cover)
     const bookCoverZone = document.getElementById('bookCoverUploadZone');
     const bookFileInput = document.getElementById('bookCoverFileInput');
-    bookCoverZone.addEventListener('click', () => bookFileInput.click());
-    bookFileInput.addEventListener('change', (e) => {
-      if (e.target.files && e.target.files[0]) {
-        uploadToCloudinary(
-          e.target.files[0],
-          document.getElementById('bookUploadStatus'),
-          document.getElementById('bookCoverPreview'),
-          document.getElementById('bookCoverPreviewBox'),
-          document.getElementById('bookCoverUrl')
-        );
-      }
-    });
+    if (bookCoverZone && bookFileInput) {
+      bookCoverZone.addEventListener('click', () => bookFileInput.click());
+      bookFileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          uploadToCloudinary(
+            e.target.files[0],
+            document.getElementById('bookUploadStatus'),
+            document.getElementById('bookCoverPreview'),
+            document.getElementById('bookCoverPreviewBox'),
+            document.getElementById('bookCoverUrl'),
+            'image'
+          );
+        }
+      });
+    }
+
+    // Cloudinary File Upload Handlers (PDF E-Book)
+    const bookPdfZone = document.getElementById('bookPdfUploadZone');
+    const bookPdfFileInput = document.getElementById('bookPdfFileInput');
+    if (bookPdfZone && bookPdfFileInput) {
+      bookPdfZone.addEventListener('click', () => bookPdfFileInput.click());
+      bookPdfFileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          uploadToCloudinary(
+            e.target.files[0],
+            document.getElementById('bookPdfUploadStatus'),
+            null,
+            null,
+            document.getElementById('bookPdfUrl'),
+            'raw'
+          );
+        }
+      });
+    }
+
+    // Cloudinary File Upload Handlers (MP3 Audio)
+    const bookAudioZone = document.getElementById('bookAudioUploadZone');
+    const bookAudioFileInput = document.getElementById('bookAudioFileInput');
+    if (bookAudioZone && bookAudioFileInput) {
+      bookAudioZone.addEventListener('click', () => bookAudioFileInput.click());
+      bookAudioFileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          uploadToCloudinary(
+            e.target.files[0],
+            document.getElementById('bookAudioUploadStatus'),
+            null,
+            null,
+            document.getElementById('bookAudioUrl'),
+            'video'
+          );
+        }
+      });
+    }
 
     // Cloudinary File Upload Handlers (Category Banner)
     const catZone = document.getElementById('categoryUploadZone');
     const catFileInput = document.getElementById('categoryFileInput');
-    catZone.addEventListener('click', () => catFileInput.click());
-    catFileInput.addEventListener('change', (e) => {
-      if (e.target.files && e.target.files[0]) {
-        uploadToCloudinary(
-          e.target.files[0],
-          document.getElementById('categoryUploadStatus'),
-          document.getElementById('categoryPreview'),
-          document.getElementById('categoryPreviewBox'),
-          document.getElementById('categoryImageUrl')
-        );
-      }
-    });
+    if (catZone && catFileInput) {
+      catZone.addEventListener('click', () => catFileInput.click());
+      catFileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          uploadToCloudinary(
+            e.target.files[0],
+            document.getElementById('categoryUploadStatus'),
+            document.getElementById('categoryPreview'),
+            document.getElementById('categoryPreviewBox'),
+            document.getElementById('categoryImageUrl'),
+            'image'
+          );
+        }
+      });
+    }
 
     // Live URL Preview Handlers
     document.getElementById('bookCoverUrl')?.addEventListener('input', (e) => {

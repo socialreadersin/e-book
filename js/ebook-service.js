@@ -636,6 +636,15 @@ window.SocialReadersDB = {
       } catch (e) {}
     }
 
+    // 3. Dispatch Live Updates to All Connected Windows & Tabs
+    try {
+      localStorage.setItem('sr_books_data', JSON.stringify(currentBooks));
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('sr_catalog_updated', { detail: cleanData }));
+        window.dispatchEvent(new CustomEvent('sr_data_synced', { detail: { key: 'sr_books_data' } }));
+      }
+    } catch (e) {}
+
     return cleanData;
   },
 
@@ -659,6 +668,16 @@ window.SocialReadersDB = {
         await window.AppFirebase.deleteDocument('books', bookId);
       } catch (e) {}
     }
+
+    // 3. Dispatch Live Updates to All Connected Windows & Tabs
+    try {
+      localStorage.setItem('sr_books_data', JSON.stringify(currentBooks));
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('sr_catalog_updated', { detail: { id: bookId, deleted: true } }));
+        window.dispatchEvent(new CustomEvent('sr_data_synced', { detail: { key: 'sr_books_data' } }));
+      }
+    } catch (e) {}
+
     return true;
   },
 

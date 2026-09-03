@@ -143,11 +143,13 @@ const cloudinaryConfigFileContent = `/**
       return CLOUDINARY_CONFIG.folder || 'ebooks';
     },
     /**
-     * Upload an image file directly to Cloudinary via unsigned POST
+     * Upload an asset (image, PDF document, or audio MP3) directly to Cloudinary
      * @param {File|Blob} file 
-     * @returns {Promise<string|null>} Secure URL or null on error
+     * @param {string} resourceType 'image' | 'raw' | 'video' | 'auto'
+     * @param {Function} onProgress Optional callback (percentage: number) => void
+     * @returns {Promise<{ secure_url: string, public_id: string }>}
      */
-    async uploadImage(file) {
+    async uploadFile(file, resourceType = 'image', onProgress = null) {
       if (!file) {
         throw new Error('No file provided for Cloudinary upload.');
       }
@@ -155,38 +157,74 @@ const cloudinaryConfigFileContent = `/**
       const uploadPreset = this.getUploadPreset();
       const folder = this.getFolder();
 
+      // Normalize resourceType for Cloudinary API:
+      // - Images (jpg, png, svg, webp) -> 'image'
+      // - Audio files (mp3, wav, m4a, aac) -> 'video' (or 'auto')
+      // - Documents (pdf, epub) -> 'raw' (or 'auto')
+      let endpointType = resourceType || 'auto';
+      if (file.type) {
+        if (file.type.startsWith('audio/')) endpointType = 'video';
+        else if (file.type === 'application/pdf') endpointType = 'raw';
+        else if (file.type.startsWith('image/')) endpointType = 'image';
+      }
+
       const formData = new FormData();
       formData.append("file", file);
       formData.append("upload_preset", uploadPreset);
-      formData.append("folder", folder);
+      if (folder) {
+        formData.append("folder", folder);
+      }
 
-      try {
-        const endpoint = \`https://api.cloudinary.com/v1_1/\${cloudName}/image/upload\`;
-        const res = await fetch(endpoint, {
-          method: "POST",
-          body: formData
-        });
+      const endpoint = \`https://api.cloudinary.com/v1_1/\${cloudName}/\${endpointType}/upload\`;
 
-        const data = await res.json();
-        if (res.ok && data.secure_url) {
-          console.log("☁️ Direct Cloudinary Upload Success:", data.secure_url);
-          return data.secure_url;
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", endpoint, true);
+
+        if (xhr.upload && typeof onProgress === 'function') {
+          xhr.upload.onprogress = (evt) => {
+            if (evt.lengthComputable) {
+              const pct = Math.round((evt.loaded / evt.total) * 100);
+              onProgress(pct);
+            }
+          };
         }
 
-        const errMsg = data.error?.message || \`Cloudinary upload failed with status \${res.status}\`;
-        console.error("Cloudinary error response:", errMsg);
-        throw new Error(errMsg);
-      } catch (err) {
-        console.error("Cloudinary upload failed:", err);
-        throw err;
-      }
+        xhr.onload = () => {
+          try {
+            const data = JSON.parse(xhr.responseText || '{}');
+            if (xhr.status >= 200 && xhr.status < 300 && data.secure_url) {
+              console.log(\`☁️ Direct Cloudinary Upload (\${endpointType}) Success:\`, data.secure_url);
+              if (typeof onProgress === 'function') onProgress(100);
+              resolve(data);
+            } else {
+              const errMsg = data.error?.message || \`Cloudinary upload failed with status \${xhr.status}\`;
+              console.error("Cloudinary error response:", errMsg);
+              reject(new Error(errMsg));
+            }
+          } catch (e) {
+            reject(new Error(\`Failed to parse Cloudinary response (\${xhr.status}): \${xhr.responseText}\`));
+          }
+        };
+
+        xhr.onerror = () => {
+          reject(new Error("Network error during Cloudinary upload. Please check internet connection and CORS settings."));
+        };
+
+        xhr.send(formData);
+      });
+    },
+
+    async uploadImage(file, onProgress = null) {
+      const res = await this.uploadFile(file, 'image', onProgress);
+      return res.secure_url;
     }
   };
 
-  // Backward compatibility bridge for existing components
+  // Backward compatibility bridge for all existing components
   window.SocialReadersCloudinary = {
     async uploadToCloudinary(file, resourceType = 'image', onProgress = null) {
-      return window.CloudinaryService.uploadImage(file);
+      return window.CloudinaryService.uploadFile(file, resourceType, onProgress);
     }
   };
 })();

@@ -920,10 +920,30 @@ async function initDynamicHomepageContent() {
   // 2. Render Dynamic Quad Sections (Tamil Picks, Trending Audiobooks, Self-Help & Mindset)
   try {
     if (window.SocialReadersDB.getQuadSections) {
-      const quadData = await window.SocialReadersDB.getQuadSections();
+      const [quadData, allBooks] = await Promise.all([
+        window.SocialReadersDB.getQuadSections(),
+        window.SocialReadersDB.getBooks(true)
+      ]);
       if (!quadData) return;
 
       const curLang = (typeof currentLanguage !== 'undefined') ? currentLanguage : (localStorage.getItem('sr_lang') || 'en');
+      const booksMap = new Map((allBooks || []).map(b => [b.id, b]));
+
+      // Helper to resolve live book details if book exists in catalog
+      const resolveBook = (item) => {
+        const live = item.bookId ? booksMap.get(item.bookId) : null;
+        if (!live) return item;
+        const title = typeof live.title === 'object' ? (curLang === 'ta' && live.title.ta ? live.title.ta : (live.title.en || item.title)) : (live.title || item.title);
+        const coverUrl = live.coverUrl || item.coverUrl || 'assets/cover-atomic-habits.svg';
+        const price = live.priceEbook ? `₹${live.priceEbook}` : (live.price ? `₹${live.price}` : (item.price || '₹149'));
+        return {
+          ...item,
+          title,
+          coverUrl,
+          price,
+          duration: live.audioDuration || live.duration || item.duration
+        };
+      };
 
       // Top Picks in Tamil
       if (quadData.tamil_picks) {
@@ -938,9 +958,9 @@ async function initDynamicHomepageContent() {
           linkEl.href = quadData.tamil_picks.exploreLink;
         }
         if (gridEl && Array.isArray(quadData.tamil_picks.items) && quadData.tamil_picks.items.length) {
-          gridEl.innerHTML = quadData.tamil_picks.items.map(item => `
+          gridEl.innerHTML = quadData.tamil_picks.items.map(resolveBook).map(item => `
             <a href="${item.linkUrl || `book-detail.html?id=${item.bookId || 'b1'}`}" class="amazon-mini-tile bg-gray-50 rounded-xl p-2 border border-gray-100 flex flex-col items-center text-center group">
-              <img src="${item.coverUrl || 'assets/cover-atomic-habits.svg'}" alt="${item.title}" class="w-16 h-20 object-contain rounded-md shadow-xs mb-1">
+              <img src="${item.coverUrl}" alt="${item.title}" class="w-16 h-20 object-contain rounded-md shadow-xs mb-1">
               <span class="text-[11px] font-bold text-gray-700 group-hover:text-forest line-clamp-1">${item.title}</span>
               <span class="text-[10px] font-black text-forest">${item.price || '₹149'}</span>
             </a>
@@ -961,10 +981,10 @@ async function initDynamicHomepageContent() {
           linkEl.href = quadData.trending_audio.exploreLink;
         }
         if (gridEl && Array.isArray(quadData.trending_audio.items) && quadData.trending_audio.items.length) {
-          gridEl.innerHTML = quadData.trending_audio.items.map(item => `
+          gridEl.innerHTML = quadData.trending_audio.items.map(resolveBook).map(item => `
             <a href="${item.linkUrl || 'audiobooks.html'}" class="amazon-mini-tile bg-purple-50/50 rounded-xl p-2 border border-purple-100 flex flex-col items-center text-center group">
               <div class="relative">
-                <img src="${item.coverUrl || 'assets/cover-atomic-habits.svg'}" alt="${item.title}" class="w-16 h-20 object-contain rounded-md shadow-xs mb-1">
+                <img src="${item.coverUrl}" alt="${item.title}" class="w-16 h-20 object-contain rounded-md shadow-xs mb-1">
                 ${item.duration ? `<span class="absolute bottom-1 right-1 bg-purple-700 text-white text-[8px] font-bold px-1 rounded">${item.duration}</span>` : ''}
               </div>
               <span class="text-[11px] font-bold text-gray-700 group-hover:text-navy line-clamp-1">${item.title}</span>
@@ -987,9 +1007,9 @@ async function initDynamicHomepageContent() {
           linkEl.href = quadData.self_help.exploreLink;
         }
         if (gridEl && Array.isArray(quadData.self_help.items) && quadData.self_help.items.length) {
-          gridEl.innerHTML = quadData.self_help.items.map(item => `
+          gridEl.innerHTML = quadData.self_help.items.map(resolveBook).map(item => `
             <a href="${item.linkUrl || `book-detail.html?id=${item.bookId || 'b1'}`}" class="amazon-mini-tile bg-green-50/40 rounded-xl p-2 border border-green-100 flex flex-col items-center text-center group">
-              <img src="${item.coverUrl || 'assets/cover-mindset.svg'}" alt="${item.title}" class="w-16 h-20 object-contain rounded-md shadow-xs mb-1">
+              <img src="${item.coverUrl}" alt="${item.title}" class="w-16 h-20 object-contain rounded-md shadow-xs mb-1">
               <span class="text-[11px] font-bold text-gray-700 group-hover:text-forest line-clamp-1">${item.title}</span>
               <span class="text-[10px] font-black text-forest">${item.price || '₹149'}</span>
             </a>
@@ -1013,6 +1033,8 @@ async function initStorefrontDynamicCatalog() {
     ? window.SocialReadersUtils.escapeHtml 
     : (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+  const curLang = (typeof currentLanguage !== 'undefined') ? currentLanguage : (localStorage.getItem('sr_lang') || 'en');
+
   // 1. Books Catalog (books.html)
   const booksGrid = document.getElementById('books-catalog-grid');
   if (booksGrid && window.SocialReadersDB.getBooks) {
@@ -1020,7 +1042,6 @@ async function initStorefrontDynamicCatalog() {
       const books = await window.SocialReadersDB.getBooks(false);
       if (books && books.length) {
         const savedWishlist = JSON.parse(localStorage.getItem('sr_wishlist') || '[]');
-        const curLang = (typeof currentLanguage !== 'undefined') ? currentLanguage : (localStorage.getItem('sr_lang') || 'en');
 
         booksGrid.innerHTML = books.map(book => {
           const title = typeof book.title === 'object' ? (curLang === 'ta' && book.title.ta ? book.title.ta : (book.title.en || '')) : (book.title || '');
@@ -1081,8 +1102,6 @@ async function initStorefrontDynamicCatalog() {
       const allBooks = await window.SocialReadersDB.getBooks(false);
       const audiobooks = (allBooks || []).filter(b => b.type === 'audiobook' || b.type === 'both' || b.priceAudiobook || b.audioUrl);
       if (audiobooks && audiobooks.length) {
-        const curLang = (typeof currentLanguage !== 'undefined') ? currentLanguage : (localStorage.getItem('sr_lang') || 'en');
-
         audioGrid.innerHTML = audiobooks.map(book => {
           const title = typeof book.title === 'object' ? (curLang === 'ta' && book.title.ta ? book.title.ta : (book.title.en || '')) : (book.title || '');
           const author = typeof book.author === 'object' ? (curLang === 'ta' && book.author.ta ? book.author.ta : (book.author.en || '')) : (book.author || '');
@@ -1090,7 +1109,7 @@ async function initStorefrontDynamicCatalog() {
           const cause = (price * 0.25).toFixed(2);
           const audioUrl = book.audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
           const cover = book.coverUrl || "assets/cover-atomic-habits.svg";
-          const duration = book.duration || "6 hrs 15 mins";
+          const duration = book.duration || book.audioDuration || "6 hrs 15 mins";
 
           return `
             <div class="bg-white rounded-3xl p-4 sm:p-6 border border-gray-100 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
@@ -1159,18 +1178,138 @@ async function initStorefrontDynamicCatalog() {
       console.warn("Dynamic audiobooks catalog sync notice:", err);
     }
   }
+
+  // 3. Homepage Deals Grid (index.html)
+  const dealsGrid = document.getElementById('deals-catalog-grid');
+  if (dealsGrid && window.SocialReadersDB.getBooks) {
+    try {
+      const allBooks = await window.SocialReadersDB.getBooks(false);
+      const dealBooks = (allBooks || []).slice(0, 4);
+      if (dealBooks.length) {
+        dealsGrid.innerHTML = dealBooks.map((book, idx) => {
+          const title = typeof book.title === 'object' ? (curLang === 'ta' && book.title.ta ? book.title.ta : (book.title.en || '')) : (book.title || '');
+          const author = typeof book.author === 'object' ? (curLang === 'ta' && book.author.ta ? book.author.ta : (book.author.en || '')) : (book.author || '');
+          const price = Number(book.priceEbook || book.price || 149);
+          const origPrice = Math.round(price * 1.8);
+          const saveAmt = origPrice - price;
+          const cover = book.coverUrl || 'assets/cover-atomic-habits.svg';
+          const discountPct = Math.round((saveAmt / origPrice) * 100);
+          const causeAmt = (price * 0.25).toFixed(2);
+
+          return `
+            <div class="book-card bg-[#FAF7F2] rounded-2xl p-4 border border-gray-200 flex flex-col justify-between relative group shadow-xs">
+              <div class="absolute top-3 left-3 z-10 flex flex-col gap-1">
+                <span class="deal-discount-badge">${discountPct}% OFF</span>
+                ${book.isBestseller ? '<span class="bg-forest text-white text-[9px] font-bold px-2 py-0.5 rounded-full">#1 Bestseller</span>' : ''}
+              </div>
+              <button type="button" class="wishlist-btn absolute top-3 right-3 z-10 p-2 bg-white/90 rounded-full shadow-md text-brandOrange" data-book-id="${esc(book.id)}" data-liked="false">
+                <svg class="w-4 h-4" fill="none" stroke="#E8720C" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+              </button>
+
+              <a href="book-detail.html?id=${esc(book.id)}" class="block my-2">
+                <img src="${esc(cover)}" alt="${esc(title)}" class="w-full h-44 sm:h-52 object-contain rounded-xl bg-white p-2">
+              </a>
+
+              <div class="mt-2">
+                <div class="flex items-center gap-1.5">
+                  <span class="star-rating-pill">★ 4.9</span>
+                  <span class="text-[11px] text-gray-500 font-medium">(${300 + idx * 80} reviews)</span>
+                </div>
+                <a href="book-detail.html?id=${esc(book.id)}">
+                  <h3 class="font-extrabold text-navy text-sm sm:text-base mt-1 line-clamp-1 group-hover:text-forest">${esc(title)}</h3>
+                </a>
+                <p class="text-xs text-gray-500 line-clamp-1">${esc(author)}</p>
+
+                <div class="flex items-baseline gap-2 mt-2">
+                  <span class="text-lg font-black text-forest">₹${price}</span>
+                  <span class="text-xs text-gray-400 line-through">₹${origPrice}</span>
+                  <span class="text-[11px] font-bold text-red-600">Save ₹${saveAmt}</span>
+                </div>
+
+                <div class="mt-2 space-y-1">
+                  <div class="flex justify-between text-[10px] font-bold text-gray-500">
+                    <span>${75 + idx * 5}% Claimed</span>
+                    <span class="text-brandOrange">25% (₹${causeAmt}) to Cause</span>
+                  </div>
+                  <div class="claimed-progress-bar">
+                    <div class="claimed-progress-fill" style="width: ${75 + idx * 5}%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 border-t border-gray-200 grid grid-cols-2 gap-2">
+                <button type="button" onclick="window.SocialReadersCheckout.openCheckout('${esc(book.id)}', 'ebook')" class="py-2 rounded-xl bg-forest text-white text-xs font-bold hover:bg-green-800 shadow-sm active:scale-95 transition-all text-center">
+                  Buy Deal
+                </button>
+                <button type="button" data-read-sample="true" data-book-id="${esc(book.id)}" class="py-2 rounded-xl border border-navy text-navy text-xs font-bold hover:bg-navy hover:text-white active:scale-95 transition-all text-center">
+                  Sample
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+        initWishlistButtons();
+        initSampleReaderTriggers();
+      }
+    } catch (e) {}
+  }
+
+  // 4. Homepage Bestsellers Carousel (index.html)
+  const carouselTrack = document.getElementById('bestsellers-carousel-track');
+  if (carouselTrack && window.SocialReadersDB.getBooks) {
+    try {
+      const allBooks = await window.SocialReadersDB.getBooks(false);
+      if (allBooks && allBooks.length) {
+        carouselTrack.innerHTML = allBooks.map(book => {
+          const title = typeof book.title === 'object' ? (curLang === 'ta' && book.title.ta ? book.title.ta : (book.title.en || '')) : (book.title || '');
+          const author = typeof book.author === 'object' ? (curLang === 'ta' && book.author.ta ? book.author.ta : (book.author.en || '')) : (book.author || '');
+          const price = Number(book.priceEbook || book.price || 149);
+          const cover = book.coverUrl || 'assets/cover-atomic-habits.svg';
+
+          return `
+            <div class="flex-none w-48 sm:w-56 bg-white rounded-2xl p-3 sm:p-4 border border-gray-200 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
+              <div>
+                <div class="relative">
+                  <a href="book-detail.html?id=${esc(book.id)}">
+                    <img src="${esc(cover)}" alt="${esc(title)}" class="w-full h-44 object-contain rounded-xl bg-gray-50 p-2">
+                  </a>
+                  ${book.isBestseller ? '<span class="absolute bottom-2 left-2 bg-forest text-white text-[9px] font-bold px-2 py-0.5 rounded-full">Bestseller</span>' : ''}
+                </div>
+                <a href="book-detail.html?id=${esc(book.id)}">
+                  <h4 class="font-bold text-navy text-sm mt-3 line-clamp-1 hover:text-forest">${esc(title)}</h4>
+                </a>
+                <p class="text-xs text-gray-500 line-clamp-1">${esc(author)}</p>
+                <div class="flex items-center gap-1 mt-1">
+                  <span class="star-rating-pill text-[10px]">★ 4.9</span>
+                  <span class="text-[10px] text-gray-400">(${book.reviewsCount || 420})</span>
+                </div>
+                <div class="flex items-baseline justify-between mt-2">
+                  <span class="text-base font-black text-forest">₹${price}</span>
+                  <span class="text-[10px] font-bold text-brandOrange bg-orange-50 px-1.5 py-0.5 rounded">25% Cause</span>
+                </div>
+              </div>
+              <button type="button" onclick="window.SocialReadersCheckout.openCheckout('${esc(book.id)}', 'ebook')" class="mt-3 w-full py-1.5 rounded-xl bg-forest text-white text-xs font-bold hover:bg-green-800 transition-colors">
+                Buy ₹${price}
+              </button>
+            </div>
+          `;
+        }).join('');
+      }
+    } catch (e) {}
+  }
 }
 
 // Real-time synchronization: Re-render catalog when admin modifies books
 if (typeof window !== 'undefined') {
-  window.addEventListener('sr_data_synced', (e) => {
-    if (!e.detail || e.detail.key === 'sr_books_data') {
-      initStorefrontDynamicCatalog();
-    }
-  });
+  const syncHandler = () => {
+    initDynamicHomepageContent();
+    initStorefrontDynamicCatalog();
+  };
+  window.addEventListener('sr_catalog_updated', syncHandler);
+  window.addEventListener('sr_data_synced', syncHandler);
   window.addEventListener('storage', (e) => {
-    if (!e.key || e.key === 'sr_books_data') {
-      initStorefrontDynamicCatalog();
+    if (!e.key || e.key.includes('sr_books') || e.key.includes('sr_quad') || e.key.includes('sr_settings')) {
+      syncHandler();
     }
   });
 }
