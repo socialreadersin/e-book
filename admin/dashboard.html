@@ -1240,9 +1240,12 @@
             <p style="font-size: 0.85rem; color: var(--text-muted);">Click or drag image file here to upload to Cloudinary</p>
             <div class="upload-status-bar" id="bookUploadStatus"><i class="fa-solid fa-circle-notch fa-spin"></i> Uploading to Cloudinary...</div>
           </div>
-          <input type="hidden" id="bookCoverUrl">
           <div class="upload-preview-container" id="bookCoverPreviewBox">
             <img src="" id="bookCoverPreview" class="upload-preview-img" alt="Book Cover Preview">
+          </div>
+          <div style="margin-top: 10px;">
+            <label class="form-label" style="font-size: 0.72rem; color: var(--text-dim);">Or Paste Image URL directly:</label>
+            <input type="url" id="bookCoverUrl" class="input-field no-icon" placeholder="https://images.unsplash.com/... or any image link">
           </div>
         </div>
 
@@ -1285,9 +1288,12 @@
             <p style="font-size: 0.85rem; color: var(--text-muted);">Upload Category graphic to Cloudinary</p>
             <div class="upload-status-bar" id="categoryUploadStatus"><i class="fa-solid fa-circle-notch fa-spin"></i> Uploading...</div>
           </div>
-          <input type="hidden" id="categoryImageUrl">
           <div class="upload-preview-container" id="categoryPreviewBox">
             <img src="" id="categoryPreview" class="upload-preview-img" alt="Category Preview">
+          </div>
+          <div style="margin-top: 10px;">
+            <label class="form-label" style="font-size: 0.72rem; color: var(--text-dim);">Or Paste Image URL directly:</label>
+            <input type="url" id="categoryImageUrl" class="input-field no-icon" placeholder="https://images.unsplash.com/... or graphic link">
           </div>
         </div>
 
@@ -2379,6 +2385,31 @@
           document.getElementById('categoryPreviewBox'),
           document.getElementById('categoryImageUrl')
         );
+      }
+    });
+
+    // Live URL Preview Handlers
+    document.getElementById('bookCoverUrl')?.addEventListener('input', (e) => {
+      const url = e.target.value.trim();
+      const prevBox = document.getElementById('bookCoverPreviewBox');
+      const prevImg = document.getElementById('bookCoverPreview');
+      if (url && (url.startsWith('http') || url.startsWith('/'))) {
+        prevImg.src = url;
+        prevBox.style.display = 'block';
+      } else if (!url) {
+        prevBox.style.display = 'none';
+      }
+    });
+
+    document.getElementById('categoryImageUrl')?.addEventListener('input', (e) => {
+      const url = e.target.value.trim();
+      const prevBox = document.getElementById('categoryPreviewBox');
+      const prevImg = document.getElementById('categoryPreview');
+      if (url && (url.startsWith('http') || url.startsWith('/'))) {
+        prevImg.src = url;
+        prevBox.style.display = 'block';
+      } else if (!url) {
+        prevBox.style.display = 'none';
       }
     });
 
