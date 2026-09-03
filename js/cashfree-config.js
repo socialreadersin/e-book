@@ -13,22 +13,24 @@
     environment: 'sandbox',
 
     // ─── APP ID (Client-Safe Public Identifier) ───────────────────────────────
-    appId: 'CF_SANDBOX_DEMO',
+    appId: (window.__CASHFREE_APP_ID__ || (window.firebaseConfig && window.firebaseConfig.cashfreeAppId) || 'CF_SANDBOX_APP'),
 
     // ─── SDK CDN URL ───────────────────────────────────────────────────────────
     sdkUrl: 'https://sdk.cashfree.com/js/v3/cashfree.js',
 
-    // ─── FIREBASE CLOUD FUNCTION ENDPOINTS ────────────────────────────────────
+    // ─── 100% FREE CLOUDFLARE SERVERLESS ENDPOINTS ────────────────────────────
     createOrderFunctionUrl: (() => {
-      const projectId = (window.firebaseConfig && window.firebaseConfig.projectId) || 'e-book-7c31a';
-      const region = 'us-central1';
-      return `https://${region}-${projectId}.cloudfunctions.net/createCashfreeOrder`;
+      if (typeof window !== 'undefined') {
+        return '/api/create-order';
+      }
+      return '/api/create-order';
     })(),
 
     verifyPaymentFunctionUrl: (() => {
-      const projectId = (window.firebaseConfig && window.firebaseConfig.projectId) || 'e-book-7c31a';
-      const region = 'us-central1';
-      return `https://${region}-${projectId}.cloudfunctions.net/verifyCashfreePayment`;
+      if (typeof window !== 'undefined') {
+        return '/api/verify-payment';
+      }
+      return '/api/verify-payment';
     })(),
   };
 

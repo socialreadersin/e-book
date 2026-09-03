@@ -195,10 +195,8 @@ exports.createCashfreeOrder = onRequest(
         // ── Create Cashfree Order via PG API ────────────────────────────────
         const orderId = generateOrderId();
         const env = environment === 'production' ? 'production' : 'sandbox';
-        const baseUrl = getCashfreeBaseUrl(env);
-
-        const appId = CASHFREE_APP_ID.value();
-        const secretKey = CASHFREE_SECRET_KEY.value();
+        const appId = (CASHFREE_APP_ID && typeof CASHFREE_APP_ID.value === 'function') ? (CASHFREE_APP_ID.value() || process.env.CASHFREE_APP_ID) : (process.env.CASHFREE_APP_ID || '');
+        const secretKey = (CASHFREE_SECRET_KEY && typeof CASHFREE_SECRET_KEY.value === 'function') ? (CASHFREE_SECRET_KEY.value() || process.env.CASHFREE_SECRET_KEY) : (process.env.CASHFREE_SECRET_KEY || '');
 
         const orderPayload = {
           order_id: orderId,
@@ -307,8 +305,8 @@ exports.verifyCashfreePayment = onRequest(
 
         const env = environment === 'production' ? 'production' : 'sandbox';
         const baseUrl = getCashfreeBaseUrl(env);
-        const appId = CASHFREE_APP_ID.value();
-        const secretKey = CASHFREE_SECRET_KEY.value();
+        const appId = (CASHFREE_APP_ID && typeof CASHFREE_APP_ID.value === 'function') ? (CASHFREE_APP_ID.value() || process.env.CASHFREE_APP_ID) : (process.env.CASHFREE_APP_ID || '');
+        const secretKey = (CASHFREE_SECRET_KEY && typeof CASHFREE_SECRET_KEY.value === 'function') ? (CASHFREE_SECRET_KEY.value() || process.env.CASHFREE_SECRET_KEY) : (process.env.CASHFREE_SECRET_KEY || '');
 
         const cfRes = await fetch(`${baseUrl}/orders/${orderId}`, {
           method: 'GET',
