@@ -132,7 +132,7 @@ const cloudinaryConfigFileContent = `/**
       return Boolean(cloudName && preset && !cloudName.includes('[YOUR_') && !preset.includes('[YOUR_'));
     },
     getCloudName() {
-      return CLOUDINARY_CONFIG.cloudName || (typeof localStorage !== 'undefined' ? localStorage.getItem('sr_cloudinary_cloud_name') : '') || 'socialreaders';
+      return CLOUDINARY_CONFIG.cloudName || (typeof localStorage !== 'undefined' ? localStorage.getItem('sr_cloudinary_cloud_name') : '') || 'tfy3lcci';
     },
     getUploadPreset() {
       return CLOUDINARY_CONFIG.uploadPreset || (typeof localStorage !== 'undefined' ? localStorage.getItem('sr_cloudinary_preset') : '') || 'tfy3lcci';

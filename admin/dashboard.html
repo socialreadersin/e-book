@@ -1347,7 +1347,7 @@
 
     const CLOUD_NAME = (typeof window !== 'undefined' && window.CLOUDINARY_CONFIG && window.CLOUDINARY_CONFIG.cloudName) 
       ? window.CLOUDINARY_CONFIG.cloudName 
-      : (window.CloudinaryService?.getCloudName ? window.CloudinaryService.getCloudName() : 'socialreaders');
+      : (window.CloudinaryService?.getCloudName ? window.CloudinaryService.getCloudName() : 'tfy3lcci');
     const UPLOAD_PRESET = (typeof window !== 'undefined' && window.CLOUDINARY_CONFIG && window.CLOUDINARY_CONFIG.uploadPreset) 
       ? window.CLOUDINARY_CONFIG.uploadPreset 
       : (window.CloudinaryService?.getUploadPreset ? window.CloudinaryService.getUploadPreset() : 'tfy3lcci');
@@ -1471,7 +1471,7 @@
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', UPLOAD_PRESET);
-        formData.append('folder', 'socialreaders');
+        formData.append('folder', 'ebooks');
 
         const endpoint = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
         const res = await fetch(endpoint, {
