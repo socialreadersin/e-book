@@ -111,9 +111,11 @@ const firebaseConfigFileContent = `/**
 fs.writeFileSync(path.join(jsDir, 'firebase-config.js'), firebaseConfigFileContent, 'utf8');
 
 // 2. Cloudinary Configuration & Service Generator
+const rawEnvCloudName = (process.env.CLOUDINARY_CLOUD_NAME || "").trim();
+const resolvedCloudName = (!rawEnvCloudName || rawEnvCloudName === 'socialreaders') ? 'tfy3lcci' : rawEnvCloudName;
 const cloudinaryConfig = {
-  cloudName: process.env.CLOUDINARY_CLOUD_NAME || "",
-  uploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET || "",
+  cloudName: resolvedCloudName,
+  uploadPreset: (process.env.CLOUDINARY_UPLOAD_PRESET || "tfy3lcci").trim(),
   folder: process.env.CLOUDINARY_FOLDER || "ebooks"
 };
 

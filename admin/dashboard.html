@@ -1156,12 +1156,15 @@
               <h4 style="color: #c084fc; margin-bottom: 16px; font-size: 1rem;"><i class="fa-solid fa-cloud"></i> Cloudinary Media Storage</h4>
               <div class="form-group">
                 <label class="form-label">Cloud Name</label>
-                <input type="text" id="settingCloudinaryName" class="input-field no-icon" readonly>
+                <input type="text" id="settingCloudinaryName" class="input-field no-icon" placeholder="tfy3lcci">
               </div>
               <div class="form-group">
                 <label class="form-label">Upload Preset</label>
-                <input type="text" id="settingCloudinaryPreset" class="input-field no-icon" readonly>
+                <input type="text" id="settingCloudinaryPreset" class="input-field no-icon" placeholder="tfy3lcci">
               </div>
+              <button type="button" class="btn btn-primary" id="saveCloudinarySettingsBtn" style="margin-top: 8px; width: 100%;">
+                <i class="fa-solid fa-floppy-disk"></i> Save Cloudinary Settings
+              </button>
             </div>
             <!-- Social Impact Summary -->
             <div class="table-container" style="padding: 24px;">
@@ -1345,12 +1348,17 @@
         measurementId: "G-Y5HDMGDDPR"
       };
 
-    const CLOUD_NAME = (typeof window !== 'undefined' && window.CLOUDINARY_CONFIG && window.CLOUDINARY_CONFIG.cloudName) 
+    const rawCloudName = (typeof window !== 'undefined' && window.CLOUDINARY_CONFIG && window.CLOUDINARY_CONFIG.cloudName) 
       ? window.CLOUDINARY_CONFIG.cloudName 
-      : (window.CloudinaryService?.getCloudName ? window.CloudinaryService.getCloudName() : 'tfy3lcci');
-    const UPLOAD_PRESET = (typeof window !== 'undefined' && window.CLOUDINARY_CONFIG && window.CLOUDINARY_CONFIG.uploadPreset) 
+      : '';
+    const CLOUD_NAME = (typeof localStorage !== 'undefined' && localStorage.getItem('sr_cloudinary_cloud_name')) 
+      || ((!rawCloudName || rawCloudName === 'socialreaders') ? 'tfy3lcci' : rawCloudName);
+
+    const rawUploadPreset = (typeof window !== 'undefined' && window.CLOUDINARY_CONFIG && window.CLOUDINARY_CONFIG.uploadPreset) 
       ? window.CLOUDINARY_CONFIG.uploadPreset 
-      : (window.CloudinaryService?.getUploadPreset ? window.CloudinaryService.getUploadPreset() : 'tfy3lcci');
+      : '';
+    const UPLOAD_PRESET = (typeof localStorage !== 'undefined' && localStorage.getItem('sr_cloudinary_preset')) 
+      || (rawUploadPreset || 'tfy3lcci');
 
     // Global App State
     let app, auth, db;
@@ -2237,17 +2245,23 @@
       // Cloudinary config
       const cnName = document.getElementById('settingCloudinaryName');
       const cnPreset = document.getElementById('settingCloudinaryPreset');
-      if (window.CloudinaryService) {
-        if (cnName) cnName.value = window.CloudinaryService.getCloudName() || 'Not configured';
-        if (cnPreset) cnPreset.value = window.CloudinaryService.getUploadPreset() || 'Not configured';
-      }
+      if (cnName) cnName.value = CLOUD_NAME || 'tfy3lcci';
+      if (cnPreset) cnPreset.value = UPLOAD_PRESET || 'tfy3lcci';
 
       // Social fund
       const totalSocial = localOrders.reduce((s, o) => s + Number(o.causeShare || (o.amount ? o.amount * 0.25 : 0)), 0);
       const sf = document.getElementById('settingTotalSocialFund');
       const to = document.getElementById('settingTotalOrders');
       if (sf) sf.textContent = `₹${totalSocial.toFixed(0)}`;
-      if (to) to.textContent = localOrders.length;
+      // Save Cloudinary Settings Button Handler
+      document.getElementById('saveCloudinarySettingsBtn')?.addEventListener('click', () => {
+        const name = document.getElementById('settingCloudinaryName')?.value.trim();
+        const preset = document.getElementById('settingCloudinaryPreset')?.value.trim();
+        if (name) localStorage.setItem('sr_cloudinary_cloud_name', name);
+        if (preset) localStorage.setItem('sr_cloudinary_preset', preset);
+        showToast(`Cloudinary settings updated: ${name || 'tfy3lcci'}`, 'success');
+        setTimeout(() => location.reload(), 800);
+      });
     }
 
     // ----------------------------------------------------
