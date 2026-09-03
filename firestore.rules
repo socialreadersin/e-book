@@ -84,6 +84,20 @@ service cloud.firestore {
       allow write: if isAuthenticated() && request.auth.uid == userId;
     }
 
+    // ─── USERS COLLECTION & SUBCOLLECTIONS (ReadMate Pattern) ─────────────────
+    // User profile doc, myBooks library subcollection, and bookcase (wishlist) subcollection
+    match /users/{userId} {
+      allow read, write: if isAuthenticated() && request.auth.uid == userId || isAdmin();
+
+      match /myBooks/{bookId} {
+        allow read, write: if isAuthenticated() && request.auth.uid == userId || isAdmin();
+      }
+
+      match /bookcase/{bookId} {
+        allow read, write: if isAuthenticated() && request.auth.uid == userId || isAdmin();
+      }
+    }
+
     // ─── ADMINS COLLECTION ────────────────────────────────────────────────────
     // Admin user list; read/write requires existing admin
     match /admins/{uid} {

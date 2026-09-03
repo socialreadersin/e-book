@@ -1393,25 +1393,59 @@ window.SocialReadersDB = {
   async grantLibraryAccess(userId, bookId, orderId, format = 'ebook') {
     if (!userId || !bookId) return false;
 
+    const now = new Date().toISOString();
     const entry = {
       bookId,
       orderId: orderId || '',
-      purchasedAt: new Date().toISOString(),
+      purchasedAt: now,
       format: format || 'ebook',
       accessStatus: 'active'
     };
 
-    // 1. Write to Firestore if available (uses merge for idempotency)
+    // ── ReadMate-inspired triple-write pattern ────────────────────────────────
+    // Approach matches ReadMate's FirestorePaymentService.buyBook() exactly,
+    // adapted for web + our existing userEntitlements schema.
     if (this.db) {
       try {
-        await this.db.collection('userEntitlements').doc(userId).set({
-          [`books.${bookId}`]: {
-            purchasedAt: entry.purchasedAt,
-            format: entry.format,
-            orderId: entry.orderId
-          }
-        }, { merge: true });
-        console.log(`Library access granted: user=${userId} book=${bookId}`);
+        const writes = [];
+
+        // Write A: userEntitlements/{uid} — our primary entitlement doc (merge)
+        writes.push(
+          this.db.collection('userEntitlements').doc(userId).set({
+            [`books.${bookId}`]: {
+              purchasedAt: entry.purchasedAt,
+              format: entry.format,
+              orderId: entry.orderId,
+              accessStatus: 'active'
+            }
+          }, { merge: true })
+        );
+
+        // Write B: users/{uid}.books[] — ReadMate's fast ownership check array
+        // (FieldValue.arrayUnion equivalent for web SDK v9 compat)
+        writes.push(
+          this.db.collection('users').doc(userId).set({
+            books: firebase.firestore.FieldValue.arrayUnion(bookId),
+            lastPurchaseAt: now
+          }, { merge: true })
+        );
+
+        // Write C: users/{uid}/myBooks/{bookId} — ReadMate's rich subcollection
+        // Full book entry stored for offline access & cross-device sync
+        writes.push(
+          this.db.collection('users').doc(userId)
+            .collection('myBooks').doc(bookId)
+            .set({
+              bookId,
+              orderId: orderId || '',
+              format: format || 'ebook',
+              purchasedAt: now,
+              accessStatus: 'active'
+            }, { merge: true })
+        );
+
+        await Promise.allSettled(writes);
+        console.log(`Library access granted (triple-write): user=${userId} book=${bookId}`);
       } catch (err) {
         // Firestore rules prevent client write in production — handled by Cloud Functions
         console.warn('grantLibraryAccess Firestore notice (expected in production):', err.message);
@@ -1436,11 +1470,112 @@ window.SocialReadersDB = {
 
   /**
    * Check if a user owns a specific book.
+   * Fast-path: checks users/{uid}.books[] array (ReadMate pattern) before full library scan.
    */
   async userOwnsBook(userId, bookId) {
     if (!userId || !bookId) return false;
+    // Fast path: check users/{uid}.books[] first (ReadMate pattern)
+    if (this.db) {
+      try {
+        const userDoc = await this.db.collection('users').doc(userId).get();
+        if (userDoc.exists) {
+          const booksArray = userDoc.data().books || [];
+          if (booksArray.includes(bookId)) return true;
+        }
+      } catch(e) {}
+    }
+    // Fallback: full library scan
     const library = await this.getUserLibrary(userId);
-    return library.some(item => item.bookId === bookId && item.accessStatus === 'active');
+    return library.some(item => item.bookId === bookId && item.accessStatus !== 'revoked');
+  },
+
+  /**
+   * Get user profile from Firestore (users/{uid}) — ReadMate's getUserProfile() equivalent.
+   * Falls back to localStorage session.
+   */
+  async getUserProfile(userId) {
+    if (!userId) return null;
+    if (this.db) {
+      try {
+        const doc = await this.db.collection('users').doc(userId).get();
+        if (doc.exists) return { uid: userId, ...doc.data() };
+      } catch(e) {}
+    }
+    // localStorage fallback
+    try {
+      const session = JSON.parse(localStorage.getItem('sr_user_auth') || 'null');
+      if (session && session.uid === userId) return session;
+    } catch(e) {}
+    return null;
+  },
+
+  /**
+   * Add a book to the user's wishlist (ReadMate's Bookcase pattern).
+   * Writes to: users/{uid}/bookcase/{bookId}
+   */
+  async addToWishlist(userId, bookId) {
+    if (!userId || !bookId) return false;
+    const entry = { bookId, savedAt: new Date().toISOString() };
+
+    // Firestore write
+    if (this.db) {
+      try {
+        await this.db.collection('users').doc(userId)
+          .collection('bookcase').doc(bookId)
+          .set(entry, { merge: true });
+      } catch(e) {
+        console.warn('addToWishlist Firestore error:', e.message);
+      }
+    }
+
+    // localStorage mirror
+    try {
+      const key = `sr_wishlist_${userId}`;
+      const list = JSON.parse(localStorage.getItem(key) || '[]');
+      if (!list.find(i => i.bookId === bookId)) list.unshift(entry);
+      localStorage.setItem(key, JSON.stringify(list));
+    } catch(e) {}
+    return true;
+  },
+
+  /**
+   * Remove a book from wishlist.
+   */
+  async removeFromWishlist(userId, bookId) {
+    if (!userId || !bookId) return false;
+    if (this.db) {
+      try {
+        await this.db.collection('users').doc(userId)
+          .collection('bookcase').doc(bookId).delete();
+      } catch(e) {}
+    }
+    try {
+      const key = `sr_wishlist_${userId}`;
+      const list = JSON.parse(localStorage.getItem(key) || '[]').filter(i => i.bookId !== bookId);
+      localStorage.setItem(key, JSON.stringify(list));
+    } catch(e) {}
+    return true;
+  },
+
+  /**
+   * Get wishlist for a user — reads users/{uid}/bookcase/ subcollection.
+   * Falls back to localStorage.
+   */
+  async getUserWishlist(userId) {
+    if (!userId) return [];
+    if (this.db) {
+      try {
+        const snap = await this.db.collection('users').doc(userId)
+          .collection('bookcase').orderBy('savedAt', 'desc').get();
+        if (!snap.empty) {
+          return snap.docs.map(d => ({ ...d.data(), bookId: d.id }));
+        }
+      } catch(e) {}
+    }
+    // localStorage fallback
+    try {
+      return JSON.parse(localStorage.getItem(`sr_wishlist_${userId}`) || '[]');
+    } catch(e) { return []; }
   },
 
   // Master Initializer
