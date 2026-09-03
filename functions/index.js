@@ -44,6 +44,9 @@ const corsHandler = cors({
     'https://socialreadersin.pages.dev',
     'https://socialreaders.in',
     'https://www.socialreaders.in',
+    // Cloudflare Workers production deployment
+    'https://e-book.socialreadersin.workers.dev',
+    'https://socialreadersin.workers.dev',
   ],
   methods: ['POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],

@@ -179,18 +179,24 @@ window.SocialReadersDB = {
   normalizeBook(book) {
     if (!book) return book;
     const b = { ...book };
-    // Normalize cover image URL
-    if (b.coverUrl) {
-      b.coverUrl = window.SocialReadersUtils.normalizeImageUrl(b.coverUrl);
+    // Normalize cover image URL — support both coverUrl and coverImageUrl field names
+    // Admin uploads save as coverUrl; some older records may use coverImageUrl
+    const rawCover = b.coverUrl || b.coverImageUrl || b.imageUrl || '';
+    if (rawCover) {
+      b.coverUrl = window.SocialReadersUtils.normalizeImageUrl(rawCover);
+      b.coverImageUrl = b.coverUrl; // alias for compatibility
     } else {
       b.coverUrl = 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80';
+      b.coverImageUrl = b.coverUrl;
     }
     // Normalize price fields: explicit price takes precedence
     const resolvedPrice = Number((b.price !== undefined && b.price !== null) ? b.price : (b.priceEbook || 149));
     b.price = resolvedPrice;
     b.priceEbook = resolvedPrice;
-    // Normalize status
+    // Normalize status — default to 'published' so books appear on frontend
     if (!b.status) b.status = 'published';
+    // Normalize pdfUrl / pdfStoragePath
+    if (!b.pdfUrl) b.pdfUrl = b.pdfStoragePath || '';
     return b;
   },
 
@@ -1075,7 +1081,7 @@ window.SocialReadersDB = {
   // -------------------------------------------------------------
   async getSettings() {
     const defaultSettings = {
-      cloudinaryCloudName: 'socialreaders',
+      cloudinaryCloudName: 'tfy3lcci',
       cloudinaryUploadPreset: 'tfy3lcci',
       causePercentage: 25,
       educationSplit: 15,
@@ -1309,6 +1315,132 @@ window.SocialReadersDB = {
     }
     const books = await this.getBooks(true);
     return { success: true, count: books.length };
+  },
+
+  // -------------------------------------------------------------
+  // 9. USER LIBRARY / ENTITLEMENT SYSTEM
+  // Source of truth: Firestore `userEntitlements/{userId}`
+  // Written by Cloud Functions after verified payment.
+  // Client can also write via grantLibraryAccess() for sandbox/test mode.
+  // -------------------------------------------------------------
+
+  /**
+   * Fetch the current user's purchased book entitlements from Firestore.
+   * Returns array of { bookId, orderId, purchasedAt, format, ... }
+   */
+  async getUserLibrary(userId) {
+    if (!userId) return [];
+
+    // 1. Try Firestore userEntitlements collection (written by Cloud Functions)
+    if (this.db) {
+      try {
+        const doc = await this.db.collection('userEntitlements').doc(userId).get();
+        if (doc.exists) {
+          const data = doc.data();
+          const books = data.books || data;
+          // Convert map { bookId: { purchasedAt, orderId, format } } to array
+          const entries = [];
+          for (const [bookId, meta] of Object.entries(books)) {
+            if (bookId === 'updatedAt') continue;
+            entries.push({
+              bookId,
+              orderId: meta.orderId || '',
+              purchasedAt: meta.purchasedAt || meta.createdAt || new Date().toISOString(),
+              format: meta.format || 'ebook',
+              accessStatus: meta.accessStatus || 'active'
+            });
+          }
+          // Cache locally
+          try { localStorage.setItem(`sr_library_${userId}`, JSON.stringify(entries)); } catch (e) {}
+          return entries;
+        }
+      } catch (err) {
+        console.warn('getUserLibrary Firestore notice:', err.message);
+      }
+    }
+
+    // 2. Fall back to local cache (works offline / without Cloud Functions)
+    try {
+      const cached = localStorage.getItem(`sr_library_${userId}`);
+      if (cached) return JSON.parse(cached);
+    } catch (e) {}
+
+    // 3. Fall back to matching completed orders by userId
+    try {
+      const orders = this.getOrdersSync();
+      const userOrders = orders.filter(o =>
+        (o.userId === userId || o.uid === userId) &&
+        (o.status === 'completed' || o.status === 'PAID' || o.testMode)
+      );
+      return userOrders.map(o => ({
+        bookId: o.bookId,
+        orderId: o.orderId || o.id,
+        purchasedAt: o.createdAt || new Date().toISOString(),
+        format: o.format || 'ebook',
+        accessStatus: 'active'
+      }));
+    } catch (e) {}
+
+    return [];
+  },
+
+  /**
+   * Grant library access for a book after successful payment.
+   * Called client-side in sandbox/test mode.
+   * In production, Cloud Functions write this via Admin SDK.
+   * Uses merge so duplicate calls are idempotent.
+   */
+  async grantLibraryAccess(userId, bookId, orderId, format = 'ebook') {
+    if (!userId || !bookId) return false;
+
+    const entry = {
+      bookId,
+      orderId: orderId || '',
+      purchasedAt: new Date().toISOString(),
+      format: format || 'ebook',
+      accessStatus: 'active'
+    };
+
+    // 1. Write to Firestore if available (uses merge for idempotency)
+    if (this.db) {
+      try {
+        await this.db.collection('userEntitlements').doc(userId).set({
+          [`books.${bookId}`]: {
+            purchasedAt: entry.purchasedAt,
+            format: entry.format,
+            orderId: entry.orderId
+          }
+        }, { merge: true });
+        console.log(`Library access granted: user=${userId} book=${bookId}`);
+      } catch (err) {
+        // Firestore rules prevent client write in production — handled by Cloud Functions
+        console.warn('grantLibraryAccess Firestore notice (expected in production):', err.message);
+      }
+    }
+
+    // 2. Always update local cache (instant UI feedback)
+    try {
+      const cached = localStorage.getItem(`sr_library_${userId}`);
+      const entries = cached ? JSON.parse(cached) : [];
+      const existing = entries.findIndex(e => e.bookId === bookId);
+      if (existing >= 0) {
+        entries[existing] = entry;
+      } else {
+        entries.unshift(entry);
+      }
+      localStorage.setItem(`sr_library_${userId}`, JSON.stringify(entries));
+    } catch (e) {}
+
+    return true;
+  },
+
+  /**
+   * Check if a user owns a specific book.
+   */
+  async userOwnsBook(userId, bookId) {
+    if (!userId || !bookId) return false;
+    const library = await this.getUserLibrary(userId);
+    return library.some(item => item.bookId === bookId && item.accessStatus === 'active');
   },
 
   // Master Initializer

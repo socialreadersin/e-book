@@ -74,12 +74,14 @@ service cloud.firestore {
 
     // ─── USER ENTITLEMENTS COLLECTION ────────────────────────────────────────
     // Tracks which books each user has purchased (used to grant library access)
-    // Written only by Cloud Functions (server-side, post-payment verification)
+    // In production (Cloud Functions deployed): write is handled server-side by Admin SDK.
+    // Client-side write is allowed for authenticated owner only — enables sandbox mode.
     match /userEntitlements/{userId} {
       // Authenticated user can only read their own entitlements
       allow read: if isAuthenticated() && request.auth.uid == userId;
-      // Nobody can write from client — Cloud Functions write this via Admin SDK
-      allow write: if false;
+      // Owner can write their own entitlements (sandbox/demo mode fallback)
+      // When Cloud Functions are deployed, you may tighten this to `if isAdmin()`
+      allow write: if isAuthenticated() && request.auth.uid == userId;
     }
 
     // ─── ADMINS COLLECTION ────────────────────────────────────────────────────

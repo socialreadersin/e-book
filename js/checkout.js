@@ -344,10 +344,24 @@ window.SocialReadersCheckout = {
     const orderId = cashfreeOrderId || `SR-${Math.floor(1000 + Math.random() * 9000)}`;
     const paymentId = (paymentDetails && paymentDetails.paymentId) || `cf_${Date.now()}`;
 
+    // Resolve current Firebase user UID (best-effort)
+    let userId = null;
+    try {
+      if (typeof firebase !== 'undefined' && firebase.auth && firebase.apps && firebase.apps.length) {
+        const fbUser = firebase.auth().currentUser;
+        if (fbUser) userId = fbUser.uid;
+      }
+      if (!userId) {
+        const session = JSON.parse(localStorage.getItem('sr_user_auth') || '{}');
+        userId = session.uid || null;
+      }
+    } catch (e) {}
+
     const order = {
       orderId: orderId,
       paymentId: paymentId,
       gateway: 'cashfree',
+      userId: userId || '',
       customerName: buyerName,
       buyerName: buyerName,
       customerEmail: buyerEmail,
@@ -366,17 +380,46 @@ window.SocialReadersCheckout = {
       await window.SocialReadersDB.createOrder(order);
     }
 
+    // ── Grant library access immediately (client-side entitlement fallback) ──
+    // In production, Cloud Functions do this via Admin SDK after webhook.
+    // This client-side grant ensures instant My Library update even in sandbox/demo mode.
+    if (userId && window.SocialReadersDB && window.SocialReadersDB.grantLibraryAccess) {
+      await window.SocialReadersDB.grantLibraryAccess(userId, item.bookId, orderId, item.format);
+    } else if (!userId) {
+      // No logged-in user — store entitlement by email as fallback
+      try {
+        const emailKey = `sr_guest_lib_${buyerEmail.toLowerCase().trim()}`;
+        const stored = JSON.parse(localStorage.getItem(emailKey) || '[]');
+        stored.unshift({ bookId: item.bookId, orderId, format: item.format, purchasedAt: new Date().toISOString() });
+        localStorage.setItem(emailKey, JSON.stringify(stored));
+      } catch (e) {}
+    }
+
     this.showSuccessModal(order);
   },
 
   async _handleTestModeCheckout({ name, email, item }) {
-    // SANDBOX / Test mode: record a pending order and explain
+    // SANDBOX / Test mode: record a pending order and grant library access for UX demo
     const orderId = `SR-TEST-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    // Resolve current user
+    let userId = null;
+    try {
+      if (typeof firebase !== 'undefined' && firebase.auth && firebase.apps && firebase.apps.length) {
+        const fbUser = firebase.auth().currentUser;
+        if (fbUser) userId = fbUser.uid;
+      }
+      if (!userId) {
+        const session = JSON.parse(localStorage.getItem('sr_user_auth') || '{}');
+        userId = session.uid || null;
+      }
+    } catch (e) {}
 
     const order = {
       orderId: orderId,
       paymentId: `test_${Date.now()}`,
       gateway: 'cashfree-test',
+      userId: userId || '',
       customerName: name,
       buyerName: name,
       customerEmail: email,
@@ -394,6 +437,11 @@ window.SocialReadersCheckout = {
 
     if (window.SocialReadersDB && window.SocialReadersDB.createOrder) {
       await window.SocialReadersDB.createOrder(order);
+    }
+
+    // Grant library access even in test mode for instant My Library feedback
+    if (userId && window.SocialReadersDB && window.SocialReadersDB.grantLibraryAccess) {
+      await window.SocialReadersDB.grantLibraryAccess(userId, item.bookId, orderId, item.format);
     }
 
     // Show a test mode success modal with helpful notice
