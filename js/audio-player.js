@@ -1,13 +1,17 @@
 /**
- * Social Readers - Global Audiobook Preview Player
- * Floating responsive player for listening to audiobook chapter previews
+ * Social Readers - Global Audiobook Player
+ * Supports Chapter Navigation, Progress Persistence, Speed Control & Seamless Streaming
  */
 
 class AudiobookPlayer {
   constructor() {
     this.audio = new Audio();
     this.currentTrack = null;
+    this.currentBook = null;
+    this.chapters = [];
+    this.currentChapterIndex = 0;
     this.isPlaying = false;
+    this.lastSavedSecond = 0;
     this.initDOM();
     this.bindEvents();
   }
@@ -17,50 +21,78 @@ class AudiobookPlayer {
     if (!playerContainer) {
       playerContainer = document.createElement('div');
       playerContainer.id = 'global-audio-player';
-      playerContainer.className = 'fixed bottom-[72px] md:bottom-6 left-1/2 transform -translate-x-1/2 w-[94%] max-w-2xl bg-navy/95 backdrop-blur-md text-white rounded-2xl p-3 sm:p-4 shadow-2xl z-40 border border-white/20 hidden transition-all duration-300';
+      playerContainer.className = 'fixed bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 w-[95%] max-w-2xl bg-[#0B2C5D]/95 backdrop-blur-md text-white rounded-2xl p-4 shadow-2xl z-50 border border-white/20 hidden transition-all duration-300';
       playerContainer.innerHTML = `
-        <div class="flex items-center justify-between gap-3 sm:gap-4">
-          
-          <!-- Track Info -->
-          <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-            <img id="player-cover" src="assets/cover-atomic-habits.svg" class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl object-contain bg-white/10 p-1 flex-shrink-0" alt="Audiobook Cover">
-            <div class="min-w-0">
-              <div class="flex items-center gap-1.5 sm:gap-2">
-                <span class="px-1.5 py-0.5 rounded bg-brandOrange text-white text-[8px] sm:text-[9px] font-bold uppercase tracking-wider">Audio Sample</span>
-                <span id="player-speed" class="text-[9px] sm:text-[10px] text-gray-300 font-mono cursor-pointer hover:text-white bg-white/10 px-1 py-0.5 rounded">1.0x</span>
+        <div class="flex flex-col gap-2.5">
+          <!-- Top Row: Cover, Info, Chapter Select & Controls -->
+          <div class="flex items-center justify-between gap-3">
+            
+            <!-- Track Info -->
+            <div class="flex items-center gap-3 min-w-0 flex-1">
+              <img id="player-cover" src="assets/cover-atomic-habits.svg" class="w-11 h-11 sm:w-13 sm:h-13 rounded-xl object-cover bg-white/10 p-0.5 border border-white/10 flex-shrink-0" alt="Cover" onerror="this.src='https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&q=80'">
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span id="player-badge" class="px-2 py-0.5 rounded bg-brandOrange text-white text-[9px] font-bold uppercase tracking-wider">Audiobook</span>
+                  <span id="player-speed" class="text-[10px] text-gray-200 font-mono cursor-pointer hover:text-white bg-white/15 px-1.5 py-0.5 rounded transition-colors" title="Change Playback Speed">1.0x</span>
+                </div>
+                <h4 id="player-title" class="font-bold text-xs sm:text-sm text-white truncate mt-0.5">Social Readers Audiobook</h4>
+                <div class="flex items-center gap-2 text-[11px] text-gray-300">
+                  <span id="player-author" class="truncate max-w-[140px]">Author</span>
+                  <span class="text-white/40">&bull;</span>
+                  <span id="player-chapter-title" class="text-amber-300 font-medium truncate flex-1">Chapter 1</span>
+                </div>
               </div>
-              <h4 id="player-title" class="font-bold text-xs sm:text-sm text-white truncate mt-0.5">Atomic Habits</h4>
-              <p id="player-author" class="text-[10px] sm:text-xs text-gray-300 truncate">James Clear</p>
             </div>
+
+            <!-- Controls -->
+            <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+              <!-- Previous Chapter -->
+              <button id="player-prev-ch" class="p-1.5 text-gray-300 hover:text-white transition-colors" title="Previous Chapter">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path></svg>
+              </button>
+
+              <!-- Rewind 10s -->
+              <button id="player-rewind" class="p-1.5 text-gray-300 hover:text-white transition-colors" title="Rewind 10s">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.334 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z"></path></svg>
+              </button>
+
+              <!-- Play/Pause -->
+              <button id="player-play-btn" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-forest hover:bg-green-600 flex items-center justify-center text-white shadow-lg transition-transform active:scale-90">
+                <svg id="play-icon" class="w-4 h-4 sm:w-5 sm:h-5 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <svg id="pause-icon" class="w-4 h-4 sm:w-5 sm:h-5 fill-current hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+              </button>
+
+              <!-- Forward 10s -->
+              <button id="player-forward" class="p-1.5 text-gray-300 hover:text-white transition-colors" title="Forward 10s">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.933 12.8a1 1 0 000-1.6L6.6 7.2A1 1 0 005 8v8a1 1 0 001.6.8l5.333-4zM19.933 12.8a1 1 0 000-1.6l-5.333-4A1 1 0 0013 8v8a1 1 0 001.6.8l5.333-4z"></path></svg>
+              </button>
+
+              <!-- Next Chapter -->
+              <button id="player-next-ch" class="p-1.5 text-gray-300 hover:text-white transition-colors" title="Next Chapter">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>
+              </button>
+
+              <!-- Close -->
+              <button id="player-close" class="p-1.5 text-gray-400 hover:text-white ml-1 transition-colors" title="Close Player">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
+            </div>
+
           </div>
 
-          <!-- Controls -->
-          <div class="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
-            <button id="player-rewind" class="p-1 sm:p-2 text-gray-300 hover:text-white active:scale-95" title="Rewind 10s">
-              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.334 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z"></path></svg>
-            </button>
-
-            <button id="player-play-btn" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-forest hover:bg-green-600 flex items-center justify-center text-white shadow-lg transition-transform active:scale-90">
-              <svg id="play-icon" class="w-4 h-4 sm:w-5 sm:h-5 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              <svg id="pause-icon" class="w-4 h-4 sm:w-5 sm:h-5 fill-current hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-            </button>
-
-            <button id="player-forward" class="p-1 sm:p-2 text-gray-300 hover:text-white active:scale-95" title="Forward 10s">
-              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.933 12.8a1 1 0 000-1.6L6.6 7.2A1 1 0 005 8v8a1 1 0 001.6.8l5.333-4zM19.933 12.8a1 1 0 000-1.6l-5.333-4A1 1 0 0013 8v8a1 1 0 001.6.8l5.333-4z"></path></svg>
-            </button>
-
-            <button id="player-close" class="p-1 text-gray-400 hover:text-white ml-0.5" title="Close">
-              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
+          <!-- Chapter Dropdown (Hidden when only 1 chapter or sample) -->
+          <div id="player-chapter-bar" class="hidden flex items-center justify-between gap-2 pt-1 border-t border-white/10">
+            <span class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">Chapter:</span>
+            <select id="player-chapter-select" class="bg-white/10 text-xs text-white rounded-lg px-2.5 py-1 border border-white/10 outline-none flex-1 max-w-xs cursor-pointer">
+            </select>
           </div>
 
-        </div>
-
-        <!-- Progress Bar & Time -->
-        <div class="mt-2 flex items-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] text-gray-300 font-mono">
-          <span id="player-current-time">0:00</span>
-          <input type="range" id="player-seek" min="0" max="100" value="0" class="flex-grow h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-brandOrange">
-          <span id="player-duration">0:00</span>
+          <!-- Progress Bar & Time -->
+          <div class="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] text-gray-300 font-mono">
+            <span id="player-current-time">0:00</span>
+            <input type="range" id="player-seek" min="0" max="100" value="0" class="flex-grow h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-brandOrange">
+            <span id="player-duration">0:00</span>
+          </div>
         </div>
       `;
       document.body.appendChild(playerContainer);
@@ -78,8 +110,11 @@ class AudiobookPlayer {
     const speedBtn = document.getElementById('player-speed');
     const rewindBtn = document.getElementById('player-rewind');
     const forwardBtn = document.getElementById('player-forward');
+    const prevChBtn = document.getElementById('player-prev-ch');
+    const nextChBtn = document.getElementById('player-next-ch');
+    const chapterSelect = document.getElementById('player-chapter-select');
 
-    // Toggle Play/Pause
+    // Play/Pause
     playBtn.addEventListener('click', () => {
       if (this.isPlaying) {
         this.audio.pause();
@@ -100,8 +135,10 @@ class AudiobookPlayer {
 
     // Seek
     seekInput.addEventListener('input', (e) => {
-      const seekTime = (e.target.value / 100) * this.audio.duration;
-      this.audio.currentTime = seekTime;
+      if (!isNaN(this.audio.duration)) {
+        const seekTime = (e.target.value / 100) * this.audio.duration;
+        this.audio.currentTime = seekTime;
+      }
     });
 
     // Rewind / Forward
@@ -110,16 +147,39 @@ class AudiobookPlayer {
     });
 
     forwardBtn.addEventListener('click', () => {
-      this.audio.currentTime = Math.min(this.audio.duration, this.audio.currentTime + 10);
+      if (!isNaN(this.audio.duration)) {
+        this.audio.currentTime = Math.min(this.audio.duration, this.audio.currentTime + 10);
+      }
+    });
+
+    // Chapter Navigation
+    prevChBtn.addEventListener('click', () => {
+      if (this.currentChapterIndex > 0) {
+        this.loadChapter(this.currentChapterIndex - 1, true);
+      }
+    });
+
+    nextChBtn.addEventListener('click', () => {
+      if (this.currentChapterIndex < this.chapters.length - 1) {
+        this.loadChapter(this.currentChapterIndex + 1, true);
+      }
+    });
+
+    chapterSelect.addEventListener('change', (e) => {
+      const idx = parseInt(e.target.value, 10);
+      if (!isNaN(idx)) {
+        this.loadChapter(idx, true);
+      }
     });
 
     // Close
     closeBtn.addEventListener('click', () => {
+      this.persistProgress();
       this.audio.pause();
       document.getElementById('global-audio-player').classList.add('hidden');
     });
 
-    // Audio element event listeners
+    // Audio State Listeners
     this.audio.addEventListener('play', () => {
       this.isPlaying = true;
       playIcon.classList.add('hidden');
@@ -130,6 +190,7 @@ class AudiobookPlayer {
       this.isPlaying = false;
       playIcon.classList.remove('hidden');
       pauseIcon.classList.add('hidden');
+      this.persistProgress();
     });
 
     this.audio.addEventListener('timeupdate', () => {
@@ -138,11 +199,25 @@ class AudiobookPlayer {
         seekInput.value = progress;
         currentTimeEl.textContent = this.formatTime(this.audio.currentTime);
         durationEl.textContent = this.formatTime(this.audio.duration);
+
+        // Throttle progress persistence every 5 seconds
+        const curSec = Math.floor(this.audio.currentTime);
+        if (Math.abs(curSec - this.lastSavedSecond) >= 5) {
+          this.lastSavedSecond = curSec;
+          this.persistProgress();
+        }
       }
     });
 
     this.audio.addEventListener('loadedmetadata', () => {
       durationEl.textContent = this.formatTime(this.audio.duration);
+    });
+
+    this.audio.addEventListener('ended', () => {
+      // Auto-play next chapter if available
+      if (this.currentChapterIndex < this.chapters.length - 1) {
+        this.loadChapter(this.currentChapterIndex + 1, true);
+      }
     });
   }
 
@@ -153,32 +228,144 @@ class AudiobookPlayer {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   }
 
+  persistProgress() {
+    if (!this.currentBook || !this.currentBook.id) return;
+    const user = window.SocialReadersAuth ? window.SocialReadersAuth.getCurrentUser() : null;
+    const userId = user ? user.uid : 'guest';
+    const curSec = Math.floor(this.audio.currentTime || 0);
+    const chapterId = this.chapters[this.currentChapterIndex]?.chapterId || '';
+
+    if (window.SocialReadersDB && window.SocialReadersDB.saveAudiobookProgress) {
+      window.SocialReadersDB.saveAudiobookProgress(userId, this.currentBook.id, curSec, chapterId);
+    }
+  }
+
+  loadChapter(index, autoPlay = false) {
+    if (!this.chapters || !this.chapters[index]) return;
+    this.currentChapterIndex = index;
+    const chapter = this.chapters[index];
+
+    const chapterTitleEl = document.getElementById('player-chapter-title');
+    const chapterSelect = document.getElementById('player-chapter-select');
+
+    if (chapterTitleEl) chapterTitleEl.textContent = chapter.title || `Chapter ${index + 1}`;
+    if (chapterSelect) chapterSelect.value = String(index);
+
+    this.audio.src = chapter.audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+    this.audio.currentTime = 0;
+
+    if (autoPlay) {
+      this.audio.play().catch(e => console.log('Audio playback prevented:', e));
+    }
+  }
+
+  /**
+   * Play full audiobook with chapter list and resume position
+   */
+  async playBook(book, startChapterIndex = 0, resumePosition = 0) {
+    this.currentBook = book;
+    const titleStr = typeof book.title === 'object' ? (book.title.en || 'Audiobook') : (book.title || 'Audiobook');
+    const authorStr = typeof book.author === 'object' ? (book.author.en || '') : (book.author || '');
+    const coverUrl = book.coverImageUrl || book.coverUrl || 'assets/cover-atomic-habits.svg';
+
+    document.getElementById('player-title').textContent = titleStr;
+    document.getElementById('player-author').textContent = authorStr;
+    document.getElementById('player-cover').src = coverUrl;
+    document.getElementById('player-badge').textContent = 'Full Audiobook';
+
+    // Populate chapters
+    if (Array.isArray(book.chapters) && book.chapters.length > 0) {
+      this.chapters = book.chapters;
+    } else {
+      this.chapters = [
+        { chapterId: 'ch1', title: 'Chapter 1: Full Audio Edition', audioUrl: book.audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", duration: book.audioDuration || 'Full Duration' }
+      ];
+    }
+
+    const chapterBar = document.getElementById('player-chapter-bar');
+    const chapterSelect = document.getElementById('player-chapter-select');
+
+    if (this.chapters.length > 1) {
+      chapterBar.classList.remove('hidden');
+      chapterSelect.innerHTML = this.chapters.map((ch, idx) => `
+        <option value="${idx}">${idx + 1}. ${ch.title} (${ch.duration || 'Audio'})</option>
+      `).join('');
+    } else {
+      chapterBar.classList.add('hidden');
+    }
+
+    // Check saved progress
+    const user = window.SocialReadersAuth ? window.SocialReadersAuth.getCurrentUser() : null;
+    let initialPosition = resumePosition;
+
+    if (initialPosition === 0 && user && window.SocialReadersDB && window.SocialReadersDB.getAudiobookProgress) {
+      const savedProg = await window.SocialReadersDB.getAudiobookProgress(user.uid, book.id);
+      if (savedProg && savedProg.lastPosition > 0) {
+        initialPosition = savedProg.lastPosition;
+        if (savedProg.lastChapterId) {
+          const chIdx = this.chapters.findIndex(c => c.chapterId === savedProg.lastChapterId);
+          if (chIdx >= 0) startChapterIndex = chIdx;
+        }
+      }
+    }
+
+    this.loadChapter(startChapterIndex, false);
+
+    if (initialPosition > 0) {
+      this.audio.addEventListener('loadedmetadata', () => {
+        if (initialPosition < this.audio.duration) {
+          this.audio.currentTime = initialPosition;
+        }
+      }, { once: true });
+    }
+
+    this.audio.play().catch(e => console.log('Autoplay notice:', e));
+    document.getElementById('global-audio-player').classList.remove('hidden');
+  }
+
   playTrack(title, author, audioUrl, coverUrl) {
-    this.currentTrack = { title, author, audioUrl, coverUrl };
-    
+    this.currentBook = { id: `sample_${Date.now()}`, title, author, coverUrl };
+    this.chapters = [
+      { chapterId: 'sample', title: 'Audio Preview', audioUrl: audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" }
+    ];
+    this.currentChapterIndex = 0;
+
     document.getElementById('player-title').textContent = title;
     document.getElementById('player-author').textContent = author;
+    document.getElementById('player-chapter-title').textContent = 'Audio Preview Sample';
+    document.getElementById('player-badge').textContent = 'Audio Sample';
+    document.getElementById('player-chapter-bar').classList.add('hidden');
+
     if (coverUrl) {
       document.getElementById('player-cover').src = coverUrl;
     }
 
     this.audio.src = audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+    this.audio.currentTime = 0;
     this.audio.play().catch(e => console.log('Audio autoplay prevented:', e));
 
-    const playerContainer = document.getElementById('global-audio-player');
-    playerContainer.classList.remove('hidden');
+    document.getElementById('global-audio-player').classList.remove('hidden');
   }
 
   bindSampleTriggers(root = document) {
     root.querySelectorAll('[data-listen-sample]').forEach(btn => {
       if (btn._audioBound) return;
       btn._audioBound = true;
-      btn.addEventListener('click', (e) => {
+      btn.addEventListener('click', async (e) => {
         e.preventDefault();
+        const bookId = btn.getAttribute('data-book-id');
         const title = btn.getAttribute('data-book-title') || "Audio Sample";
         const author = btn.getAttribute('data-book-author') || "";
         const url = btn.getAttribute('data-audio-url') || "";
         const cover = btn.getAttribute('data-cover-url') || "";
+
+        if (bookId && window.SocialReadersDB) {
+          const book = await window.SocialReadersDB.getBookById(bookId);
+          if (book) {
+            this.playBook(book, 0, 0);
+            return;
+          }
+        }
         this.playTrack(title, author, url, cover);
       });
     });
@@ -189,4 +376,3 @@ document.addEventListener('DOMContentLoaded', () => {
   window.SocialReadersAudioPlayer = new AudiobookPlayer();
   window.SocialReadersAudioPlayer.bindSampleTriggers();
 });
-

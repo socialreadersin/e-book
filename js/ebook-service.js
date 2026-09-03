@@ -180,8 +180,7 @@ window.SocialReadersDB = {
     if (!book) return book;
     const b = { ...book };
     // Normalize cover image URL — support both coverUrl and coverImageUrl field names
-    // Admin uploads save as coverUrl; some older records may use coverImageUrl
-    const rawCover = b.coverUrl || b.coverImageUrl || b.imageUrl || '';
+    const rawCover = b.coverImageUrl || b.coverUrl || b.imageUrl || '';
     if (rawCover) {
       b.coverUrl = window.SocialReadersUtils.normalizeImageUrl(rawCover);
       b.coverImageUrl = b.coverUrl; // alias for compatibility
@@ -197,6 +196,28 @@ window.SocialReadersDB = {
     if (!b.status) b.status = 'published';
     // Normalize pdfUrl / pdfStoragePath
     if (!b.pdfUrl) b.pdfUrl = b.pdfStoragePath || '';
+    
+    // Normalize chapters array for audiobooks
+    if (b.type === 'audiobook' || b.type === 'both') {
+      if (!Array.isArray(b.chapters) || b.chapters.length === 0) {
+        if (b.audioUrl) {
+          b.chapters = [
+            {
+              chapterId: 'ch1',
+              title: 'Chapter 1: Full Audio Edition',
+              order: 1,
+              duration: b.audioDuration || 'Full Duration',
+              storagePath: `audiobooks/${b.id || 'book'}/chapter-01.mp3`,
+              audioUrl: b.audioUrl
+            }
+          ];
+        } else {
+          b.chapters = [];
+        }
+      }
+    } else {
+      if (!Array.isArray(b.chapters)) b.chapters = [];
+    }
     return b;
   },
 
@@ -217,10 +238,17 @@ window.SocialReadersDB = {
         isBestseller: true,
         status: "published",
         coverUrl: "assets/cover-atomic-habits.svg",
+        coverImageUrl: "assets/cover-atomic-habits.svg",
         pdfUrl: "",
+        pdfStoragePath: "ebooks/b1/atomic-habits.pdf",
         audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
         audioDuration: "5 hrs 35 mins",
         narrator: "James Clear",
+        chapters: [
+          { chapterId: "b1-c1", title: "Chapter 1: The Surprising Power of Atomic Habits", order: 1, duration: "48 mins", storagePath: "audiobooks/b1/chapter-01.mp3", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+          { chapterId: "b1-c2", title: "Chapter 2: How Your Habits Shape Your Identity", order: 2, duration: "55 mins", storagePath: "audiobooks/b1/chapter-02.mp3", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+          { chapterId: "b1-c3", title: "Chapter 3: How to Build Better Habits in 4 Steps", order: 3, duration: "52 mins", storagePath: "audiobooks/b1/chapter-03.mp3", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" }
+        ],
         rating: 4.9,
         reviewsCount: 428,
         description: {
@@ -241,10 +269,16 @@ window.SocialReadersDB = {
         isBestseller: false,
         status: "published",
         coverUrl: "assets/cover-mindset.svg",
+        coverImageUrl: "assets/cover-mindset.svg",
         pdfUrl: "",
+        pdfStoragePath: "ebooks/b2/mindset.pdf",
         audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
         audioDuration: "6 hrs 12 mins",
         narrator: "Carol S. Dweck",
+        chapters: [
+          { chapterId: "b2-c1", title: "Chapter 1: The Mindsets", order: 1, duration: "42 mins", storagePath: "audiobooks/b2/chapter-01.mp3", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+          { chapterId: "b2-c2", title: "Chapter 2: Inside the Mindsets", order: 2, duration: "50 mins", storagePath: "audiobooks/b2/chapter-02.mp3", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" }
+        ],
         rating: 4.8,
         reviewsCount: 312,
         description: {
@@ -265,8 +299,11 @@ window.SocialReadersDB = {
         isBestseller: true,
         status: "published",
         coverUrl: "assets/cover-you-can-win.svg",
+        coverImageUrl: "assets/cover-you-can-win.svg",
         pdfUrl: "",
+        pdfStoragePath: "ebooks/b3/you-can-win.pdf",
         audioUrl: null,
+        chapters: [],
         rating: 4.9,
         reviewsCount: 520,
         description: {
@@ -287,10 +324,16 @@ window.SocialReadersDB = {
         isBestseller: true,
         status: "published",
         coverUrl: "assets/cover-rich-dad.svg",
+        coverImageUrl: "assets/cover-rich-dad.svg",
         pdfUrl: "",
+        pdfStoragePath: "ebooks/b4/rich-dad-poor-dad.pdf",
         audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
         audioDuration: "6 hrs 45 mins",
         narrator: "Robert Kiyosaki",
+        chapters: [
+          { chapterId: "b4-c1", title: "Chapter 1: Rich Dad, Poor Dad", order: 1, duration: "54 mins", storagePath: "audiobooks/b4/chapter-01.mp3", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+          { chapterId: "b4-c2", title: "Chapter 2: The Rich Don't Work for Money", order: 2, duration: "62 mins", storagePath: "audiobooks/b4/chapter-02.mp3", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" }
+        ],
         rating: 4.9,
         reviewsCount: 890,
         description: {
@@ -311,10 +354,16 @@ window.SocialReadersDB = {
         isBestseller: true,
         status: "published",
         coverUrl: "assets/cover-wings-of-fire.svg",
+        coverImageUrl: "assets/cover-wings-of-fire.svg",
         pdfUrl: "",
+        pdfStoragePath: "ebooks/b5/wings-of-fire.pdf",
         audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
         audioDuration: "7 hrs 20 mins",
         narrator: "Girish Karnad",
+        chapters: [
+          { chapterId: "b5-c1", title: "Chapter 1: Orientation", order: 1, duration: "60 mins", storagePath: "audiobooks/b5/chapter-01.mp3", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+          { chapterId: "b5-c2", title: "Chapter 2: Creation", order: 2, duration: "72 mins", storagePath: "audiobooks/b5/chapter-02.mp3", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" }
+        ],
         rating: 5.0,
         reviewsCount: 1240,
         description: {
@@ -335,10 +384,16 @@ window.SocialReadersDB = {
         isBestseller: false,
         status: "published",
         coverUrl: "assets/cover-ikigai.svg",
+        coverImageUrl: "assets/cover-ikigai.svg",
         pdfUrl: "",
+        pdfStoragePath: "ebooks/b6/ikigai.pdf",
         audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
         audioDuration: "4 hrs 50 mins",
         narrator: "Héctor García",
+        chapters: [
+          { chapterId: "b6-c1", title: "Chapter 1: The Art of Staying Young", order: 1, duration: "50 mins", storagePath: "audiobooks/b6/chapter-01.mp3", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+          { chapterId: "b6-c2", title: "Chapter 2: Antiaging Secrets", order: 2, duration: "48 mins", storagePath: "audiobooks/b6/chapter-02.mp3", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" }
+        ],
         rating: 4.7,
         reviewsCount: 290,
         description: {
@@ -359,8 +414,11 @@ window.SocialReadersDB = {
         isBestseller: false,
         status: "published",
         coverUrl: "assets/cover-deep-work.svg",
+        coverImageUrl: "assets/cover-deep-work.svg",
         pdfUrl: "",
+        pdfStoragePath: "ebooks/b7/deep-work.pdf",
         audioUrl: null,
+        chapters: [],
         rating: 4.8,
         reviewsCount: 380,
         description: {
@@ -381,10 +439,16 @@ window.SocialReadersDB = {
         isBestseller: true,
         status: "published",
         coverUrl: "assets/cover-psychology-money.svg",
+        coverImageUrl: "assets/cover-psychology-money.svg",
         pdfUrl: "",
+        pdfStoragePath: "ebooks/b8/psychology-of-money.pdf",
         audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
         audioDuration: "5 hrs 40 mins",
         narrator: "Chris Hill",
+        chapters: [
+          { chapterId: "b8-c1", title: "Chapter 1: No One's Crazy", order: 1, duration: "44 mins", storagePath: "audiobooks/b8/chapter-01.mp3", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+          { chapterId: "b8-c2", title: "Chapter 2: Luck & Risk", order: 2, duration: "50 mins", storagePath: "audiobooks/b8/chapter-02.mp3", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" }
+        ],
         rating: 4.9,
         reviewsCount: 650,
         description: {
@@ -1595,6 +1659,118 @@ window.SocialReadersDB = {
     try {
       return JSON.parse(localStorage.getItem(`sr_wishlist_${userId}`) || '[]');
     } catch(e) { return []; }
+  },
+
+  /**
+   * Save Audiobook playback position (progress tracking)
+   * Writes to Firestore users/{uid}/library/{bookId} and localStorage
+   */
+  async saveAudiobookProgress(userId, bookId, positionSeconds, chapterId = '') {
+    if (!userId || !bookId) return null;
+    const progress = {
+      lastPosition: Math.floor(Number(positionSeconds) || 0),
+      lastChapterId: String(chapterId || ''),
+      lastPlayedAt: new Date().toISOString()
+    };
+
+    // 1. LocalStorage mirror for instant resumption
+    try {
+      localStorage.setItem(`sr_audio_progress_${userId}_${bookId}`, JSON.stringify(progress));
+    } catch(e) {}
+
+    // 2. Firestore library document update
+    if (this.db) {
+      try {
+        await this.db.collection('users').doc(userId)
+          .collection('library').doc(bookId)
+          .set({
+            lastPosition: progress.lastPosition,
+            lastChapterId: progress.lastChapterId,
+            lastPlayedAt: progress.lastPlayedAt
+          }, { merge: true });
+      } catch(err) {
+        console.warn('saveAudiobookProgress Firestore notice:', err.message);
+      }
+    }
+    return progress;
+  },
+
+  /**
+   * Retrieve Audiobook playback progress
+   */
+  async getAudiobookProgress(userId, bookId) {
+    if (!userId || !bookId) return null;
+
+    // 1. Check Firestore
+    if (this.db) {
+      try {
+        const doc = await this.db.collection('users').doc(userId).collection('library').doc(bookId).get();
+        if (doc.exists && doc.data().lastPosition !== undefined) {
+          return {
+            lastPosition: Number(doc.data().lastPosition) || 0,
+            lastChapterId: doc.data().lastChapterId || '',
+            lastPlayedAt: doc.data().lastPlayedAt || ''
+          };
+        }
+      } catch(err) {}
+    }
+
+    // 2. Check LocalStorage fallback
+    try {
+      const saved = localStorage.getItem(`sr_audio_progress_${userId}_${bookId}`);
+      if (saved) return JSON.parse(saved);
+    } catch(e) {}
+
+    return null;
+  },
+
+  /**
+   * Request secure authorized access for digital E-book or Audiobook content.
+   */
+  async getSecureContentAccess(contentId, format = 'ebook', chapterId = '') {
+    const user = window.SocialReadersAuth ? window.SocialReadersAuth.getCurrentUser() : null;
+    if (!user) {
+      return { authorized: false, error: 'NOT_LOGGED_IN', message: 'Please sign in to access your purchased content.' };
+    }
+
+    try {
+      let idToken = '';
+      if (this.auth && this.auth.currentUser) {
+        idToken = await this.auth.currentUser.getIdToken(true);
+      }
+
+      const fnUrl = 'https://us-central1-e-book-7c31a.cloudfunctions.net/getSecureContentAccess';
+      const res = await fetch(fnUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': idToken ? `Bearer ${idToken}` : ''
+        },
+        body: JSON.stringify({ contentId, format, chapterId, idToken })
+      });
+
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch(e) {
+      console.warn('Cloud Function secure access notice, checking local entitlements:', e);
+    }
+
+    // Fallback client-side entitlement check
+    const owns = await this.userOwnsBook(user.uid, contentId);
+    if (owns) {
+      const book = await this.getBookById(contentId);
+      return {
+        authorized: true,
+        contentId,
+        format,
+        pdfUrl: book ? (book.pdfUrl || book.pdfStoragePath) : '',
+        chapters: book ? (book.chapters || []) : [],
+        audioUrl: book ? book.audioUrl : ''
+      };
+    }
+
+    return { authorized: false, error: 'ACCESS_DENIED', message: 'Purchase required to access this title.' };
   },
 
   // Master Initializer

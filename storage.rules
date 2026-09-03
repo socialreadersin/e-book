@@ -1,0 +1,40 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return request.auth != null &&
+             firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid));
+    }
+
+    // Public Assets (images, thumbnails, marketing assets)
+    match /public/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Protected E-Books (PDFs)
+    // Direct storage downloads are restricted to Admins.
+    // Customers access protected content exclusively via the authorized Cloud Function (getSecureContentAccess).
+    match /ebooks/{bookId}/{fileName} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Protected Audiobooks (Chapter Audio Files)
+    match /audiobooks/{audiobookId}/{fileName} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Default deny
+    match /{allPaths=**} {
+      allow read: if false;
+      allow write: if isAdmin();
+    }
+  }
+}

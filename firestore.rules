@@ -4,7 +4,7 @@ service cloud.firestore {
 
     // ─── HELPER FUNCTIONS ─────────────────────────────────────────────────────
 
-    // Check if the caller is an authenticated admin (has a document in /admins)
+    // Check if the caller is an authenticated admin in /admins collection
     function isAdmin() {
       return request.auth != null &&
              exists(/databases/$(database)/documents/admins/$(request.auth.uid));
@@ -15,100 +15,101 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    // Check if the caller is the buyer of the order being accessed
-    function isOrderOwner(orderData) {
-      return isAuthenticated() &&
-             (request.auth.uid == orderData.userId ||
-              request.auth.token.email == orderData.buyerEmail ||
-              request.auth.token.email == orderData.customerEmail);
+    // ─── CONTENT & BOOKS COLLECTIONS ──────────────────────────────────────────
+    // Public read for published items only; admin can read/write all
+    match /content/{contentId} {
+      allow read: if resource.data.status == "published" || isAdmin();
+      allow write: if isAdmin();
     }
 
-    // ─── BOOKS COLLECTION ─────────────────────────────────────────────────────
-    // Public read for published books only; admin can read/write all
     match /books/{bookId} {
       allow read: if resource.data.status == "published" || isAdmin();
       allow write: if isAdmin();
     }
 
     // ─── CATEGORIES COLLECTION ────────────────────────────────────────────────
-    // Public read; admin write only
     match /categories/{catId} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
     // ─── DEALS COLLECTION ─────────────────────────────────────────────────────
-    // Public read of active deals; admin write
     match /deals/{dealId} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
     // ─── STORIES COLLECTION ───────────────────────────────────────────────────
-    // Public read; admin write
     match /stories/{storyId} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
     // ─── ORDERS COLLECTION ────────────────────────────────────────────────────
-    // SECURITY:
-    //   create → ONLY authenticated users (prevents anonymous fake orders)
-    //            + strict field validation (amount > 0, required fields present)
-    //            + status must be 'pending' on creation (no client marking 'completed')
-    //   read   → authenticated user who is the buyer, OR admin
-    //   update → admin only (order status updates, including payment confirmation)
-    //   delete → admin only
+    // Security: Only read by the owner or admin.
+    // Writes (creation & marking PAID) happen exclusively via Firebase Cloud Functions (Admin SDK).
     match /orders/{orderId} {
-      allow create: if isAuthenticated()
-                    && request.resource.data.keys().hasAll(['orderId', 'bookId', 'amount', 'status', 'customerEmail'])
-                    && request.resource.data.amount is number
-                    && request.resource.data.amount > 0
-                    && request.resource.data.status == 'pending'
-                    && request.resource.data.customerEmail is string
-                    && request.resource.data.customerEmail.size() > 3;
-
-      allow read: if isAuthenticated() && isOrderOwner(resource.data) || isAdmin();
-      allow update, delete: if isAdmin();
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        resource.data.customerEmail == request.auth.token.email ||
+        resource.data.buyerEmail == request.auth.token.email ||
+        isAdmin()
+      );
+      allow write: if isAdmin();
     }
 
-    // ─── USER ENTITLEMENTS COLLECTION ────────────────────────────────────────
-    // Tracks which books each user has purchased (used to grant library access)
-    // In production (Cloud Functions deployed): write is handled server-side by Admin SDK.
-    // Client-side write is allowed for authenticated owner only — enables sandbox mode.
+    // ─── USER ENTITLEMENTS COLLECTION ─────────────────────────────────────────
+    // Source of truth for digital book ownership
+    // Security: Users can only read their own entitlement doc.
+    // Writes happen exclusively via Firebase Cloud Functions / Admin SDK upon verified payment.
     match /userEntitlements/{userId} {
-      // Authenticated user can only read their own entitlements
-      allow read: if isAuthenticated() && request.auth.uid == userId;
-      // Owner can write their own entitlements (sandbox/demo mode fallback)
-      // When Cloud Functions are deployed, you may tighten this to `if isAdmin()`
-      allow write: if isAuthenticated() && request.auth.uid == userId;
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow write: if isAdmin();
     }
 
-    // ─── USERS COLLECTION & SUBCOLLECTIONS (ReadMate Pattern) ─────────────────
-    // User profile doc, myBooks library subcollection, and bookcase (wishlist) subcollection
+    // ─── USERS COLLECTION & SUBCOLLECTIONS ────────────────────────────────────
     match /users/{userId} {
-      allow read, write: if isAuthenticated() && request.auth.uid == userId || isAdmin();
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      
+      // Users can update their basic profile, but CANNOT elevate roles or inject entitlements
+      allow create, update: if isAuthenticated() && (
+        (request.auth.uid == userId &&
+         !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'isAdmin', 'admin', 'permissions', 'books', 'entitlements'])) ||
+        isAdmin()
+      );
+      allow delete: if isAdmin();
 
-      match /myBooks/{bookId} {
-        allow read, write: if isAuthenticated() && request.auth.uid == userId || isAdmin();
+      // Library subcollection:
+      // Users can read their library and update playback timestamps (lastPosition, lastPlayedAt, lastAccessedAt)
+      // New book entitlement creation is restricted to Admin SDK / Cloud Functions.
+      match /library/{contentId} {
+        allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+        allow update: if isAuthenticated() && request.auth.uid == userId &&
+                      request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastPosition', 'lastPlayedAt', 'lastChapterId', 'lastAccessedAt']);
+        allow write: if isAdmin();
       }
 
-      match /bookcase/{bookId} {
-        allow read, write: if isAuthenticated() && request.auth.uid == userId || isAdmin();
+      match /myBooks/{bookId} {
+        allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+        allow write: if isAdmin();
       }
     }
 
     // ─── ADMINS COLLECTION ────────────────────────────────────────────────────
-    // Admin user list; read/write requires existing admin
     match /admins/{uid} {
-      allow read, write: if isAdmin();
+      allow read: if isAuthenticated() && (request.auth.uid == uid || isAdmin());
+      allow write: if isAdmin();
     }
 
-    // ─── SETTINGS COLLECTION ─────────────────────────────────────────────────
-    // Store-level settings (non-sensitive); public read, admin write
+    // ─── SETTINGS COLLECTION ──────────────────────────────────────────────────
     match /settings/{docId} {
       allow read: if true;
       allow write: if isAdmin();
+    }
+
+    // Default deny for all other paths
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

@@ -1,32 +1,24 @@
 /**
  * Cashfree Payment Gateway Configuration
- * Social Readers — Secure Payment Layer
+ * Social Readers — Production Secure Payment Layer
  *
- * CLIENT-SAFE: Only App ID is stored here (public identifier).
- * Secret Key is NEVER placed in frontend code.
- * Payment session creation happens exclusively in Firebase Cloud Functions.
- *
- * Environment Toggle:
- *   SANDBOX  → Test payments (no real money)
- *   PRODUCTION → Live payments
+ * ⚠️ CLIENT-SAFE: Only public configuration is defined here.
+ * The Cashfree Secret Key is NEVER placed in frontend code.
+ * Payment orders and verification happen exclusively in Firebase Cloud Functions.
  */
 (function () {
   const CASHFREE_CONFIG = {
     // ─── ENVIRONMENT ──────────────────────────────────────────────────────────
-    // Set to 'production' when ready to accept live payments
+    // 'sandbox' for testing or 'production' for live payments
     environment: 'sandbox',
 
     // ─── APP ID (Client-Safe Public Identifier) ───────────────────────────────
-    appId: localStorage.getItem('sr_cashfree_app_id') || 'CF_SANDBOX_DEMO',
-
-    // ─── DEMO / SANDBOX FALLBACK CREDENTIALS (from Cashfree DevStudio) ────────
-    demoSessionId: localStorage.getItem('sr_cashfree_session_id') || 'session_OTLh5zhLOSyLwO90GzwSgTpbnjm6FBy-kU9O7wjif-LbCxr5NjtJer-PM26IiizjbOfEKsSqlly8xnh1HbPnGhus9wfpnq_B4NNSYY4y8sL13sQ1cwlCeiM-Qcspayment',
-    demoOrderId: localStorage.getItem('sr_cashfree_order_id') || 'devstudio_7500965240050705402',
+    appId: 'CF_SANDBOX_DEMO',
 
     // ─── SDK CDN URL ───────────────────────────────────────────────────────────
     sdkUrl: 'https://sdk.cashfree.com/js/v3/cashfree.js',
 
-    // ─── FIREBASE CLOUD FUNCTION ENDPOINT ─────────────────────────────────────
+    // ─── FIREBASE CLOUD FUNCTION ENDPOINTS ────────────────────────────────────
     createOrderFunctionUrl: (() => {
       const projectId = (window.firebaseConfig && window.firebaseConfig.projectId) || 'e-book-7c31a';
       const region = 'us-central1';
@@ -56,12 +48,6 @@
     getAppId() {
       return CASHFREE_CONFIG.appId;
     },
-    getDemoSessionId() {
-      return CASHFREE_CONFIG.demoSessionId;
-    },
-    getDemoOrderId() {
-      return CASHFREE_CONFIG.demoOrderId;
-    },
     getCreateOrderUrl() {
       return CASHFREE_CONFIG.createOrderFunctionUrl;
     },
@@ -80,7 +66,6 @@
         }
         const existing = document.querySelector(`script[src="${CASHFREE_CONFIG.sdkUrl}"]`);
         if (existing) {
-          // Wait for existing script to load
           existing.addEventListener('load', () => resolve(window.Cashfree));
           existing.addEventListener('error', reject);
           return;
@@ -89,7 +74,7 @@
         script.src = CASHFREE_CONFIG.sdkUrl;
         script.async = true;
         script.onload = () => resolve(window.Cashfree);
-        script.onerror = () => reject(new Error('Failed to load Cashfree SDK. Check your internet connection or ad-blocker settings.'));
+        script.onerror = () => reject(new Error('Failed to load Cashfree SDK. Check internet connection or ad-blocker settings.'));
         document.head.appendChild(script);
       });
     },

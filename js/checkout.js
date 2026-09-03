@@ -2,16 +2,12 @@
  * Social Readers — Checkout & Order Processing
  * Payment Gateway: Cashfree Payments (PG JS SDK v3)
  *
- * Architecture:
- *   1. User opens checkout modal → enters name/email
- *   2. "Pay Now" → calls Firebase Cloud Function to create Cashfree order (server-side, secure)
- *   3. Cloud Function returns paymentSessionId
- *   4. Cashfree Drop-in UI opens with paymentSessionId
- *   5. On payment success → Cloud Function verifies payment → Firestore order created
- *   6. Success modal shown → user redirected to library
- *
- * ⚠️  The Cashfree SECRET KEY is NEVER present in this file.
- *     All server-side operations happen in Firebase Cloud Functions only.
+ * Security Principles:
+ *   1. Order creation and pricing calculation are strictly performed server-side by Firebase Cloud Functions.
+ *   2. The Cashfree Secret Key is NEVER in frontend code.
+ *   3. Payment status is strictly verified server-side with the Cashfree API.
+ *   4. Digital entitlements in Firestore are granted ONLY by Cloud Functions / Admin SDK upon verified payment.
+ *   5. The client NEVER modifies payment status or writes directly to user entitlements.
  */
 
 window.SocialReadersCheckout = {
@@ -20,14 +16,9 @@ window.SocialReadersCheckout = {
   async openCheckout(bookId, format = 'ebook') {
     let book = null;
 
-    // Fetch book from Firestore or local cache
-    if (window.SocialReadersDB) {
-      if (window.SocialReadersDB.getBookById) {
-        book = await window.SocialReadersDB.getBookById(bookId);
-      }
-      if (!book && window.SocialReadersDB.getBooksSync) {
-        book = window.SocialReadersDB.getBooksSync(true).find(b => b.id === bookId);
-      }
+    // Fetch book metadata from Firestore
+    if (window.SocialReadersDB && window.SocialReadersDB.getBookById) {
+      book = await window.SocialReadersDB.getBookById(bookId);
     }
 
     if (!book) {
@@ -43,19 +34,19 @@ window.SocialReadersCheckout = {
       ? (window.getLanguage && window.getLanguage() === 'ta' ? (book.author.ta || book.author.en) : book.author.en)
       : book.author;
 
-    // Server-verified price — read from catalog, never from user input
-    let verifiedPrice = 149;
+    // Server-verified base price — Cloud Functions will re-verify against Firestore
+    let displayPrice = 149;
     if (format === 'audiobook') {
-      verifiedPrice = Number(book.priceAudiobook) || Number(book.price) || 199;
+      displayPrice = Number(book.priceAudiobook) || Number(book.price) || 199;
     } else if (format === 'both') {
       const ebookP = Number(book.priceEbook) || Number(book.price) || 149;
       const audioP = Number(book.priceAudiobook) || 199;
-      verifiedPrice = Math.round((ebookP + audioP) * 0.85); // 15% bundle discount
+      displayPrice = Math.round((ebookP + audioP) * 0.85); // 15% bundle discount
     } else {
-      verifiedPrice = Number(book.priceEbook) || Number(book.price) || 149;
+      displayPrice = Number(book.priceEbook) || Number(book.price) || 149;
     }
 
-    if (isNaN(verifiedPrice) || verifiedPrice <= 0) verifiedPrice = 149;
+    if (isNaN(displayPrice) || displayPrice <= 0) displayPrice = 149;
 
     const formatLabel = format === 'audiobook' ? 'Audiobook' : (format === 'both' ? 'E-Book + Audiobook' : 'E-Book');
 
@@ -63,9 +54,10 @@ window.SocialReadersCheckout = {
       bookId: book.id,
       title: titleStr || 'E-Book',
       author: authorStr || 'Author',
-      price: verifiedPrice,
-      coverUrl: book.coverUrl || 'assets/cover-atomic-habits.svg',
-      format: formatLabel
+      price: displayPrice,
+      coverUrl: book.coverImageUrl || book.coverUrl || 'assets/cover-atomic-habits.svg',
+      format: formatLabel,
+      rawFormat: format
     };
 
     this.renderModal();
@@ -216,7 +208,6 @@ window.SocialReadersCheckout = {
 
   _showError(message) {
     console.error('[Checkout]', message);
-    // Show a toast if available, else alert
     if (window.showToast) {
       window.showToast(message, 'error');
     } else {
@@ -241,90 +232,77 @@ window.SocialReadersCheckout = {
     const item = this.currentCartItem;
 
     try {
-      // ─── STEP 1: Create Cashfree Order via Firebase Cloud Function ─────────
-      let paymentSessionId = null;
-      let cashfreeOrderId = null;
-      let finalAmount = item.price;
-
-      if (window.CashfreeService) {
-        payBtn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg><span>Connecting to Cashfree...</span>`;
-
-        try {
-          const orderResult = await window.CashfreeService.createOrder({
-            bookId: item.bookId,
-            format: item.format,
-            buyerName: name,
-            buyerEmail: email
-          });
-          paymentSessionId = orderResult.paymentSessionId;
-          cashfreeOrderId = orderResult.orderId;
-          finalAmount = orderResult.amount || item.price;
-        } catch (cloudFnErr) {
-          console.warn('[Checkout] Cloud Function not reachable, checking sandbox demo session:', cloudFnErr.message);
-          // Sandbox fallback: use the Cashfree DevStudio demo session to launch the real popup modal
-          if (window.CashfreeService.getEnvironment() === 'sandbox') {
-            paymentSessionId = window.CashfreeService.getDemoSessionId();
-            cashfreeOrderId = window.CashfreeService.getDemoOrderId();
-            console.info('[Checkout] Loaded Cashfree DevStudio Sandbox Session:', paymentSessionId);
-          } else {
-            paymentSessionId = null;
-          }
-        }
-
-        if (paymentSessionId) {
-          // ─── STEP 2: Load Cashfree SDK & Open Payment Drop-in Popup ─────────
-          payBtn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg><span>Opening Cashfree Modal...</span>`;
-
-          await window.CashfreeService.loadSDK();
-
-          const cashfree = typeof window.Cashfree === 'function'
-            ? window.Cashfree({ mode: window.CashfreeService.getEnvironment() === 'production' ? 'production' : 'sandbox' })
-            : window.Cashfree;
-
-          const checkoutOptions = {
-            paymentSessionId: paymentSessionId,
-            redirectTarget: '_modal'
-          };
-
-          const result = await cashfree.checkout(checkoutOptions);
-
-          if (result) {
-            if (result.error) {
-              const errMsg = result.error.message || '';
-              if (errMsg.toLowerCase().includes('drop') || errMsg.toLowerCase().includes('close') || result.error.code === 'USER_DROPPED') {
-                this._showCheckoutError('Payment window was closed.');
-                return;
-              }
-              throw new Error(errMsg || 'Payment was declined or cancelled.');
-            }
-
-            if (result.redirect) {
-              return;
-            }
-
-            if (result.paymentDetails || result.payment_status === 'SUCCESS') {
-              await this._handlePaymentSuccess({
-                cashfreeOrderId: cashfreeOrderId,
-                paymentDetails: result.paymentDetails || { status: 'SUCCESS' },
-                buyerName: name,
-                buyerEmail: email,
-                item: item,
-                finalAmount: finalAmount
-              });
-              return;
-            }
-          }
-
-          // In sandbox mode with DevStudio session, if popup was completed or dismissed without error
-          if (window.CashfreeService.getEnvironment() === 'sandbox') {
-            await this._handleTestModeCheckout({ name, email, item });
-            return;
-          }
-        }
+      if (!window.CashfreeService) {
+        throw new Error('Payment gateway is currently initializing. Please try again in a moment.');
       }
 
-      // ─── FALLBACK: Test/Demo mode ──────────────────────────────────────────
-      await this._handleTestModeCheckout({ name, email, item });
+      // ─── STEP 1: Create Cashfree Order via Firebase Cloud Function ─────────
+      payBtn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg><span>Connecting to Cashfree...</span>`;
+
+      const orderResult = await window.CashfreeService.createOrder({
+        bookId: item.bookId,
+        format: item.rawFormat || 'ebook',
+        buyerName: name,
+        buyerEmail: email
+      });
+
+      const paymentSessionId = orderResult.paymentSessionId;
+      const cashfreeOrderId = orderResult.orderId;
+      const finalAmount = orderResult.amount || item.price;
+
+      if (!paymentSessionId) {
+        throw new Error('Payment session could not be established. Please try again.');
+      }
+
+      // ─── STEP 2: Load Cashfree SDK & Open Payment Drop-in Popup ───────────
+      payBtn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg><span>Opening Payment Window...</span>`;
+
+      await window.CashfreeService.loadSDK();
+
+      const cashfree = typeof window.Cashfree === 'function'
+        ? window.Cashfree({ mode: window.CashfreeService.getEnvironment() === 'production' ? 'production' : 'sandbox' })
+        : window.Cashfree;
+
+      const checkoutOptions = {
+        paymentSessionId: paymentSessionId,
+        redirectTarget: '_modal'
+      };
+
+      const result = await cashfree.checkout(checkoutOptions);
+
+      if (result) {
+        if (result.error) {
+          const errMsg = result.error.message || '';
+          if (errMsg.toLowerCase().includes('drop') || errMsg.toLowerCase().includes('close') || result.error.code === 'USER_DROPPED') {
+            this._showCheckoutError('Payment window was closed.');
+            return;
+          }
+          throw new Error(errMsg || 'Payment was declined or cancelled.');
+        }
+
+        if (result.redirect) {
+          return;
+        }
+
+        // ─── STEP 3: Server-side Payment Verification ───────────────────────
+        payBtn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg><span>Verifying with Server...</span>`;
+
+        const verification = await window.CashfreeService.verifyPayment(cashfreeOrderId);
+
+        if (verification && verification.success && verification.status === 'PAID') {
+          this.showSuccessModal({
+            orderId: cashfreeOrderId,
+            amount: finalAmount,
+            causeShare: Number((finalAmount * 0.25).toFixed(2)),
+            customerEmail: email,
+            bookTitle: item.title,
+            format: item.format
+          });
+          return;
+        } else {
+          throw new Error('Payment status could not be verified by server. If amount was deducted, access will be granted automatically via webhook.');
+        }
+      }
 
     } catch (err) {
       console.error('[Checkout] Payment error:', err);
@@ -340,127 +318,12 @@ window.SocialReadersCheckout = {
     }
   },
 
-  async _handlePaymentSuccess({ cashfreeOrderId, paymentDetails, buyerName, buyerEmail, item, finalAmount }) {
-    const orderId = cashfreeOrderId || `SR-${Math.floor(1000 + Math.random() * 9000)}`;
-    const paymentId = (paymentDetails && paymentDetails.paymentId) || `cf_${Date.now()}`;
-
-    // Resolve current Firebase user UID (best-effort)
-    let userId = null;
-    try {
-      if (typeof firebase !== 'undefined' && firebase.auth && firebase.apps && firebase.apps.length) {
-        const fbUser = firebase.auth().currentUser;
-        if (fbUser) userId = fbUser.uid;
-      }
-      if (!userId) {
-        const session = JSON.parse(localStorage.getItem('sr_user_auth') || '{}');
-        userId = session.uid || null;
-      }
-    } catch (e) {}
-
-    const order = {
-      orderId: orderId,
-      paymentId: paymentId,
-      gateway: 'cashfree',
-      userId: userId || '',
-      customerName: buyerName,
-      buyerName: buyerName,
-      customerEmail: buyerEmail,
-      buyerEmail: buyerEmail,
-      bookId: item.bookId,
-      bookTitle: item.title,
-      format: item.format,
-      amount: finalAmount || item.price,
-      causeShare: Number(((finalAmount || item.price) * 0.25).toFixed(2)),
-      status: 'completed',
-      date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
-      createdAt: new Date().toISOString()
-    };
-
-    if (window.SocialReadersDB && window.SocialReadersDB.createOrder) {
-      await window.SocialReadersDB.createOrder(order);
-    }
-
-    // ── Grant library access immediately (client-side entitlement fallback) ──
-    // In production, Cloud Functions do this via Admin SDK after webhook.
-    // This client-side grant ensures instant My Library update even in sandbox/demo mode.
-    if (userId && window.SocialReadersDB && window.SocialReadersDB.grantLibraryAccess) {
-      await window.SocialReadersDB.grantLibraryAccess(userId, item.bookId, orderId, item.format);
-    } else if (!userId) {
-      // No logged-in user — store entitlement by email as fallback
-      try {
-        const emailKey = `sr_guest_lib_${buyerEmail.toLowerCase().trim()}`;
-        const stored = JSON.parse(localStorage.getItem(emailKey) || '[]');
-        stored.unshift({ bookId: item.bookId, orderId, format: item.format, purchasedAt: new Date().toISOString() });
-        localStorage.setItem(emailKey, JSON.stringify(stored));
-      } catch (e) {}
-    }
-
-    this.showSuccessModal(order);
-  },
-
-  async _handleTestModeCheckout({ name, email, item }) {
-    // SANDBOX / Test mode: record a pending order and grant library access for UX demo
-    const orderId = `SR-TEST-${Math.floor(1000 + Math.random() * 9000)}`;
-
-    // Resolve current user
-    let userId = null;
-    try {
-      if (typeof firebase !== 'undefined' && firebase.auth && firebase.apps && firebase.apps.length) {
-        const fbUser = firebase.auth().currentUser;
-        if (fbUser) userId = fbUser.uid;
-      }
-      if (!userId) {
-        const session = JSON.parse(localStorage.getItem('sr_user_auth') || '{}');
-        userId = session.uid || null;
-      }
-    } catch (e) {}
-
-    const order = {
-      orderId: orderId,
-      paymentId: `test_${Date.now()}`,
-      gateway: 'cashfree-test',
-      userId: userId || '',
-      customerName: name,
-      buyerName: name,
-      customerEmail: email,
-      buyerEmail: email,
-      bookId: item.bookId,
-      bookTitle: item.title,
-      format: item.format,
-      amount: item.price,
-      causeShare: Number((item.price * 0.25).toFixed(2)),
-      status: 'pending',
-      testMode: true,
-      date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
-      createdAt: new Date().toISOString()
-    };
-
-    if (window.SocialReadersDB && window.SocialReadersDB.createOrder) {
-      await window.SocialReadersDB.createOrder(order);
-    }
-
-    // Grant library access even in test mode for instant My Library feedback
-    if (userId && window.SocialReadersDB && window.SocialReadersDB.grantLibraryAccess) {
-      await window.SocialReadersDB.grantLibraryAccess(userId, item.bookId, orderId, item.format);
-    }
-
-    // Show a test mode success modal with helpful notice
-    this.showSuccessModal(order, true);
-  },
-
-  showSuccessModal(order, isTestMode = false) {
+  showSuccessModal(order) {
     const esc = (window.SocialReadersUtils && window.SocialReadersUtils.escapeHtml)
       ? window.SocialReadersUtils.escapeHtml
       : (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
     const modal = document.getElementById('sr-checkout-modal');
-
-    const testModeBanner = isTestMode ? `
-      <div class="mb-4 p-2.5 bg-amber-50 border border-amber-300 rounded-xl text-[10px] text-amber-700 flex items-start gap-2">
-        <span>⚠️</span>
-        <span><strong>Sandbox Mode:</strong> Real payment not processed. Deploy Firebase Cloud Functions to enable live payments.</span>
-      </div>
-    ` : '';
 
     modal.innerHTML = `
       <div class="bg-white rounded-3xl max-w-md w-full max-h-[92vh] overflow-y-auto p-6 sm:p-8 shadow-2xl border border-gray-100 text-center animate-scaleUp">
@@ -468,10 +331,8 @@ window.SocialReadersCheckout = {
           <svg class="w-7 h-7 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
         </div>
 
-        <h3 class="text-xl sm:text-2xl font-extrabold text-navy">Thank You for Reading &amp; Giving!</h3>
+        <h3 class="text-xl sm:text-2xl font-extrabold text-navy">Payment Verified!</h3>
         <p class="text-xs text-gray-500 mt-1">Order Ref: <strong class="font-mono text-navy">${esc(order.orderId)}</strong></p>
-
-        ${testModeBanner}
 
         <div class="my-5 sm:my-6 p-3.5 sm:p-4 bg-orange-50 rounded-2xl border border-orange-200 text-left space-y-1.5">
           <div class="flex justify-between text-xs text-gray-600">
@@ -483,14 +344,14 @@ window.SocialReadersCheckout = {
             <span>₹${order.causeShare}</span>
           </div>
           <div class="flex justify-between text-xs text-gray-600 pt-1 border-t border-orange-200/60">
-            <span>Delivery:</span>
-            <span class="text-forest font-semibold truncate ml-2">Sent to ${esc(order.customerEmail)}</span>
+            <span>Access:</span>
+            <span class="text-forest font-semibold truncate ml-2">Delivered to ${esc(order.customerEmail)}</span>
           </div>
         </div>
 
         <div class="space-y-2 sm:space-y-2.5">
           <a href="account.html" class="block w-full py-3 rounded-full bg-navy text-white text-xs font-bold hover:bg-blue-950 active:scale-95 transition-all">
-            Go to My Library &amp; Download
+            Go to My Library
           </a>
           <button id="close-success-modal-btn" class="block w-full py-2 text-xs text-gray-500 hover:text-navy font-semibold">
             Continue Browsing Store
@@ -503,7 +364,6 @@ window.SocialReadersCheckout = {
       modal.classList.add('hidden');
     });
 
-    // Trigger real-time cart/library refresh events
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('sr_order_created', { detail: order }));
     }
