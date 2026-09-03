@@ -15,6 +15,10 @@
   Content-Type: text/css; charset=utf-8
   Cache-Control: public, max-age=86400
 
+/js/*config*.js
+  Content-Type: application/javascript; charset=utf-8
+  Cache-Control: no-cache, no-store, must-revalidate
+
 /js/*.js
   Content-Type: application/javascript; charset=utf-8
   Cache-Control: public, max-age=86400

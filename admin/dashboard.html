@@ -10,10 +10,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <!-- Dynamic External Configs & Shared Persistence Layer -->
-  <script src="../js/firebase-config.js"></script>
-  <script src="../js/cloudinary.config.js"></script>
-  <script src="../js/cashfree-config.js"></script>
-  <script src="../js/ebook-service.js"></script>
+  <script src="/js/firebase-config.js?v=2.2"></script>
+  <script src="/js/cloudinary.config.js?v=2.2"></script>
+  <script src="/js/cashfree-config.js?v=2.2"></script>
+  <script src="/js/ebook-service.js?v=2.2"></script>
   
   <style>
     :root {
@@ -1327,21 +1327,26 @@
     // ----------------------------------------------------
     // 1. CONFIGURATION & CREDENTIALS (Referenced from firebase-config.js)
     // ----------------------------------------------------
-    const firebaseConfig = (typeof window !== 'undefined' && window.firebaseConfig) ? window.firebaseConfig : {
-      apiKey: "",
-      authDomain: "",
-      projectId: "",
-      storageBucket: "",
-      messagingSenderId: "",
-      appId: ""
+    const DEFAULT_PROD_FIREBASE = {
+      apiKey: "AIzaSyDRz477R0X0lexNOSsHZiUmNs3ut5VzaWk",
+      authDomain: "e-book-7c31a.firebaseapp.com",
+      projectId: "e-book-7c31a",
+      storageBucket: "e-book-7c31a.firebasestorage.app",
+      messagingSenderId: "34774269799",
+      appId: "1:34774269799:web:225f344859794de1a139c2",
+      measurementId: "G-Y5HDMGDDPR"
     };
 
-    const CLOUD_NAME = (typeof window !== 'undefined' && window.CLOUDINARY_CONFIG) 
-      ? (window.CLOUDINARY_CONFIG.cloudName || '') 
-      : (window.CloudinaryService?.getCloudName ? window.CloudinaryService.getCloudName() : '');
-    const UPLOAD_PRESET = (typeof window !== 'undefined' && window.CLOUDINARY_CONFIG) 
-      ? (window.CLOUDINARY_CONFIG.uploadPreset || '') 
-      : (window.CloudinaryService?.getUploadPreset ? window.CloudinaryService.getUploadPreset() : '');
+    const firebaseConfig = (typeof window !== 'undefined' && window.firebaseConfig && window.firebaseConfig.apiKey && !window.firebaseConfig.apiKey.includes('[YOUR_')) 
+      ? window.firebaseConfig 
+      : DEFAULT_PROD_FIREBASE;
+
+    const CLOUD_NAME = (typeof window !== 'undefined' && window.CLOUDINARY_CONFIG && window.CLOUDINARY_CONFIG.cloudName) 
+      ? window.CLOUDINARY_CONFIG.cloudName 
+      : (window.CloudinaryService?.getCloudName ? window.CloudinaryService.getCloudName() : 'socialreaders');
+    const UPLOAD_PRESET = (typeof window !== 'undefined' && window.CLOUDINARY_CONFIG && window.CLOUDINARY_CONFIG.uploadPreset) 
+      ? window.CLOUDINARY_CONFIG.uploadPreset 
+      : (window.CloudinaryService?.getUploadPreset ? window.CloudinaryService.getUploadPreset() : 'tfy3lcci');
 
     // Global App State
     let app, auth, db;
