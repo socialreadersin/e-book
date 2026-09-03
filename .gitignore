@@ -3,6 +3,8 @@
 .env.local
 .env.*
 *.env
+js/firebase-config.js
+js/cloudinary.config.js
 
 # Dependencies
 node_modules/

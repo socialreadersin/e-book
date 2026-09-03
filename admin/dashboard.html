@@ -1327,19 +1327,17 @@
     // ----------------------------------------------------
     // 1. CONFIGURATION & CREDENTIALS (Referenced from firebase-config.js)
     // ----------------------------------------------------
-    const DEFAULT_PROD_FIREBASE = {
-      apiKey: "AIzaSyDRz477R0X0lexNOSsHZiUmNs3ut5VzaWk",
-      authDomain: "e-book-7c31a.firebaseapp.com",
-      projectId: "e-book-7c31a",
-      storageBucket: "e-book-7c31a.firebasestorage.app",
-      messagingSenderId: "34774269799",
-      appId: "1:34774269799:web:225f344859794de1a139c2",
-      measurementId: "G-Y5HDMGDDPR"
-    };
-
-    const firebaseConfig = (typeof window !== 'undefined' && window.firebaseConfig && window.firebaseConfig.apiKey && !window.firebaseConfig.apiKey.includes('[YOUR_')) 
+    const firebaseConfig = (typeof window !== 'undefined' && window.firebaseConfig && window.firebaseConfig.apiKey) 
       ? window.firebaseConfig 
-      : DEFAULT_PROD_FIREBASE;
+      : {
+        apiKey: (typeof localStorage !== 'undefined' && (localStorage.getItem('ebook_firebase_api_key') || localStorage.getItem('sr_firebase_api_key'))) || '',
+        authDomain: "e-book-7c31a.firebaseapp.com",
+        projectId: "e-book-7c31a",
+        storageBucket: "e-book-7c31a.firebasestorage.app",
+        messagingSenderId: "34774269799",
+        appId: "1:34774269799:web:225f344859794de1a139c2",
+        measurementId: "G-Y5HDMGDDPR"
+      };
 
     const CLOUD_NAME = (typeof window !== 'undefined' && window.CLOUDINARY_CONFIG && window.CLOUDINARY_CONFIG.cloudName) 
       ? window.CLOUDINARY_CONFIG.cloudName 
