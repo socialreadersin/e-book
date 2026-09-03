@@ -76,35 +76,38 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 .bg-cream { background-color: #FAF7F2; }
 
-/* Enhanced Book Cards with smooth touch responses */
+/* Rock-solid, flicker-free card interaction system */
 .book-card {
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
-}
-
-.book-card:active {
-  transform: scale(0.97);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 @media (min-width: 768px) {
   .book-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 16px 30px -8px rgba(11, 44, 93, 0.14), 0 8px 16px -6px rgba(11, 44, 93, 0.08);
+    box-shadow: 0 12px 28px -6px rgba(11, 44, 93, 0.15), 0 4px 12px -2px rgba(11, 44, 93, 0.08);
+    border-color: rgba(11, 44, 93, 0.2);
+  }
+  
+  .book-card:hover img {
+    transform: scale(1.02);
   }
 }
 
-.category-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.book-card img {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 }
 
-.category-card:active {
-  transform: scale(0.97);
+.category-card {
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+  transform: translateZ(0);
 }
 
 @media (min-width: 768px) {
   .category-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px -6px rgba(11, 44, 93, 0.12);
+    box-shadow: 0 10px 24px -4px rgba(11, 44, 93, 0.12);
+    border-color: rgba(11, 44, 93, 0.25);
   }
 }
 
@@ -333,26 +336,27 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 /* 2. Amazon 4-in-1 Quad Feature Cards */
 .amazon-quad-card {
   background: #FFFFFF;
-  border-radius: 1rem;
+  border-radius: 1.25rem;
   border: 1px solid #F3F4F6;
   box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
 .amazon-quad-card:hover {
-  box-shadow: 0 12px 24px -4px rgba(11, 44, 93, 0.12);
-  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -4px rgba(11, 44, 93, 0.12);
+  border-color: rgba(11, 44, 93, 0.15);
 }
 
 .amazon-mini-tile {
-  transition: transform 0.15s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .amazon-mini-tile:hover {
-  transform: scale(1.03);
+  background-color: #F8FAFC;
+  border-color: rgba(11, 44, 93, 0.2);
 }
 
 /* 3. Lightning Deals & Countdown Timer */
@@ -641,9 +645,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   z-index: 4;
 }
 
+.ebook-cover-wrapper {
+  transition: box-shadow 0.25s ease;
+}
+
 .ebook-cover-wrapper:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 20px 30px -10px rgba(11, 44, 93, 0.25), 0 10px 15px -5px rgba(11, 44, 93, 0.15);
+  box-shadow: 0 16px 28px -8px rgba(11, 44, 93, 0.22);
 }
 
 /* Subtle Glassmorphic Badges */

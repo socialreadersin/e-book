@@ -16,8 +16,14 @@ window.SocialReadersCheckout = {
   async openCheckout(bookId, format = 'ebook') {
     let book = null;
 
-    // Fetch book metadata from Firestore
-    if (window.SocialReadersDB && window.SocialReadersDB.getBookById) {
+    // 1. Instant synchronous check from in-memory cache
+    if (window.SocialReadersDB && window.SocialReadersDB.getBooksSync) {
+      const syncBooks = window.SocialReadersDB.getBooksSync(true);
+      book = syncBooks.find(b => b.id === bookId) || null;
+    }
+
+    // 2. Fallback to async fetch if not in sync cache
+    if (!book && window.SocialReadersDB && window.SocialReadersDB.getBookById) {
       book = await window.SocialReadersDB.getBookById(bookId);
     }
 

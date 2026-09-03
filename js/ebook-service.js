@@ -652,14 +652,23 @@ window.SocialReadersDB = {
   },
 
   async getBookById(id) {
+    if (!id) return null;
+    // 1. Instant synchronous check
+    const syncBooks = this.getBooksSync(true);
+    const cached = syncBooks.find(b => b.id === id);
+    if (cached) return cached;
+
+    // 2. Query Firestore with 1.5s timeout protection
     if (this.db) {
       try {
-        const doc = await this.db.collection('books').doc(id).get();
-        if (doc.exists) {
+        const docPromise = this.db.collection('books').doc(id).get();
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 1500));
+        const doc = await Promise.race([docPromise, timeoutPromise]);
+        if (doc && doc.exists) {
           return this.normalizeBook({ id: doc.id, ...doc.data() });
         }
       } catch (err) {
-        console.warn("Firestore getBookById notice:", err.message);
+        // Fallback to local
       }
     }
     const books = await this.getBooks(true);
