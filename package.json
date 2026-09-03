@@ -5,13 +5,10 @@
   "description": "Social Readers - Fullstack Frontend with Dual-Transport Firebase, Cloudflare & Cloudinary",
   "scripts": {
     "build": "node build-config.js",
-    "typecheck": "tsc --noEmit",
     "start": "python3 -m http.server 8080",
     "deploy": "npx wrangler deploy"
   },
   "devDependencies": {
-    "@types/node": "^26.4.1",
-    "typescript": "^7.0.2",
     "wrangler": "^4.127.1"
   }
 }
