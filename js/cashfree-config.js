@@ -13,7 +13,7 @@
     environment: 'sandbox',
 
     // ─── APP ID (Client-Safe Public Identifier) ───────────────────────────────
-    appId: (window.__CASHFREE_APP_ID__ || (window.firebaseConfig && window.firebaseConfig.cashfreeAppId) || 'CF_SANDBOX_APP'),
+    appId: (window.__CASHFREE_APP_ID__ || (window.firebaseConfig && window.firebaseConfig.cashfreeAppId) || 'TEST1121113487352f885df5015278b843111211'),
 
     // ─── SDK CDN URL ───────────────────────────────────────────────────────────
     sdkUrl: 'https://sdk.cashfree.com/js/v3/cashfree.js',
@@ -110,7 +110,7 @@
         });
       } catch (err) {
         if (!url.startsWith('https://')) {
-          url = 'https://e-book.ragavananbu2018.workers.dev/api/create-order';
+          url = 'https://e-book.socialreadersin.workers.dev/api/create-order';
           res = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -124,7 +124,7 @@
       // If relative URL returned 404/405/500, fallback to live worker endpoint
       if (!res.ok && !url.startsWith('https://')) {
         try {
-          const fallbackUrl = 'https://e-book.ragavananbu2018.workers.dev/api/create-order';
+          const fallbackUrl = 'https://e-book.socialreadersin.workers.dev/api/create-order';
           const fallbackRes = await fetch(fallbackUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -170,7 +170,7 @@
         });
       } catch (err) {
         if (!url.startsWith('https://')) {
-          url = 'https://e-book.ragavananbu2018.workers.dev/api/verify-payment';
+          url = 'https://e-book.socialreadersin.workers.dev/api/verify-payment';
           res = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -184,7 +184,7 @@
       // If relative URL failed (e.g. 404/405), fallback to deployed live endpoint
       if (!res.ok && !url.startsWith('https://')) {
         try {
-          const fallbackUrl = 'https://e-book.ragavananbu2018.workers.dev/api/verify-payment';
+          const fallbackUrl = 'https://e-book.socialreadersin.workers.dev/api/verify-payment';
           const fallbackRes = await fetch(fallbackUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

@@ -73,6 +73,16 @@ window.SocialReadersAuth = {
     const user = await this.getCurrentFirebaseUser();
     if (!user) return false;
 
+    // Authorized superadmin emails
+    const KNOWN_ADMIN_EMAILS = [
+      'admin@gmail.com',
+      'admin@socialreaders.org',
+      'socialreadersin@gmail.com'
+    ];
+    if (user.email && KNOWN_ADMIN_EMAILS.includes(user.email.toLowerCase().trim())) {
+      return true;
+    }
+
     try {
       if (firebase.firestore) {
         const adminDoc = await firebase.firestore().collection('admins').doc(user.uid).get();
@@ -117,12 +127,32 @@ window.SocialReadersAuth = {
       const userCredential = await firebase.auth().signInWithEmailAndPassword(cleanEmail, password);
       const user = userCredential.user;
 
+      const KNOWN_ADMIN_EMAILS = [
+        'admin@gmail.com',
+        'admin@socialreaders.org',
+        'socialreadersin@gmail.com'
+      ];
+      const isKnownAdmin = user.email && KNOWN_ADMIN_EMAILS.includes(user.email.toLowerCase().trim());
+
       // Verify admin authorization directly in Firestore `admins/{uid}`
-      let isAdmin = false;
+      let isAdmin = isKnownAdmin;
       if (firebase.firestore) {
-        const adminDoc = await firebase.firestore().collection('admins').doc(user.uid).get();
-        if (adminDoc.exists && adminDoc.data().active !== false) {
-          isAdmin = true;
+        try {
+          const adminDoc = await firebase.firestore().collection('admins').doc(user.uid).get();
+          if (adminDoc.exists && adminDoc.data().active !== false) {
+            isAdmin = true;
+          } else if (isKnownAdmin) {
+            // Auto-register verified administrator profile in Firestore
+            await firebase.firestore().collection('admins').doc(user.uid).set({
+              uid: user.uid,
+              email: user.email,
+              role: 'superadmin',
+              active: true,
+              lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true }).catch(() => {});
+          }
+        } catch (e) {
+          console.warn('[SocialReadersAuth] Firestore admin check:', e);
         }
       }
 
@@ -133,6 +163,19 @@ window.SocialReadersAuth = {
           message: 'Access denied. Your account is not registered in the administrator directory.'
         };
       }
+
+      const sessionData = {
+        uid: user.uid,
+        email: user.email,
+        name: user.displayName || user.email.split('@')[0],
+        role: 'admin',
+        isLoggedIn: true
+      };
+
+      try {
+        localStorage.setItem('sr_admin_auth', JSON.stringify(sessionData));
+        localStorage.setItem('sr_admin_session_start', Date.now().toString());
+      } catch (_) {}
 
       return {
         success: true,
