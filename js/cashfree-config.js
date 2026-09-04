@@ -87,7 +87,7 @@
      * @returns {Promise<{ orderId, paymentSessionId, amount }>}
      */
     async createOrder(orderRequest) {
-      const url = this.getCreateOrderUrl();
+      let url = this.getCreateOrderUrl();
       const currentUser = window.SocialReadersAuth && window.SocialReadersAuth.getCurrentUser
         ? window.SocialReadersAuth.getCurrentUser()
         : null;
@@ -101,11 +101,40 @@
         environment: CASHFREE_CONFIG.environment
       };
 
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+      let res;
+      try {
+        res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        if (!url.startsWith('https://')) {
+          url = 'https://e-book.ragavananbu2018.workers.dev/api/create-order';
+          res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        } else {
+          throw err;
+        }
+      }
+
+      // If relative URL returned 404/405/500, fallback to live worker endpoint
+      if (!res.ok && !url.startsWith('https://')) {
+        try {
+          const fallbackUrl = 'https://e-book.ragavananbu2018.workers.dev/api/create-order';
+          const fallbackRes = await fetch(fallbackUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (fallbackRes.ok) {
+            return await fallbackRes.json();
+          }
+        } catch (_) {}
+      }
 
       if (!res.ok) {
         let errMsg = `Order creation failed (HTTP ${res.status})`;
@@ -124,22 +153,53 @@
     },
 
     /**
-     * Verify payment status via Firebase Cloud Function
+     * Verify payment status via Cloudflare Worker
      * @param {string} orderId - The Cashfree order ID
      * @returns {Promise<{ success: boolean, status: string, order?: Object }>}
      */
     async verifyPayment(orderId) {
-      const url = this.getVerifyPaymentUrl();
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId, environment: CASHFREE_CONFIG.environment })
-      });
+      let url = this.getVerifyPaymentUrl();
+      const payload = { orderId, environment: CASHFREE_CONFIG.environment };
+
+      let res;
+      try {
+        res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        if (!url.startsWith('https://')) {
+          url = 'https://e-book.ragavananbu2018.workers.dev/api/verify-payment';
+          res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        } else {
+          throw err;
+        }
+      }
+
+      // If relative URL failed (e.g. 404/405), fallback to deployed live endpoint
+      if (!res.ok && !url.startsWith('https://')) {
+        try {
+          const fallbackUrl = 'https://e-book.ragavananbu2018.workers.dev/api/verify-payment';
+          const fallbackRes = await fetch(fallbackUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (fallbackRes.ok) {
+            return await fallbackRes.json();
+          }
+        } catch (_) {}
+      }
 
       if (!res.ok) {
-        throw new Error(`Payment verification failed (HTTP ${res.status})`);
+        return { success: false, status: 'FAILED' };
       }
-      return res.json();
+      return await res.json();
     }
   };
 

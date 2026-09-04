@@ -1,8 +1,10 @@
 # Cloudflare Workers Assets Ignore List
-node_modules/
-.git/
-.github/
-.wrangler/
+node_modules/**
+node_modules
+.git/**
+.git
+.github/**
+.wrangler/**
 .DS_Store
 .env*
 *.local
@@ -21,3 +23,5 @@ README.md
 *.log
 .agents/
 .gemini/
+functions/
+worker.js

@@ -28,7 +28,7 @@ graph TD
     
     Frontend -->|Live Auth & Session| FirebaseAuth[Firebase Auth]
     Frontend -->|Real-Time Catalog & Scoped Orders| Firestore[Cloud Firestore]
-    Frontend -->|Payment Gateway| Razorpay[Razorpay Standard SDK]
+    Frontend -->|Payment Gateway| Cashfree[Cashfree Payments PG SDK]
     
     AdminPanel -->|Auth Guard requireAdmin| FirebaseAuth
     AdminPanel -->|CRUD Operations| Firestore
@@ -47,7 +47,7 @@ graph TD
 | **Authentication** | Firebase Auth | Email/Password login for both customers and store administrators |
 | **Database** | Cloud Firestore | Real-time collections for `books`, `orders`, `stories`, `deals`, `categories`, `settings`, `admins` |
 | **Media Hosting** | Cloudinary CDN | High-speed delivery of book covers, author portraits, audio samples, and documents |
-| **Payments** | Razorpay Checkout SDK | Test Mode (`rzp_test_TWjICbE8TiyTnQ`) & Live Mode ready |
+| **Payments** | Cashfree PG SDK | Sandbox & Live Mode ready via Cloudflare Pages serverless endpoints (`/api/create-order`, `/api/verify-payment`) |
 | **Deployment** | Cloudflare Pages / Workers | Global Edge delivery with HTTPS and zero-config caching |
 
 ---
@@ -75,7 +75,7 @@ graph TD
   - **Personal 25% Impact Tracker:** Dynamically calculates total contribution, textbooks funded, and athletic shoes sponsored.
 - ✅ **Audiobook Web Player (`js/audio-player.js`):** Sticky, floating bottom audio player with Play/Pause, 15s skip, progress scrub, and audio sample previews.
 - ✅ **Interactive E-Book Reader (`js/reader.js`):** Clean reading modal with original chapter previews, dark mode toggle, font scaling (A- / A+), and progress bar.
-- ✅ **Secure Checkout (`js/checkout.js`):** Real Razorpay checkout flow with dynamic pre-fill of logged-in user credentials and 25% transparent cause calculation.
+- ✅ **Secure Checkout (`js/checkout.js`):** Real Cashfree checkout flow with dynamic pre-fill of logged-in user credentials, serverless order session creation, and 25% transparent cause calculation.
 - ✅ **Full Admin Suite (`admin/*.html`):** Protected by `requireAdmin()`. Real Firestore CRUD for Books, Categories, Stories, Lightning Deals, and Platform Settings.
 
 ---
@@ -151,12 +151,16 @@ const firebaseConfig = {
      }
      ```
 
-3. **Cloudflare Secrets (For Backend Worker APIs / Razorpay Secret):**
-   - Keep your Razorpay Key Secret (`z6yPl1bxc...`) out of frontend files.
-   - If using Cloudflare Workers backend functions, add secrets via CLI:
-     ```bash
-     npx wrangler secret put RAZORPAY_KEY_SECRET
-     ```
+3. **Cloudflare Pages Environment Variables (For Cashfree PG Integration):**
+   - Keep Cashfree API credentials (`CASHFREE_APP_ID`, `CASHFREE_SECRET_KEY`) out of git repository files and frontend scripts.
+   - Because this project deploys via **Cloudflare Pages Git Integration** (not `wrangler deploy`), these must never be committed to `wrangler.jsonc` or any public config. Set them securely via the Cloudflare Pages dashboard:
+     1. Open **Cloudflare Dashboard** → **Workers & Pages** → select your project (`e-book`).
+     2. Navigate to **Settings** → **Environment variables**.
+     3. Under **Production** (and **Preview**), add the following variables:
+        - `CASHFREE_APP_ID`: Your Cashfree Merchant App ID
+        - `CASHFREE_SECRET_KEY`: Your Cashfree Secret Key (select **Encrypt**)
+        - `CASHFREE_ENVIRONMENT`: `sandbox` (for testing) or `production` (for live payments)
+     4. Save and redeploy. The serverless Cloudflare Pages functions (`/functions/api/create-order.js` and `/functions/api/verify-payment.js`) read these safely at runtime via `context.env`.
 
 ---
 
@@ -185,13 +189,13 @@ const firebaseConfig = {
 - [x] Firebase SDK & Firestore integration for books, orders, stories, deals, settings.
 - [x] Cloudinary direct upload integration for admin cover/media management.
 - [x] Scoped User Library and Order History (No demo data leaks).
-- [x] Real Razorpay Standard Checkout SDK popup with 25% social share calculation.
+- [x] Real Cashfree PG SDK popup/redirect checkout with 25% social share calculation.
 - [x] Admin security guard (`requireAdmin()`) protecting all admin routes.
 - [x] Fix Cloudflare deployment 404s by properly tracking `js/firebase-config.js`.
 
 ### ⏳ Pending Roadmap for Production Launch:
 - [ ] **Full PDF Canvas Viewer (PDF.js):** Embed in-browser protected PDF reader that restricts raw downloads to verified order IDs.
-- [ ] **Automated Order Receipt Emails:** Setup Firebase Cloud Function or Cloudflare Worker with SendGrid / Resend to automatically email PDF download links upon Razorpay webhook trigger.
+- [ ] **Automated Order Receipt Emails:** Setup Firebase Cloud Function or Cloudflare Worker with SendGrid / Resend to automatically email PDF download links upon Cashfree webhook trigger.
 - [ ] **Google Cloud API Key Domain Restriction:** Apply HTTP referrer domain restriction in Google Cloud Console.
 - [ ] **Custom Domain Setup:** Map `socialreaders.org` or `store.socialreaders.org` in Cloudflare Dashboard.
 

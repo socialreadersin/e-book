@@ -159,18 +159,30 @@ window.SocialReadersAuth = {
   },
 
   /**
-   * Logout Admin
+   * Logout Admin - Professional Complete Session Termination
    */
   async logoutAdmin() {
     ensureFirebaseInitialized();
-    if (typeof firebase !== 'undefined' && firebase.auth) {
-      try {
+    try {
+      if (typeof firebase !== 'undefined' && firebase.auth && firebase.apps.length) {
         await firebase.auth().signOut();
-      } catch (e) {
-        console.warn(e);
       }
+    } catch (e) {
+      console.warn('[SocialReadersAuth] Sign out notice:', e);
     }
-    window.location.href = 'login.html';
+
+    try {
+      localStorage.removeItem('sr_admin_auth');
+      localStorage.removeItem('sr_admin_session_start');
+      localStorage.removeItem('sr_admin_session_expiry');
+      sessionStorage.removeItem('sr_admin_session');
+      sessionStorage.clear();
+    } catch (_) {}
+
+    // Determine target login page URL based on current path
+    const isInsideAdmin = window.location.pathname.includes('/admin/');
+    const targetUrl = isInsideAdmin ? 'login.html?logged_out=1' : 'admin/login.html?logged_out=1';
+    window.location.replace(targetUrl);
   },
 
   /**

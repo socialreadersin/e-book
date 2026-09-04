@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background-color: #FAF7F2;">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Login | Social Readers</title>
   
+  <!-- Favicon & Brand Icons -->
+  <link rel="icon" type="image/jpeg" href="../assets/logo.jpeg">
+  <link rel="apple-touch-icon" href="../assets/logo.jpeg">
+
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,7 +34,7 @@
   </script>
   <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="bg-cream text-gray-800 min-h-screen flex flex-col justify-between font-body">
+<body class="bg-[#FAF7F2] text-gray-800 min-h-screen flex flex-col justify-between font-body" style="background-color: #FAF7F2;">
 
   <!-- Top bar with Back Link & Store link -->
   <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 py-6 flex justify-between items-center">
@@ -41,7 +45,7 @@
     <div class="flex items-center gap-2">
       <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1.5">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        Phase 2 Console
+        Admin Console
       </span>
     </div>
   </div>
@@ -50,8 +54,11 @@
   <div class="flex-grow flex items-center justify-center px-4 py-8">
     <div class="w-full max-w-md bg-white rounded-3xl p-8 sm:p-10 border border-gray-100 shadow-xl space-y-6">
       
-      <!-- Brand Header -->
+      <!-- Brand Header with Nav Logo -->
       <div class="text-center space-y-2">
+        <div class="flex justify-center mb-2">
+          <img src="../assets/nav-logo.jpeg" alt="Social Readers" class="w-16 h-16 rounded-2xl object-contain shadow-md border border-gray-100" width="64" height="64">
+        </div>
         <a href="../index.html" class="inline-flex items-center justify-center gap-1.5">
           <span class="text-2xl font-extrabold tracking-tight text-navy font-heading">SOCIAL</span>
           <span class="text-2xl font-extrabold tracking-tight text-forest font-heading">READERS</span>
@@ -63,6 +70,12 @@
         </div>
         <h1 class="text-xl font-bold text-navy pt-2 font-heading">Sign In to Console</h1>
         <p class="text-xs text-gray-500">Enter your administrator credentials to access the management portal</p>
+      </div>
+
+      <!-- Logout Notice (Shown if redirected after logout) -->
+      <div id="logout-notice" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-center gap-2">
+        <svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <span>You have been safely logged out. Your session was securely terminated.</span>
       </div>
 
       <!-- Error / Status Notice -->
@@ -139,11 +152,16 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <!-- 2. Auto-generated Firebase & Cloudinary Config -->
-  <script src="/js/firebase-config.js?v=2.2"></script>
-  <script src="/js/cloudinary.config.js?v=2.2"></script>
-  <script src="/js/ebook-service.js?v=2.2"></script>
-  <script src="/js/auth.js?v=2.2"></script>
+  <script src="../js/firebase-config.js?v=2.2"></script>
+  <script src="../js/cloudinary.config.js?v=2.2"></script>
+  <script src="../js/ebook-service.js?v=2.2"></script>
+  <script src="../js/auth.js?v=2.2"></script>
   <script>
+    if (window.location.search.includes('logged_out=1')) {
+      const notice = document.getElementById('logout-notice');
+      if (notice) notice.classList.remove('hidden');
+    }
+
     document.getElementById('admin-login-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       const email = document.getElementById('admin-email').value.trim();

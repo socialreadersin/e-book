@@ -11,4 +11,4 @@
 /listen        /audiobooks.html         301
 /shop          /books.html              301
 /library       /account.html            301
-/login         /auth.html               301
+/login         /admin/login.html        301

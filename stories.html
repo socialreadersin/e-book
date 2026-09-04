@@ -1,11 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background-color: #FAF7F2;">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Novel Stories | Social Readers</title>
   <meta name="description" content="Read episodic web novels with weekly chapter releases. 25% of all proceeds support youth education.">
   
+  <!-- Favicon & Brand Icons -->
+  <link rel="icon" type="image/jpeg" href="assets/logo.jpeg">
+  <link rel="apple-touch-icon" href="assets/logo.jpeg">
+  <meta property="og:title" content="Novel Stories | Social Readers">
+  <meta property="og:description" content="Read episodic web novels with 25% cause contribution.">
+  <meta property="og:image" content="assets/logo.jpeg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="assets/logo.jpeg">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,21 +41,28 @@
   </script>
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-[#FAF7F2] text-gray-800 flex flex-col min-h-screen pb-20 md:pb-8">
+<body class="bg-[#FAF7F2] text-gray-800 flex flex-col min-h-screen pb-20 md:pb-8" style="background-color: #FAF7F2;">
 
   <!-- Header -->
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16 sm:h-20 gap-4">
         <!-- Logo -->
-        <a href="index.html" class="flex flex-col items-start group">
-          <div class="flex items-center gap-1">
-            <span class="text-xl sm:text-2xl font-extrabold text-navy">SOCIAL</span>
-            <span class="text-xl sm:text-2xl font-extrabold text-forest">READERS</span>
+        <a href="index.html" class="flex items-center gap-2.5 sm:gap-3 group flex-shrink-0">
+          <img src="assets/nav-logo.jpeg" alt="Social Readers Logo" class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl object-contain shadow-sm border border-gray-100 group-hover:scale-105 transition-transform" width="48" height="48">
+          <div class="flex flex-col items-start">
+            <div class="flex items-center gap-1 sm:gap-1.5 leading-none">
+              <span class="text-lg sm:text-2xl font-extrabold tracking-tight text-navy">SOCIAL</span>
+              <span class="text-lg sm:text-2xl font-extrabold tracking-tight text-forest">READERS</span>
+            </div>
+            <div class="flex items-center gap-1.5 sm:gap-2 mt-1">
+              <div class="w-2.5 sm:w-3.5 h-[2px] bg-brandOrange rounded-full"></div>
+              <span data-i18n="brand.tagline" class="text-[9px] sm:text-[11px] tracking-widest uppercase font-bold text-gray-500 group-hover:text-brandOrange transition-colors">
+                READ FOR CHANGE
+              </span>
+              <div class="w-2.5 sm:w-3.5 h-[2px] bg-brandOrange rounded-full"></div>
+            </div>
           </div>
-          <span data-i18n="brand.tagline" class="text-[9px] tracking-widest uppercase font-bold text-gray-500">
-            READ FOR CHANGE ❤️
-          </span>
         </a>
 
         <!-- Search input -->

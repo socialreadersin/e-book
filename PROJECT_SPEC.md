@@ -22,7 +22,7 @@
 | Logic | Vanilla JS (no framework) |
 | Backend (Phase 2+) | Firebase (Auth + Firestore) |
 | Media hosting | Cloudinary — images via standard upload; **PDFs via `resource_type: raw`** (not the image endpoint) |
-| Payments (Phase 3) | Razorpay |
+| Payments (Phase 3) | Cashfree Payments (PG Web SDK + Cloudflare Pages Functions) |
 | Deployment | GitHub → Cloudflare Pages (auto-deploy on push to `main`) |
 
 No React, no npm build pipeline. Everything must run as static files.
@@ -111,7 +111,7 @@ orders/{orderId}
   - buyerEmail: string
   - amount: number
   - causeShare: number     (25% of amount, stored explicitly for reporting)
-  - paymentId: string       (Razorpay)
+  - paymentId: string       (Cashfree payment/order session ID)
   - paymentStatus: string   (pending | success | failed)
   - downloadToken: string   (time-limited signed access)
   - createdAt: timestamp
@@ -120,7 +120,7 @@ admins/{uid}
   - email: string
 ```
 
-Security rule principle to apply later: public read on `books`, no public write; `orders` writable only via a Cloudflare Function that verifies the Razorpay signature server-side (never trust client-submitted payment status).
+Security rule principle to apply later: public read on `books`, no public write; `orders` writable only via a Cloudflare Function that verifies the Cashfree payment status server-side (never trust client-submitted payment status).
 
 ---
 
@@ -144,7 +144,7 @@ These were NOT in the original design screenshot but are confirmed real requirem
 These must be resolved before any real deployment or client demo with real users:
 
 1. **Copyright risk in sample reader content** — `js/reader.js`'s `bookSamples` object currently contains verbatim excerpts from real published books (Atomic Habits, Wings of Fire, Rich Dad Poor Dad, The Psychology of Money, etc.) used as placeholder demo data. Client confirmed these are placeholder titles only — the real catalog will use different books. **This placeholder content must be fully replaced with original, non-copyrighted text before going live**, even in a demo/staging environment, since accidentally publishing real copyrighted excerpts is an infringement risk regardless of intent.
-2. **Fake checkout button text is misleading** — `js/checkout.js`'s buy button currently reads "Pay ₹X (Razorpay / UPI / Card)" but performs a `setTimeout`-based simulation only; no real payment gateway is wired. Must be relabeled (e.g. "Simulate Payment — Demo Mode") until real Razorpay integration with server-side signature verification lands in Phase 3, to avoid misleading testers, stakeholders, or (worst case) real customers into believing a transaction occurred.
+2. **Fake checkout button text is misleading** — `js/checkout.js`'s buy button currently reads "Pay ₹X (Cashfree / UPI / Card)" but performs a `setTimeout`-based simulation only; no real payment gateway is wired. Must be relabeled (e.g. "Simulate Payment — Demo Mode") until real Cashfree PG integration with server-side payment verification lands in Phase 3, to avoid misleading testers, stakeholders, or (worst case) real customers into believing a transaction occurred.
 3. **Admin auth is not real security** — `js/auth.js` checks credentials client-side in plaintext JS (`email === 'admin@socialreaders.org' && (password === 'admin123' || password.length >= 6)`), visible to anyone via browser DevTools, and accepts *any* 6+ character password. This is placeholder UI only and must never be treated as real access control. Real Firebase Auth + server-verified admin role check is required before the admin dashboard is trusted with real order/revenue data.
 4. **`js/firebase-config.js` doesn't actually use Firebase** — despite the name and despite `PROJECT_SPEC.md` claiming "Firebase Auth + Firestore," this file only wraps `localStorage` reads/writes (`window.SocialReadersDB`). No real Firebase SDK call exists yet. Keep this in mind when planning real Firebase integration — it may be cleaner to build the real integration in a new file rather than retrofitting this one, to avoid confusion between the simulated and real data layers.
 

@@ -2,6 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "e-book",
   "compatibility_date": "2026-08-28",
+  "main": "worker.js",
   "assets": {
     "directory": ".",
     "html_handling": "auto-trailing-slash",
@@ -10,6 +11,7 @@
   "vars": {
     "ENVIRONMENT": "production",
     "CAUSE_SHARE_PERCENT": "25",
-    "BRAND_NAME": "Social Readers"
+    "BRAND_NAME": "Social Readers",
+    "CASHFREE_ENVIRONMENT": "sandbox"
   }
 }

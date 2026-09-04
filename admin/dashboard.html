@@ -4,16 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard | Social Readers</title>
+  <link rel="icon" type="image/jpeg" href="../assets/logo.jpeg">
+  <link rel="apple-touch-icon" href="../assets/logo.jpeg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <!-- Dynamic External Configs & Shared Persistence Layer -->
-  <script src="/js/firebase-config.js?v=2.2"></script>
-  <script src="/js/cloudinary.config.js?v=2.2"></script>
-  <script src="/js/cashfree-config.js?v=2.2"></script>
-  <script src="/js/ebook-service.js?v=2.2"></script>
+  <script src="../js/firebase-config.js?v=2.2"></script>
+  <script src="../js/cloudinary.config.js?v=2.2"></script>
+  <script src="../js/cashfree-config.js?v=2.2"></script>
+  <script src="../js/ebook-service.js?v=2.2"></script>
   
   <style>
     :root {
@@ -766,13 +768,11 @@
   <div id="dashboardLayout">
     <!-- Sidebar -->
     <aside class="sidebar" id="appSidebar">
-      <div class="sidebar-brand">
-        <div class="sidebar-brand-icon">
-          <i class="fa-solid fa-feather"></i>
-        </div>
+      <div class="sidebar-brand" style="display: flex; align-items: center; gap: 12px;">
+        <img src="../assets/nav-logo.jpeg" alt="Social Readers" style="width: 38px; height: 38px; border-radius: 10px; object-fit: contain; border: 1px solid rgba(255,255,255,0.12); flex-shrink: 0;">
         <div>
-          <h3 style="font-size: 1.05rem; font-weight: 700; color: #fff;">Social Readers</h3>
-          <p style="font-size: 0.72rem; color: var(--forest); font-weight: 600;">PORTAL v2.0</p>
+          <h3 style="font-size: 1.05rem; font-weight: 700; color: #fff; line-height: 1.2;">Social Readers</h3>
+          <p style="font-size: 0.72rem; color: var(--forest); font-weight: 600;">ADMIN CONSOLE</p>
         </div>
       </div>
 
@@ -781,6 +781,12 @@
           <button class="nav-item-btn active" data-tab="tab-overview">
             <i class="fa-solid fa-chart-pie"></i>
             <span>Overview Stats</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-item-btn" data-tab="tab-banners">
+            <i class="fa-solid fa-images"></i>
+            <span>Hero Banners</span>
           </button>
         </li>
         <li>
@@ -848,14 +854,25 @@
           </div>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 16px;">
-          <a href="/" target="_blank" class="btn btn-ghost btn-sm" title="View Public Store">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <!-- Professional Session Active Badge -->
+          <div class="session-badge" id="sessionStatusBadge" style="display: flex; align-items: center; gap: 7px; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 20px; padding: 5px 12px; font-size: 0.72rem; color: #34d399; font-weight: 600;">
+            <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 6px #10b981; animation: pulse 2s infinite;"></span>
+            <span id="sessionTimerDisplay">Active Session (30:00)</span>
+          </div>
+
+          <a href="../index.html" target="_blank" class="btn btn-ghost btn-sm" title="View Public Store">
             <i class="fa-solid fa-arrow-up-right-from-square"></i> Store Front
           </a>
+
           <div class="header-user-badge">
             <div class="user-avatar" id="headerAvatar">A</div>
             <span class="user-email-text" id="headerUserEmail">admin@socialreaders.org</span>
           </div>
+
+          <button type="button" id="headerLogoutBtn" class="btn btn-ghost btn-sm" style="color: #f87171;" title="End Admin Session">
+            <i class="fa-solid fa-power-off"></i>
+          </button>
         </div>
       </header>
 
@@ -943,6 +960,45 @@
           </div>
         </section>
 
+        <!-- TAB: HERO BANNERS & SLIDER MANAGEMENT -->
+        <section id="tab-banners" class="tab-section">
+          <div class="section-header">
+            <div>
+              <h3>Hero Banners &amp; Carousel Slider</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Replace or update the promotional hero slider images shown on the public storefront</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button type="button" class="btn btn-secondary" id="addNewBannerBtn">
+                <i class="fa-solid fa-plus"></i> Add Slide
+              </button>
+              <button type="button" class="btn btn-primary" id="saveAllBannersBtn">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Save &amp; Publish Banners
+              </button>
+            </div>
+          </div>
+
+          <!-- Preset Selector Quick Actions -->
+          <div style="background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-muted);">
+              <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--primary);"></i>
+              <span>Quick Presets &amp; Built-in Banners:</span>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <button type="button" class="btn btn-ghost btn-sm" onclick="window.applyPresetBanner('assets/hero-banner-tamil.svg', 'Tamil Bestselling E-Books & Audiobooks', 'books.html')">Tamil Special</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="window.applyPresetBanner('assets/hero-banner-deal.svg', 'Mega Book Fair - Flat 40% - 60% Off', 'books.html')">Book Fair</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="window.applyPresetBanner('assets/hero-banner-cause.svg', 'Read for Change - 25% Social Impact', 'impact.html')">25% Cause</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="window.applyPresetBanner('assets/hero-banner-audio.svg', 'Studio Quality Audiobooks with Sample Player', 'audiobooks.html')">Audiobooks</button>
+            </div>
+          </div>
+
+          <!-- Live Banners List Container -->
+          <div id="bannersListContainer" style="display: grid; gap: 18px;">
+            <div style="text-align: center; color: var(--text-dim); padding: 40px;">
+              <i class="fa-solid fa-circle-notch fa-spin"></i> Loading hero banners...
+            </div>
+          </div>
+        </section>
+
         <!-- SECTION 1: MANAGE MAIN ENTITY (BOOKS) -->
         <section id="tab-books" class="tab-section">
           <div class="section-header">
@@ -1006,10 +1062,15 @@
         <!-- SECTION 3: MANAGE ORDERS / ENQUIRIES -->
         <section id="tab-orders" class="tab-section">
           <div class="section-header">
-            <h3>Orders & Customer Enquiries</h3>
-            <div style="font-size: 0.85rem; color: var(--forest); font-weight: 600;">
-              <i class="fa-solid fa-heart"></i> 25% Earmarked For Education & Sports
+            <div>
+              <h3>Orders &amp; Customer Enquiries</h3>
+              <div style="font-size: 0.85rem; color: var(--forest); font-weight: 600; margin-top: 4px;">
+                <i class="fa-solid fa-heart"></i> 25% Earmarked For Education &amp; Sports
+              </div>
             </div>
+            <button class="btn btn-forest" id="export-csv-btn">
+              <i class="fa-solid fa-file-csv"></i> Export Orders CSV
+            </button>
           </div>
 
           <div class="table-container">
@@ -1608,6 +1669,7 @@
       document.getElementById('dashboardLayout').style.display = 'block';
       document.getElementById('headerUserEmail').textContent = email;
       document.getElementById('headerAvatar').textContent = email.charAt(0).toUpperCase();
+      startSessionTracker();
     }
 
     // Login Form Submit
@@ -1645,15 +1707,73 @@
       }
     });
 
-    // Logout
-    document.getElementById('logoutBtn').addEventListener('click', async () => {
+    // ----------------------------------------------------
+    // 5.1 PROFESSIONAL SESSION MANAGEMENT & TIMEOUT
+    // ----------------------------------------------------
+    const SESSION_DURATION_MS = 30 * 60 * 1000; // 30-minute security session
+    let sessionRemainingMs = SESSION_DURATION_MS;
+    let sessionTimerInterval = null;
+
+    function resetSessionActivity() {
+      sessionRemainingMs = SESSION_DURATION_MS;
       try {
+        localStorage.setItem('sr_admin_session_start', Date.now().toString());
+      } catch (_) {}
+    }
+
+    function startSessionTracker() {
+      resetSessionActivity();
+      ['mousemove', 'keydown', 'click', 'scroll'].forEach(evt => {
+        window.addEventListener(evt, resetSessionActivity, { passive: true });
+      });
+
+      if (sessionTimerInterval) clearInterval(sessionTimerInterval);
+      sessionTimerInterval = setInterval(() => {
+        sessionRemainingMs -= 1000;
+        const displayEl = document.getElementById('sessionTimerDisplay');
+        if (sessionRemainingMs <= 0) {
+          clearInterval(sessionTimerInterval);
+          showToast('Session timed out for security. Terminating session...', 'error');
+          handleAdminLogout();
+          return;
+        }
+
+        if (displayEl) {
+          const mins = Math.floor(sessionRemainingMs / 60000);
+          const secs = Math.floor((sessionRemainingMs % 60000) / 1000);
+          const timeStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+          displayEl.textContent = `Active (${timeStr})`;
+          if (sessionRemainingMs < 60000) {
+            displayEl.style.color = '#f87171';
+          } else {
+            displayEl.style.color = '#34d399';
+          }
+        }
+      }, 1000);
+    }
+
+    // Professional Logout Flow
+    async function handleAdminLogout() {
+      try {
+        showToast('Ending admin session safely...', 'info');
         if (auth) await signOut(auth);
-        showToast('Logged out successfully.', 'info');
       } catch (err) {
-        showToast(`Logout error: ${err.message}`, 'error');
+        console.warn('[Admin] SignOut notice:', err);
       }
-    });
+      try {
+        localStorage.removeItem('sr_admin_auth');
+        localStorage.removeItem('sr_admin_session_start');
+        localStorage.removeItem('sr_admin_session_expiry');
+        sessionStorage.clear();
+      } catch (_) {}
+
+      setTimeout(() => {
+        window.location.replace('login.html?logged_out=1');
+      }, 400);
+    }
+
+    document.getElementById('logoutBtn')?.addEventListener('click', handleAdminLogout);
+    document.getElementById('headerLogoutBtn')?.addEventListener('click', handleAdminLogout);
 
     // ----------------------------------------------------
     // 6. FIRESTORE CRUD OPERATIONS
@@ -2112,6 +2232,39 @@
       }
     }
 
+    // Export Orders to CSV (Ported from admin/orders.html)
+    const exportCsvBtn = document.getElementById('export-csv-btn');
+    if (exportCsvBtn) {
+      exportCsvBtn.addEventListener('click', () => {
+        if (!localOrders || !localOrders.length) {
+          alert('No orders available to export.');
+          return;
+        }
+
+        const headers = ['OrderID', 'BookTitle', 'Format', 'BuyerName', 'BuyerEmail', 'Amount_INR', 'CauseShare_INR', 'Status', 'Date'];
+        const rows = localOrders.map(o => [
+          `"${o.orderId || o.id || ''}"`,
+          `"${(o.bookTitle || (o.items && o.items[0]?.title?.en) || 'Book Purchase').replace(/"/g, '""')}"`,
+          `"${o.format || 'E-Book'}"`,
+          `"${(o.customerName || o.buyerName || '').replace(/"/g, '""')}"`,
+          `"${o.customerEmail || o.buyerEmail || ''}"`,
+          Number(o.amount || 0),
+          (o.causeShare || (Number(o.amount || 0) * 0.25)).toFixed(2),
+          `"${o.status || 'Completed'}"`,
+          `"${o.date || o.createdAt || ''}"`
+        ]);
+
+        const csvContent = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', `social_readers_orders_${Date.now()}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+    }
+
     // Seed Firestore Action
     document.getElementById('seedDataBtn').addEventListener('click', async () => {
       try {
@@ -2332,6 +2485,166 @@
       });
     }
 
+    // --- HERO BANNERS MANAGEMENT ---
+    let localHeroBanners = [];
+
+    async function loadHeroBannersManager() {
+      const container = document.getElementById('bannersListContainer');
+      if (!container) return;
+
+      try {
+        if (window.SocialReadersDB && window.SocialReadersDB.getHeroBanners) {
+          localHeroBanners = await window.SocialReadersDB.getHeroBanners();
+        } else {
+          localHeroBanners = [
+            { id: 'b1', title: 'Tamil Special Editions', subtitle: 'Read for Change & Growth', linkUrl: 'books.html', imageUrl: 'assets/hero-banner-tamil.svg', active: true },
+            { id: 'b2', title: 'Mega Book Fair', subtitle: 'Flat 40% - 60% Off', linkUrl: 'books.html', imageUrl: 'assets/hero-banner-deal.svg', active: true },
+            { id: 'b3', title: 'Read for Change', subtitle: '25% to Education & Sports', linkUrl: 'impact.html', imageUrl: 'assets/hero-banner-cause.svg', active: true },
+            { id: 'b4', title: 'Studio Audiobooks', subtitle: 'Immersive Tamil & English Narration', linkUrl: 'audiobooks.html', imageUrl: 'assets/hero-banner-audio.svg', active: true }
+          ];
+        }
+      } catch (e) {
+        console.warn("Error loading hero banners:", e);
+      }
+
+      renderHeroBannersList();
+    }
+
+    function renderHeroBannersList() {
+      const container = document.getElementById('bannersListContainer');
+      if (!container) return;
+
+      if (!localHeroBanners.length) {
+        container.innerHTML = `<div style="text-align: center; color: var(--text-dim); padding: 40px;">No hero banners configured. Click "Add Slide" to create one.</div>`;
+        return;
+      }
+
+      container.innerHTML = localHeroBanners.map((b, idx) => `
+        <div class="table-container" style="padding: 20px; border-left: 4px solid ${b.active !== false ? 'var(--forest)' : 'var(--danger)'};" data-banner-idx="${idx}">
+          <div style="display: flex; flex-direction: column; lg:flex-row; gap: 20px;">
+            <!-- Thumbnail Preview -->
+            <div style="width: 100%; max-width: 280px; flex-shrink: 0;">
+              <div style="aspect-ratio: 16/7; border-radius: 10px; overflow: hidden; background: #0B2C5D; border: 1px solid var(--border-glass); position: relative;">
+                <img id="banner-preview-img-${idx}" src="${b.imageUrl.startsWith('http') || b.imageUrl.startsWith('assets/') ? (b.imageUrl.startsWith('assets/') ? '../' + b.imageUrl : b.imageUrl) : b.imageUrl}" alt="${b.title || 'Slide'}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='../assets/hero-banner-tamil.svg'">
+                <span style="position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); font-size: 0.7rem; color: #fff; font-weight: 700; padding: 2px 8px; border-radius: 6px;">Slide ${idx + 1}</span>
+              </div>
+              <div style="margin-top: 10px; display: flex; gap: 6px;">
+                <label class="btn btn-ghost btn-sm" style="flex: 1; text-align: center; cursor: pointer;">
+                  <i class="fa-solid fa-cloud-arrow-up"></i> Upload
+                  <input type="file" accept="image/*" style="display: none;" onchange="window.handleBannerFileUpload(event, ${idx})">
+                </label>
+                <button type="button" class="btn btn-ghost btn-sm" style="color: #f87171;" onclick="window.removeHeroBanner(${idx})" title="Remove Slide">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Fields Editor -->
+            <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Slide Title</label>
+                <input type="text" class="input-field no-icon" id="banner-title-${idx}" value="${b.title || ''}" placeholder="e.g. Tamil Special Editions" oninput="window.updateBannerField(${idx}, 'title', this.value)">
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Subtitle / Description</label>
+                <input type="text" class="input-field no-icon" id="banner-sub-${idx}" value="${b.subtitle || ''}" placeholder="e.g. Read for Change &amp; Growth" oninput="window.updateBannerField(${idx}, 'subtitle', this.value)">
+              </div>
+              <div class="form-group" style="grid-column: span 2; margin-bottom: 0;">
+                <label class="form-label">Image Source URL / Path (SVG, JPEG, PNG or Cloudinary)</label>
+                <input type="text" class="input-field no-icon" id="banner-url-${idx}" value="${b.imageUrl || ''}" placeholder="assets/hero-banner-tamil.svg or https://..." oninput="window.updateBannerImage(${idx}, this.value)">
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Click Link Destination</label>
+                <input type="text" class="input-field no-icon" id="banner-link-${idx}" value="${b.linkUrl || 'books.html'}" placeholder="books.html or impact.html" oninput="window.updateBannerField(${idx}, 'linkUrl', this.value)">
+              </div>
+              <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 10px; padding-top: 24px;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; font-size: 0.85rem; color: #fff;">
+                  <input type="checkbox" id="banner-active-${idx}" ${b.active !== false ? 'checked' : ''} onchange="window.updateBannerField(${idx}, 'active', this.checked)">
+                  <span>Active in Storefront Carousel</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.updateBannerField = function(idx, field, val) {
+      if (localHeroBanners[idx]) {
+        localHeroBanners[idx][field] = val;
+      }
+    };
+
+    window.updateBannerImage = function(idx, url) {
+      if (localHeroBanners[idx]) {
+        localHeroBanners[idx].imageUrl = url.trim();
+        const img = document.getElementById(`banner-preview-img-${idx}`);
+        if (img) {
+          const clean = url.trim();
+          img.src = clean.startsWith('assets/') ? '../' + clean : clean;
+        }
+      }
+    };
+
+    window.applyPresetBanner = function(path, title, link) {
+      localHeroBanners.push({
+        id: `banner-${Date.now()}`,
+        title: title,
+        subtitle: 'Read for Change',
+        imageUrl: path,
+        linkUrl: link,
+        active: true
+      });
+      renderHeroBannersList();
+      showToast(`Added preset banner: ${title}`, 'info');
+    };
+
+    window.removeHeroBanner = function(idx) {
+      if (confirm('Are you sure you want to remove this banner slide?')) {
+        localHeroBanners.splice(idx, 1);
+        renderHeroBannersList();
+      }
+    };
+
+    window.handleBannerFileUpload = async function(evt, idx) {
+      const file = evt.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const dataUrl = e.target.result;
+        window.updateBannerImage(idx, dataUrl);
+        const urlInput = document.getElementById(`banner-url-${idx}`);
+        if (urlInput) urlInput.value = dataUrl;
+        showToast('Image loaded for slide preview. Click "Save & Publish" to commit.', 'info');
+      };
+      reader.readAsDataURL(file);
+    };
+
+    async function saveAllHeroBanners() {
+      const btn = document.getElementById('saveAllBannersBtn');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Saving...`;
+      }
+
+      try {
+        if (window.SocialReadersDB && window.SocialReadersDB.saveHeroBanners) {
+          await window.SocialReadersDB.saveHeroBanners(localHeroBanners);
+        } else {
+          localStorage.setItem('sr_hero_banners', JSON.stringify(localHeroBanners));
+        }
+        showToast('Hero banners successfully saved and published!', 'success');
+      } catch (err) {
+        showToast(`Save failed: ${err.message}`, 'error');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save &amp; Publish Banners`;
+        }
+      }
+    }
+
     // ----------------------------------------------------
     // 7. UI EVENTS, NAVIGATION & MODAL CONTROLLERS
     // ----------------------------------------------------
@@ -2349,6 +2662,7 @@
         // Update heading
         const tabNames = {
           'tab-overview': 'Dashboard Overview',
+          'tab-banners': 'Hero Banners & Slider Manager',
           'tab-books': 'Manage Books Catalog',
           'tab-categories': 'Manage Book Categories',
           'tab-orders': 'Orders & Social Impact',
@@ -2360,6 +2674,7 @@
         document.getElementById('currentTabHeading').textContent = tabNames[btn.dataset.tab] || 'Admin Dashboard';
 
         // Lazy-load data when switching to specific tabs
+        if (btn.dataset.tab === 'tab-banners') loadHeroBannersManager();
         if (btn.dataset.tab === 'tab-deals') loadDeals();
         if (btn.dataset.tab === 'tab-stories') loadStories();
         if (btn.dataset.tab === 'tab-users') renderUsersTable();
@@ -2368,6 +2683,21 @@
         // Close mobile sidebar if open
         document.getElementById('appSidebar').classList.remove('open');
       });
+    });
+
+    // Wire up Banner Action Buttons
+    document.getElementById('saveAllBannersBtn')?.addEventListener('click', saveAllHeroBanners);
+    document.getElementById('addNewBannerBtn')?.addEventListener('click', () => {
+      localHeroBanners.push({
+        id: `banner-${Date.now()}`,
+        title: 'New Promotional Banner',
+        subtitle: '25% for Youth Education',
+        linkUrl: 'books.html',
+        imageUrl: 'assets/hero-banner-deal.svg',
+        active: true
+      });
+      renderHeroBannersList();
+      showToast('New banner added. Set the details and click "Save & Publish".', 'info');
     });
 
     // Mobile Sidebar Toggle
